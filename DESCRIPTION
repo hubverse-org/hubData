@@ -1,10 +1,17 @@
 Package: hubData
-Title: What the Package Does (One Line, Title Case)
+Title: Tools for accessing and working with hubverse Hub data
 Version: 0.0.0.9000
 Authors@R: 
-    person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-2378-4915"))
-Description: What the package does (one paragraph).
+    c(person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-2378-4915")),
+      person("Li", "Shandross", , "lshandross@umass.edu", role = "ctb"),
+      person("Nicholas G.", "Reich", , "nick@umass.edu", role = "ctb",
+           comment = c(ORCID = "0000-0003-3503-9899")),
+      person("Evan L.", "Ray", , "elray@umass.edu", role = "ctb"),
+      person(family = "Consortium of Infectious Disease Modeling Hubs",
+           role = c("cph")))
+Description: A set of utility functions for accessing and working with
+    forecast and target data from Infectious Disease Modeling Hubs.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
