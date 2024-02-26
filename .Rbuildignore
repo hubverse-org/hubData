@@ -8,3 +8,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.github$
+^\.lintr$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
