@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 The goal of hubData is to provide tools for accessing and working with hubverse Hub data. 
 
-The hubData package is part of the [hubverse](https://hubverse.org) ecosystem, which aims to provide a suite of tools for infectious disease modeling and data analysis.
+This package is part of the [hubverse](https://hubdocs.readthedocs.io/en/latest/) ecosystem, which aims to provide a set of tools for infectious disease modeling hubs to share and collaborate on their work.
 
 ## Installation
 
