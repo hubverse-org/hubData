@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# hubData <a href="https://Infectious-Disease-Modeling-Hubs.github.io/hubData/"><img src="man/figures/logo.svg" align="right" height="131" alt="hubData website" /></a>
+# hubData <a href="https://Infectious-Disease-Modeling-Hubs.github.io/hubData/"><img src="man/figures/logo.png" align="right" height="131" alt="hubData website" /></a>
 
 <!-- badges: start -->
 
