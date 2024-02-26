@@ -12,7 +12,12 @@ status](https://www.r-pkg.org/badges/version/hubData)](https://CRAN.R-project.or
 [![R-CMD-check](https://github.com/Infectious-Disease-Modeling-Hubs/hubData/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Infectious-Disease-Modeling-Hubs/hubData/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of hubData is to …
+The goal of hubData is to provide tools for accessing and working with
+hubverse Hub data.
+
+The hubData package is part of the [hubverse](https://hubverse.org)
+ecosystem, which aims to provide a suite of tools for infectious disease
+modeling and data analysis.
 
 ## Installation
 
