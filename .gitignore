@@ -6,3 +6,4 @@
 .secrets
 .quarto
 docs
+inst/doc

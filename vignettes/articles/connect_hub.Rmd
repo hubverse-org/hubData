@@ -1,0 +1,175 @@
+---
+title: "Accessing data from a hub"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+An important function of `hubData` is allowing for the connection to data in the `model-output` directory to facilitate extraction, filtering, querying, exploring, and analyzing of Hub data.
+
+# Structure of hubverse datasets
+
+All data returned from connecting to and querying hubs can be read or validated as a `model_out_tbl` which is a foundational S3 class in the hubverse ecosystem. A `model_out_tbl` is a long-form [`tibble`](https://tibble.tidyverse.org/) designed to conform to the [hubverse data specifications for model output data](https://hubdocs.readthedocs.io/en/latest/format/model-output.html). In short, the columns of a valid `model_out_tbl` containing model output data from a hub are:
+
+ - `model_id`: this is the unique character identifier of a model.
+ - `output_type`: a character variable that defines the type of representation of model output that is in a given row.
+ - `output_type_id`: a variable that specifies some additional identifying information specific to the output type in a given row, e.g., a numeric quantile level, a string giving the name of a possible category for a discrete outcome, or an index of a sample.
+ - `value`: a numeric variable that provides the information about the model's prediction.
+ - `...` : other columns will be present depending on modeling tasks defined by the individual modeling hub. These columns are referred to in hubverse terminology as the `task-ID` variables.
+
+Other hubverse tools, designed for data validation, [ensemble building](https://infectious-disease-modeling-hubs.github.io/hubEnsembles/), [visualization](https://github.com/Infectious-Disease-Modeling-Hubs/hubVis), etc..., all are designed with the "promises" implicit in the data format specified by `model_out_tbl`. For example, [the `hubEnsembles::linear_pool()` function ](https://infectious-disease-modeling-hubs.github.io/hubEnsembles/reference/linear_pool.html) both accepts as input and returns as output `model_out_tbl` objects.
+
+# Hub connections
+
+There are two functions for connecting to `model-output` data:
+
+- `connect_hub()` is used for connecting to fully configured hubs (i.e. which contain valid `admin.json` and `tasks.json` in a `hub-config` directory). This function uses configurations defined in config files in the `hub-config/` directory and allows for connecting to hubs with files in multiple file formats (allowable formats specified by the `file_format` property of `admin.json`).
+- `connect_model_output()` allows for connecting directly to the contents of a `model-output` directory and is useful for connecting to appropriately organised files in an informal hub (i.e. which has not been fully configured with appropriate `hub-config/` files.)
+
+Both functions establish connections through the [`arrow`](https://arrow.apache.org/docs/r/) package, specifically by opening datasets as [`FileSystemDataset`s](https://arrow.apache.org/docs/r/reference/Dataset.html), one for each file format. 
+
+Where multiple file formats are accepted in a single Hub, file format specific `FileSystemDataset`s are combined into a single `UnionDataset` for single point access to the entire Hub `model-output` dataset. 
+This only applies to `connect_hub()` in fully configured Hubs, where config files can be used to determine a unifying schema across all file formats. 
+
+In contract, `connect_model_output()` can only be used to open single file format datasets of the format defined explicitly through the `file_format` argument.
+
+
+```{r setup}
+library(hubData)
+library(dplyr)
+```
+
+## Connecting to a configured hub
+
+
+```{r}
+hub_path <- system.file("testhubs/flusight", package = "hubUtils")
+hub_con <- connect_hub(hub_path)
+hub_con
+```
+
+To access data from a hub connection you can use dplyr verbs and construct querying pipelines.
+
+```{r}
+hub_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  collect()
+```
+
+Note however that not all dplyr filtering options are available for all data types yet.
+
+You can see how in the above output the required `model_id`, `output_type`, `output_type_id` and `value` column names are all present, as is required for a `model_out_tbl` object. However, the output of the above expression, while conforming to `model_out_tbl` convention, is actually returned just as a `tbl_df` or `tibble` object.
+
+For example, if you wanted to get all quantile predictions for the last forecast date in the hub, you might try:
+
+```{r, error=TRUE}
+hub_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  filter(forecast_date == max(forecast_date)) %>%
+  collect()
+```
+
+This doesn't work however as `arrow` does not have an equivalent `max` method for `Date[32]` data types.
+
+In such a situation, you could collect after applying the first filtering level which does work for arrow and then finish the filtering on the in-memory data returned by collect.
+
+```{r}
+hub_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  collect() %>%
+  filter(forecast_date == max(forecast_date))
+```
+
+Alternatively, depending on the size of the data, in might be quicker to filter the data in two steps:
+
+1. get the last forecast date available for the filtered subset.
+2. use the last forecast date in the filtering query.
+
+```{r}
+last_forecast <- hub_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  pull(forecast_date, as_vector = TRUE) %>%
+  max()
+
+
+hub_con %>%
+  filter(
+    output_type == "quantile", location == "US",
+    forecast_date == last_forecast
+  ) %>%
+  collect()
+```
+
+
+
+## Connecting to a model output directory
+
+There is also an option to connect directly to a model output directory without using any metadata in a hub config file. This can be useful when a hub has not been fully configured yet. 
+
+The approach does have certain limitations though. For example, an overall unifying schema cannot be determined from the config files so the ability of `open_dataset()` to connect and parse data correctly cannot be guaranteed across files.
+
+In addition, only a single file_format dataset can be opened.
+
+```{r}
+model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
+mod_out_con <- connect_model_output(model_output_dir, file_format = "csv")
+mod_out_con
+```
+
+
+```{r}
+mod_out_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  collect()
+```
+
+
+When connecting to a model output directly, you can also specify a schema to override the default arrow schema auto-detection. This can help at times to resolve conflicts in data types across different dataset files.
+
+```{r}
+library(arrow)
+
+model_output_schema <- schema(
+  origin_date = date32(),
+  target = string(),
+  horizon = int32(),
+  location = string(),
+  output_type = string(),
+  output_type_id = string(),
+  value = int32(),
+  model_id = string()
+)
+
+mod_out_con <- connect_model_output(model_output_dir,
+  file_format = "csv",
+  schema = model_output_schema
+)
+mod_out_con
+```
+
+Using a schema can however also produce new errors which can sometimes be hard to debug. For example, here we are defining a schema with field `output_type` cast as `int32` data type. As column `output_type` actually contain character type data which cannot be coerced to integer, connecting to the model output directory produces an `arrow` error. 
+
+
+```{r, error=TRUE}
+model_output_schema <- schema(
+  origin_date = date32(),
+  target = string(),
+  horizon = int32(),
+  location = string(),
+  output_type = int32(),
+  output_type_id = string(),
+  value = int32(),
+  model_id = string()
+)
+
+mod_out_con <- connect_model_output(model_output_dir,
+  file_format = "csv",
+  schema = model_output_schema
+)
+```
+
+Beware that `arrow` errors can be somewhat misleading at times so if you do get such a non-informative error, a good place to start would be to check your schema matches the columns and your data can be coerced to the data types specified in the schema.

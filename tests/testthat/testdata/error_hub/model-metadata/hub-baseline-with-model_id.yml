@@ -1,0 +1,24 @@
+team_name: "Hub Coordination Team"
+model_name: "Baseline"
+model_id: "hub-baseline-with-model_id"
+model_version: "1.0"
+model_contributors: [
+  {
+    "name": "Joe Bloggs",
+    "email": "j.bloggs@email.com"
+  },
+  {
+    "name": "J Smith",
+    "email": "j.smith@email.com"
+  }
+]
+website_url: "https://team1goodmodel.website"
+license: "cc-by-4.0"
+include_viz: true
+include_ensemble: false
+include_eval: true
+model_details: {
+  methods: "this the method description of the model.",
+  data_inputs: "description of the data inputs"
+}
+ensemble_of_hub_models: false
