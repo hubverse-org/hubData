@@ -4,7 +4,7 @@
 \alias{validate_model_out_tbl}
 \title{Validate a \code{model_out_tbl} object}
 \value{
-If valid, retunrs \code{tbl}. Otherwise throws an error.
+If valid, returns a \code{tbl}. Otherwise throws an error.
 }
 \description{
 See \code{\link[hubUtils:validate_model_out_tbl]{hubUtils::validate_model_out_tbl()}} for details.
