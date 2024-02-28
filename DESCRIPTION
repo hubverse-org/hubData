@@ -25,7 +25,7 @@ Imports:
     cli,
     dplyr,
     fs,
-    hubUtils,
+    hubUtils (>= 0.0.1),
     magrittr,
     purrr,
     rlang,
@@ -41,7 +41,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.2.0)
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils
+    Infectious-Disease-Modeling-Hubs/hubUtils#143
 Config/Needs/website: Infectious-Disease-Modeling-Hubs/hubStyle
 Depends: 
     R (>= 2.10)
