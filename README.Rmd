@@ -35,15 +35,6 @@ You can install the development version of hubData from [GitHub](https://github.
 remotes::install_github("Infectious-Disease-Modeling-Hubs/hubData")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(hubData)
-## basic example code
-```
-
 ***
 
 ## Code of Conduct
