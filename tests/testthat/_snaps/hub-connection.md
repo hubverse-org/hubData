@@ -1178,3 +1178,35 @@
       Error in `connect_hub()`:
       x 'hub-config' directory not found in root of Hub.
 
+# connect_hub detects unopenned files correctly
+
+    Code
+      connect_hub(hub_path)
+    Condition
+      Warning:
+      !  The following potentially invalid model output file not opened successfully.
+      'testdata/error_file/model-output/simple_hub-baseline/2022-11-28-simple_hub-baseline.csv'
+    Message
+      
+      -- <hub_connection/FileSystemDataset> --
+      
+      * hub_name: "Simple Forecast Hub"
+      * hub_path: 'testdata/error_file'
+      * file_format: "csv(8/9)"
+      * file_system: "LocalFileSystem"
+      * model_output_dir: "testdata/error_file/model-output"
+      * config_admin: 'hub-config/admin.json'
+      * config_tasks: 'hub-config/tasks.json'
+      
+      -- Connection schema 
+    Output
+      hub_connection with 8 csv files
+      origin_date: date32[day]
+      horizon: int32
+      location: string
+      target: string
+      output_type: string
+      output_type_id: double
+      value: int32
+      model_id: string
+

@@ -385,3 +385,8 @@ test_that("connect_hub & connect_model_output fail correctly", {
     regexp = "Directory .*model-output.* does not exist at path"
   )
 })
+
+test_that("connect_hub detects unopenned files correctly", {
+  hub_path <- testthat::test_path("testdata/error_file")
+  expect_snapshot(connect_hub(hub_path))
+})

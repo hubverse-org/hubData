@@ -30,6 +30,22 @@
 ---
 
     Code
+      coerce_to_hub_schema(tbl, config_tasks, as_arrow_table = TRUE,
+        skip_date_coercion = TRUE)
+    Output
+      Table
+      23 rows x 7 columns
+      $origin_date <string>
+      $target <string>
+      $horizon <int32>
+      $location <string>
+      $output_type <string>
+      $output_type_id <double>
+      $value <int32>
+
+# coerce_to_character works
+
+    Code
       str(coerce_to_character(tbl))
     Output
       tibble [23 x 7] (S3: tbl_df/tbl/data.frame)

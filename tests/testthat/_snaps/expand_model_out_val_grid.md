@@ -226,14 +226,14 @@
     Code
       expand_model_out_val_grid(config_tasks)
     Condition
-      Error in `hubUtils::get_round_idx()`:
-      ! `round_id` must be a character vector, not absent.
+      Error in `checkmate::assert_string()`:
+      ! argument "round_id" is missing, with no default
 
 ---
 
     Code
       expand_model_out_val_grid(config_tasks)
     Condition
-      Error in `hubUtils::get_round_idx()`:
-      ! `round_id` must be a character vector, not absent.
+      Error in `checkmate::assert_string()`:
+      ! argument "round_id" is missing, with no default
 
