@@ -16,12 +16,63 @@
     <loc>https://infectious-disease-modeling-hubs.github.io/hubData/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/articles/connect_hub.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/articles/index.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubData/authors.html</loc>
   </url>
   <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubData/index.html</loc>
   </url>
   <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/as_model_out_tbl.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/coerce_to_hub_schema.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/connect_hub.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/create_hub_schema.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/create_model_out_submit_tmpl.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/expand_model_out_val_grid.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/gs_bucket.html</loc>
+  </url>
+  <url>
     <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/load_model_metadata.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/model_id_merge.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/model_id_split.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/print.hub_connection.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/s3_bucket.html</loc>
+  </url>
+  <url>
+    <loc>https://infectious-disease-modeling-hubs.github.io/hubData/reference/validate_model_out_tbl.html</loc>
   </url>
 </urlset>
