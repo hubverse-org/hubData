@@ -154,12 +154,12 @@ warn_unopened_files <- function(x, dataset, model_output_dir) {
 
     unopened_files <- purrr::map(
       purrr::set_names(names(x)[unopened_file_formats]),
-      ~ list_dir_files(model_output_dir, file_format)
+      ~ list_dir_files(model_output_dir, .x)
     ) %>%
       # check dir files against files opened in dataset
       purrr::imap(
         function(.x, .y) {
-          .x[!.x %in% dataset_files[[.y]]]
+          .x[!normalizePath(.x) %in% normalizePath(dataset_files[[.y]])]
         }
       ) %>%
       purrr::list_simplify() %>%
