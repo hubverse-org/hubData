@@ -41,7 +41,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.2.0)
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils@split-hubutils,
+    Infectious-Disease-Modeling-Hubs/hubUtils,
 Config/Needs/website: Infectious-Disease-Modeling-Hubs/hubStyle
 Depends: 
     R (>= 2.10)
