@@ -1185,7 +1185,7 @@
     Condition
       Warning:
       !  The following potentially invalid model output file not opened successfully.
-      'testdata/error_file/model-output/simple_hub-baseline/2022-11-28-simple_hub-baseline.csv'
+      'testdata/error_file/model-output/baseline/2022-11-28-baseline.csv'
     Message
       
       -- <hub_connection/FileSystemDataset> --
