@@ -107,7 +107,7 @@ Alternatively, depending on the size of the data, in might be quicker to filter 
 last_forecast <- hub_con %>%
   filter(output_type == "quantile", location == "US") %>%
   pull(forecast_date, as_vector = TRUE) %>%
-  max()
+  max(na.rm = TRUE)
 
 
 hub_con %>%
@@ -115,9 +115,20 @@ hub_con %>%
     output_type == "quantile", location == "US",
     forecast_date == last_forecast
   ) %>%
-  collect()
+  collect_hub()
 ```
 
+Or you could use `arrow::to_duckdb()` to first convert the dataset connection to an in memory virtual DuckDB table. This will allows you to run queries that are supported by DuckDB but not by arrow, extending the potential queries that can be run against hub data before collecting.
+
+_For more details see [DuckDB quacks Arrow: A zero-copy data integration between Apache Arrow and DuckDB](https://duckdb.org/2021/12/03/duck-arrow.html)._
+
+```{r}
+hub_con %>%
+  arrow::to_duckdb() %>%
+  filter(output_type == "quantile", location == "US",
+         forecast_date == max(forecast_date, na.rm = TRUE)) %>%
+  collect_hub()
+```
 
 
 ## Connecting to a model output directory
