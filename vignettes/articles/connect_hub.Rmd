@@ -54,10 +54,24 @@ hub_con
 
 To access data from a hub connection you can use dplyr verbs and construct querying pipelines.
 
+You can use `dplyr`'s `collect()` function:
 ```{r}
 hub_con %>%
   filter(output_type == "quantile", location == "US") %>%
   collect()
+```
+
+
+or the `hubData` wrapper `collect_hub()` which converts the output to a `model_out_tbl` class object where possible:
+
+```{r}
+tbl <- hub_con %>%
+  filter(output_type == "quantile", location == "US") %>%
+  collect_hub()
+
+tbl
+
+class(tbl)
 ```
 
 Note however that not all dplyr filtering options are available for all data types yet.
@@ -68,9 +82,9 @@ For example, if you wanted to get all quantile predictions for the last forecast
 
 ```{r, error=TRUE}
 hub_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  filter(forecast_date == max(forecast_date)) %>%
-  collect()
+  filter(output_type == "quantile", location == "US",
+         forecast_date == max(forecast_date, na.rm = TRUE)) %>%
+  collect_hub()
 ```
 
 This doesn't work however as `arrow` does not have an equivalent `max` method for `Date[32]` data types.
@@ -80,7 +94,7 @@ In such a situation, you could collect after applying the first filtering level 
 ```{r}
 hub_con %>%
   filter(output_type == "quantile", location == "US") %>%
-  collect() %>%
+  collect_hub() %>%
   filter(forecast_date == max(forecast_date))
 ```
 
@@ -124,7 +138,7 @@ mod_out_con
 ```{r}
 mod_out_con %>%
   filter(output_type == "quantile", location == "US") %>%
-  collect()
+  collect_hub()
 ```
 
 
