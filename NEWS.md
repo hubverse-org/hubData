@@ -1,6 +1,6 @@
 # hubData 0.1.0
 
-* Add `collect_hub()` which wraps `dplyr::collect()` but attempts to convert the output to a `model_out_tbl` class object by default.
+* Add `collect_hub()` which wraps `dplyr::collect()` and, where possible, converts the output to a `model_out_tbl` class object by default. The function also accepts additional arguments that can be passed to `as_model_out_tbl()`.
 
 # hubData 0.0.1
 
