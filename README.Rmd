@@ -35,6 +35,15 @@ You can install the development version of hubData from [GitHub](https://github.
 remotes::install_github("Infectious-Disease-Modeling-Hubs/hubData")
 ```
 
+> ##### 💡 TIP 
+> `hubData` has a dependency on the `arrow` package. For troubleshooting `arrow` installation problems, please consult the [`arrow` package documentation](https://arrow.apache.org/docs/r/#installation).
+>
+> You could also try installing the package from the [Apache R Universe repository](https://apache.r-universe.dev) with:
+>
+> ```r
+> install.packages("arrow", repos = c("https://apache.r-universe.dev", "https://cran.r-project.org"))
+> ```
+
 ***
 
 ## Code of Conduct
