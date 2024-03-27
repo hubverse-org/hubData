@@ -1,6 +1,9 @@
 #' Collect Hub model output data
 #'
-#' `collect_hub` retrieves data from a `<hub_connection>/<mod_out_connection>` after executing any `<arrow_dplyr_query>` into a local tibble. The function also attempts to convert the output to a `model_out_tbl` class object before returning.
+#' `collect_hub` retrieves data from a `<hub_connection>/<mod_out_connection>`
+#'  after executing any `<arrow_dplyr_query>` into a local tibble.
+#'  The function also attempts to convert the output to a `model_out_tbl` class
+#'  object before returning.
 #' @param x a `<hub_connection>/<mod_out_connection>` or `<arrow_dplyr_query>` object.
 #' @param silent Logical. Whether to suppress message generated if conversion to `model_out_tbl` fails.
 #' @param ... Further argument passed on to [as_model_out_tbl()].
@@ -18,8 +21,8 @@
 #'   dplyr::filter(is.na(output_type_id)) %>%
 #'   collect_hub()
 #' # Pass arguments to as_model_out_tbl()
-#'dplyr::filter(hub_con, is.na(output_type_id)) %>%
-#'  collect_hub(remove_empty = TRUE)
+#' dplyr::filter(hub_con, is.na(output_type_id)) %>%
+#'   collect_hub(remove_empty = TRUE)
 collect_hub <- function(x, silent = FALSE, ...) {
   if (inherits(x, "list")) {
     cli::cli_warn("Hub is empty. No data to collect. Returning {.code NULL}")

@@ -17,7 +17,10 @@ collect_hub(x, silent = FALSE, ...)
 A \code{model_out_tbl}, unless conversion to \code{model_out_tbl} fails in which case a \code{tibble} is returned.
 }
 \description{
-\code{collect_hub} retrieves data from a \verb{<hub_connection>/<mod_out_connection>} after executing any \verb{<arrow_dplyr_query>} into a local tibble. The function also attempts to convert the output to a \code{model_out_tbl} class object before returning.
+\code{collect_hub} retrieves data from a \verb{<hub_connection>/<mod_out_connection>}
+after executing any \verb{<arrow_dplyr_query>} into a local tibble.
+The function also attempts to convert the output to a \code{model_out_tbl} class
+object before returning.
 }
 \examples{
 hub_path <- system.file("testhubs/simple", package = "hubUtils")
@@ -30,5 +33,5 @@ hub_con \%>\%
   collect_hub()
 # Pass arguments to as_model_out_tbl()
 dplyr::filter(hub_con, is.na(output_type_id)) \%>\%
- collect_hub(remove_empty = TRUE)
+  collect_hub(remove_empty = TRUE)
 }
