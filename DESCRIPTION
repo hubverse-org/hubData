@@ -35,6 +35,7 @@ Suggests:
     covr,
     curl,
     digest,
+    duckdb,
     gh,
     knitr,
     mockery,
