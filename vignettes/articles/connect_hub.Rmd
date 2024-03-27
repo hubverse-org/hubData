@@ -82,8 +82,10 @@ For example, if you wanted to get all quantile predictions for the last forecast
 
 ```{r, error=TRUE}
 hub_con %>%
-  filter(output_type == "quantile", location == "US",
-         forecast_date == max(forecast_date, na.rm = TRUE)) %>%
+  filter(
+    output_type == "quantile", location == "US",
+    forecast_date == max(forecast_date, na.rm = TRUE)
+  ) %>%
   collect_hub()
 ```
 
@@ -125,8 +127,10 @@ _For more details see [DuckDB quacks Arrow: A zero-copy data integration between
 ```{r}
 hub_con %>%
   arrow::to_duckdb() %>%
-  filter(output_type == "quantile", location == "US",
-         forecast_date == max(forecast_date, na.rm = TRUE)) %>%
+  filter(
+    output_type == "quantile", location == "US",
+    forecast_date == max(forecast_date, na.rm = TRUE)
+  ) %>%
   collect_hub()
 ```
 
