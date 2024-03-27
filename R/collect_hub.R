@@ -33,7 +33,7 @@ collect_hub <- function(x, silent = FALSE, ...) {
     dplyr::collect(x),
     error = function(e) {
       cli::cli_abort(e$message,
-        call = rlang::expr(collect(x))
+        call = rlang::expr(dplyr::collect(x))
       )
     }
   )
