@@ -69,6 +69,42 @@ test_that("expand_model_out_val_grid works correctly", {
       as_arrow_table = TRUE
     )
   )
+
+  expect_snapshot(
+    str(
+      expand_model_out_val_grid(
+        jsonlite::fromJSON(
+          test_path(
+            "testdata",
+            "configs",
+            "both_null_tasks.json"
+          ),
+          simplifyVector = TRUE,
+          simplifyDataFrame = FALSE
+        ),
+        round_id = "2023-11-26"
+      ) %>%
+        dplyr::filter(is.na(horizon))
+    )
+  )
+
+  expect_snapshot(
+    str(
+      expand_model_out_val_grid(
+        jsonlite::fromJSON(
+          test_path(
+            "testdata",
+            "configs",
+            "both_null_tasks_swap.json"
+          ),
+          simplifyVector = TRUE,
+          simplifyDataFrame = FALSE
+        ),
+        round_id = "2023-11-26"
+      ) %>%
+        dplyr::filter(is.na(horizon))
+    )
+  )
 })
 
 test_that("Setting of round_id value works correctly", {
@@ -195,6 +231,27 @@ test_that("expand_model_out_val_grid errors correctly", {
 
   expect_snapshot(
     expand_model_out_val_grid(config_tasks),
+    error = TRUE
+  )
+
+  # TODO: re-snapshot when error better handled by create_hub_schema
+  # when all horizon properties are null
+  expect_snapshot(
+    str(
+      expand_model_out_val_grid(
+        jsonlite::fromJSON(
+          test_path(
+            "testdata",
+            "configs",
+            "both_null_tasks_all.json"
+          ),
+          simplifyVector = TRUE,
+          simplifyDataFrame = FALSE
+        ),
+        round_id = "2023-11-26"
+      ) %>%
+        dplyr::filter(is.na(horizon))
+    ),
     error = TRUE
   )
 })

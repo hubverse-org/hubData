@@ -38,6 +38,7 @@ Suggests:
     digest,
     duckdb,
     gh,
+    jsonlite,
     knitr,
     mockery,
     rmarkdown,
