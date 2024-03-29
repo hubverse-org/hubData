@@ -80,7 +80,8 @@ expand_model_out_val_grid <- function(config_tasks,
 
   task_id_l <- purrr::map(
     round_config[["model_tasks"]],
-    ~ .x[["task_ids"]]
+    ~ .x[["task_ids"]] %>%
+      null_taskids_to_na()
   ) %>%
     fix_round_id(
       round_id = round_id,
@@ -242,4 +243,19 @@ pad_missing_cols <- function(x, all_cols) {
     return(cbind(x, missing_cols)[, all_cols])
   }
   x
+}
+
+# Convert required value to NA in task IDs where both required and optional
+#  are  as NA.
+null_taskids_to_na <- function(model_task) {
+  to_na <- purrr::map_lgl(
+    model_task, ~ all(purrr::map_lgl(.x, is.null))
+  )
+  purrr::modify_if(model_task,
+    .p = to_na,
+    ~ list(
+      required = NA,
+      optional = NULL
+    )
+  )
 }

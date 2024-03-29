@@ -110,6 +110,39 @@
       $output_type <string>
       $output_type_id <string>
 
+---
+
+    Code
+      str(expand_model_out_val_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks.json"), simplifyVector = TRUE, simplifyDataFrame = FALSE),
+      round_id = "2023-11-26") %>% dplyr::filter(is.na(horizon)))
+    Output
+      tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
+       $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
+       $ target        : chr [1:24] "peak time hosp" "peak time hosp" "peak time hosp" "peak time hosp" ...
+       $ horizon       : int [1:24] NA NA NA NA NA NA NA NA NA NA ...
+       $ location      : chr [1:24] "US" "01" "02" "US" ...
+       $ age_group     : chr [1:24] "0-130" "0-130" "0-130" "0-0.99" ...
+       $ output_type   : chr [1:24] "cdf" "cdf" "cdf" "cdf" ...
+       $ output_type_id: num [1:24] 1 1 1 1 1 1 1 1 1 1 ...
+
+---
+
+    Code
+      str(expand_model_out_val_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks_swap.json"), simplifyVector = TRUE,
+      simplifyDataFrame = FALSE), round_id = "2023-11-26") %>% dplyr::filter(is.na(
+        horizon)))
+    Output
+      tibble [24 x 7] (S3: tbl_df/tbl/data.frame)
+       $ origin_date   : Date[1:24], format: "2023-11-26" "2023-11-26" ...
+       $ target        : chr [1:24] "peak time hosp" "peak time hosp" "peak time hosp" "peak time hosp" ...
+       $ horizon       : int [1:24] NA NA NA NA NA NA NA NA NA NA ...
+       $ location      : chr [1:24] "US" "01" "02" "US" ...
+       $ age_group     : chr [1:24] "0-130" "0-130" "0-130" "0-0.99" ...
+       $ output_type   : chr [1:24] "cdf" "cdf" "cdf" "cdf" ...
+       $ output_type_id: num [1:24] 1 1 1 1 1 1 1 1 1 1 ...
+
 # expand_model_out_val_grid output controls work correctly
 
     Code
@@ -236,4 +269,18 @@
     Condition
       Error in `checkmate::assert_string()`:
       ! argument "round_id" is missing, with no default
+
+---
+
+    Code
+      str(expand_model_out_val_grid(jsonlite::fromJSON(test_path("testdata",
+        "configs", "both_null_tasks_all.json"), simplifyVector = TRUE,
+      simplifyDataFrame = FALSE), round_id = "2023-11-26") %>% dplyr::filter(is.na(
+        horizon)))
+    Condition
+      Error in `map2()`:
+      i In index: 3.
+      i With name: horizon.
+      Caused by error:
+      ! horizon must be a DataType, not NULL
 
