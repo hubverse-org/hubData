@@ -31,6 +31,7 @@ There are two functions for connecting to `model-output` data:
 - `connect_model_output()` allows for connecting directly to the contents of a `model-output` directory and is useful for connecting to appropriately organised files in an informal hub (i.e. which has not been fully configured with appropriate `hub-config/` files.)
 
 Both functions establish connections through the [`arrow`](https://arrow.apache.org/docs/r/) package, specifically by opening datasets as [`FileSystemDataset`s](https://arrow.apache.org/docs/r/reference/Dataset.html), one for each file format. 
+Both functions are also able to connect to files that are stored locally or in the cloud (e.g. in AWS S3 buckets).
 
 Where multiple file formats are accepted in a single Hub, file format specific `FileSystemDataset`s are combined into a single `UnionDataset` for single point access to the entire Hub `model-output` dataset. 
 This only applies to `connect_hub()` in fully configured Hubs, where config files can be used to determine a unifying schema across all file formats. 
@@ -43,8 +44,11 @@ library(hubData)
 library(dplyr)
 ```
 
-## Connecting to a configured hub
+# Connecting to a configured hub
 
+## Connecting to a local hub
+
+To connect to a local hub, supply the path to the hub to `connect_hub()`
 
 ```{r}
 hub_path <- system.file("testhubs/flusight", package = "hubUtils")
@@ -52,17 +56,35 @@ hub_con <- connect_hub(hub_path)
 hub_con
 ```
 
+## Connecting to a hub in the cloud
+
+To connect to a hub in the cloud, first use one of the re-exported `arrow` helpers `s3_bucket()` or `gs_bucket()` depending on the cloud storage provider, and a string of the bucket name/path to create the appropriate cloud `*FileSystem` object (For more details consult the `arrow` article on [Using cloud storage (S3, GCS)](https://arrow.apache.org/docs/r/articles/fs.html)).
+
+Then supply the resulting `*FileSystem` object to `connect_hub()`.
+
+```{r}
+hub_path_cloud <- s3_bucket("hubverse/hubutils/testhubs/simple/")
+hub_con_cloud <- connect_hub(hub_path_cloud)
+hub_con_cloud
+```
+
+
+# Accessing data
+
 To access data from a hub connection you can use dplyr verbs and construct querying pipelines.
 
-You can use `dplyr`'s `collect()` function:
+To perform the queries, you can use `dplyr`'s `collect()` function:
 ```{r}
 hub_con %>%
   filter(output_type == "quantile", location == "US") %>%
   collect()
 ```
 
+Note however that in the above example, while the output contains the required `model_id`, `output_type`, `output_type_id` and `value` columns for a `model_out_tbl` object, it is returned as a `tbl_df` or `tibble` object and the order of the columns is not standardised.
 
-or the `hubData` wrapper `collect_hub()` which converts the output to a `model_out_tbl` class object where possible:
+## Use `collect_hub()` to return `model_out_tbl`s
+
+Conveniently, you can use the `hubData` wrapper `collect_hub()` which converts the output of `dplyr::collect()` to a `model_out_tbl` class object where possible:
 
 ```{r}
 tbl <- hub_con %>%
@@ -74,9 +96,19 @@ tbl
 class(tbl)
 ```
 
-Note however that not all dplyr filtering options are available for all data types yet.
+## Accessing data from cloud hubs
 
-You can see how in the above output the required `model_id`, `output_type`, `output_type_id` and `value` column names are all present, as is required for a `model_out_tbl` object. However, the output of the above expression, while conforming to `model_out_tbl` convention, is actually returned just as a `tbl_df` or `tibble` object.
+Accessing data from hubs in the cloud is exactly the same:
+
+```{r}
+hub_con_cloud %>%
+  filter(output_type == "quantile", location == "US") %>%
+  collect_hub()
+```
+
+## Limitations of `dplyr` queries on `arrow` datasets
+
+Note that [not all `dplyr` filtering options are available](https://arrow.apache.org/docs/dev/r/reference/acero.html) on arrow datasets.
 
 For example, if you wanted to get all quantile predictions for the last forecast date in the hub, you might try:
 
@@ -120,7 +152,9 @@ hub_con %>%
   collect_hub()
 ```
 
-Or you could use `arrow::to_duckdb()` to first convert the dataset connection to an in memory virtual DuckDB table. This will allows you to run queries that are supported by DuckDB but not by arrow, extending the potential queries that can be run against hub data before collecting.
+### Use `arrow::to_duckdb()` to extend available queries 
+
+You could alternatively use `arrow::to_duckdb()` to first convert the dataset connection to an in memory virtual DuckDB table. This will allows you to run queries that are supported by DuckDB but not by arrow, extending the potential queries that can be run against hub data before collecting.
 
 _For more details see [DuckDB quacks Arrow: A zero-copy data integration between Apache Arrow and DuckDB](https://duckdb.org/2021/12/03/duck-arrow.html)._
 
@@ -135,7 +169,7 @@ hub_con %>%
 ```
 
 
-## Connecting to a model output directory
+# Connecting to a model output directory
 
 There is also an option to connect directly to a model output directory without using any metadata in a hub config file. This can be useful when a hub has not been fully configured yet. 
 
@@ -149,6 +183,7 @@ mod_out_con <- connect_model_output(model_output_dir, file_format = "csv")
 mod_out_con
 ```
 
+Accessing data follows the same procedure described for fully configured hubs:
 
 ```{r}
 mod_out_con %>%
@@ -156,6 +191,21 @@ mod_out_con %>%
   collect_hub()
 ```
 
+And connecting to cloud model output data follows the same procedure described for fully configured cloud hubs:
+
+```{r}
+mod_out_dir_cloud <- s3_bucket(
+  "hubverse/hubutils/testhubs/simple/model-output/"
+)
+mod_out_con_cloud <- connect_model_output(
+  mod_out_dir_cloud,
+  file_format = "csv"
+)
+mod_out_con_cloud
+```
+
+
+## Providing a custom schema 
 
 When connecting to a model output directly, you can also specify a schema to override the default arrow schema auto-detection. This can help at times to resolve conflicts in data types across different dataset files.
 
