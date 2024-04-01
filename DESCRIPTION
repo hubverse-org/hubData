@@ -1,6 +1,6 @@
 Package: hubData
 Title: Tools for accessing and working with hubverse Hub data
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     c(person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2378-4915")),
@@ -34,8 +34,11 @@ Imports:
 Suggests: 
     covr,
     curl,
+    dbplyr,
     digest,
+    duckdb,
     gh,
+    jsonlite,
     knitr,
     mockery,
     rmarkdown,
