@@ -108,13 +108,13 @@ hub_con \%>\%
     origin_date == "2022-10-08",
     horizon == 2
   ) \%>\%
-  collect()
+  collect_hub()
 mod_out_con \%>\%
   filter(
     origin_date == "2022-10-08",
     horizon == 2
   ) \%>\%
-  collect()
+  collect_hub()
 # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 \dontrun{
 hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
