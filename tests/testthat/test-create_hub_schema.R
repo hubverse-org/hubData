@@ -62,3 +62,38 @@ test_that("create_hub_schema works correctly", {
     )
   )
 })
+
+test_that("create_hub_schema works with sample output types", {
+  expect_equal(
+    create_hub_schema(
+      jsonlite::fromJSON(
+        testthat::test_path("testdata", "configs", "tasks-samples-pass.json"),
+        simplifyVector = TRUE,
+        simplifyDataFrame = FALSE
+      )
+    )$ToString(),
+    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
+  )
+
+  expect_equal(
+    create_hub_schema(
+      jsonlite::fromJSON(
+        testthat::test_path("testdata", "configs", "tasks-samples-tid-from-sample.json"),
+        simplifyVector = TRUE,
+        simplifyDataFrame = FALSE
+      )
+    )$ToString(),
+    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\noutput_type: string\noutput_type_id: int32\nvalue: double\nmodel_id: string"
+  )
+
+  expect_equal(
+    create_hub_schema(
+      jsonlite::fromJSON(
+        testthat::test_path("testdata", "configs", "tasks-samples-old-schema.json"),
+        simplifyVector = TRUE,
+        simplifyDataFrame = FALSE
+      )
+    )$ToString(),
+    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
+  )
+})
