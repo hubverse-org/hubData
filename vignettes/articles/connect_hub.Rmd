@@ -13,7 +13,7 @@ An important function of `hubData` is allowing for the connection to data in the
 
 # Structure of hubverse datasets
 
-All data returned from connecting to and querying hubs can be read or validated as a `model_out_tbl` which is a foundational S3 class in the hubverse ecosystem. A `model_out_tbl` is a long-form [`tibble`](https://tibble.tidyverse.org/) designed to conform to the [hubverse data specifications for model output data](https://hubdocs.readthedocs.io/en/latest/format/model-output.html). In short, the columns of a valid `model_out_tbl` containing model output data from a hub are:
+All data returned from connecting to and querying hubs can be read or validated as a `model_out_tbl` which is a foundational S3 class in the hubverse ecosystem. A `model_out_tbl` is a long-form [`tibble`](https://tibble.tidyverse.org/) designed to conform to the [hubverse data specifications for model output data](https://hubverse.io/en/latest/user-guide/model-output.html). In short, the columns of a valid `model_out_tbl` containing model output data from a hub are:
 
  - `model_id`: this is the unique character identifier of a model.
  - `output_type`: a character variable that defines the type of representation of model output that is in a given row.
