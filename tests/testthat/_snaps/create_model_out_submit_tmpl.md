@@ -130,6 +130,65 @@
        $ output_type_id: num(0) 
        $ value         : int(0) 
 
+---
+
+    Code
+      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
+        "config", "tasks.json", package = "hubData")), round_id = "2022-12-26")
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      s1                NA
+       8 2022-12-26    wk ahead inc~       1 US       sample      s2                NA
+       9 2022-12-26    wk ahead inc~       2 01       sample      s3                NA
+      10 2022-12-26    wk ahead inc~       1 01       sample      s4                NA
+      # i 32 more rows
+
+---
+
+    Code
+      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
+        "config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26")
+    Output
+      # A tibble: 42 x 7
+         forecast_date target        horizon location output_type output_type_id value
+         <date>        <chr>           <int> <chr>    <chr>       <chr>          <dbl>
+       1 2022-12-26    wk ahead inc~       2 US       mean        <NA>              NA
+       2 2022-12-26    wk ahead inc~       1 US       mean        <NA>              NA
+       3 2022-12-26    wk ahead inc~       2 01       mean        <NA>              NA
+       4 2022-12-26    wk ahead inc~       1 01       mean        <NA>              NA
+       5 2022-12-26    wk ahead inc~       2 02       mean        <NA>              NA
+       6 2022-12-26    wk ahead inc~       1 02       mean        <NA>              NA
+       7 2022-12-26    wk ahead inc~       2 US       sample      1                 NA
+       8 2022-12-26    wk ahead inc~       2 01       sample      1                 NA
+       9 2022-12-26    wk ahead inc~       2 02       sample      1                 NA
+      10 2022-12-26    wk ahead inc~       1 US       sample      2                 NA
+      # i 32 more rows
+
+---
+
+    Code
+      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
+        "config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26") %>%
+        dplyr::filter(.data$output_type == "sample")
+    Output
+      # A tibble: 6 x 7
+        forecast_date target         horizon location output_type output_type_id value
+        <date>        <chr>            <int> <chr>    <chr>       <chr>          <dbl>
+      1 2022-12-26    wk ahead inc ~       2 US       sample      1                 NA
+      2 2022-12-26    wk ahead inc ~       2 01       sample      1                 NA
+      3 2022-12-26    wk ahead inc ~       2 02       sample      1                 NA
+      4 2022-12-26    wk ahead inc ~       1 US       sample      2                 NA
+      5 2022-12-26    wk ahead inc ~       1 01       sample      2                 NA
+      6 2022-12-26    wk ahead inc ~       1 02       sample      2                 NA
+
 # create_model_out_submit_tmpl errors correctly
 
     Code

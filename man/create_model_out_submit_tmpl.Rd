@@ -53,6 +53,11 @@ complete cases of required value combinations exists.
 To return a template of incomplete required cases, which includes \code{NA} columns, use
 \code{complete_cases_only = FALSE}.
 
+When sample output types are included in the output, the \code{output_type_id}
+column contains example sample indexes which are useful for identifying the
+compound task ID structure of multivariate sampling distributions in particular,
+i.e. which combinations of task ID values represent individual samples.
+
 When a round is set to \code{round_id_from_variable: true},
 the value of the task ID from which round IDs are derived (i.e. the task ID
 specified in \code{round_id} property of \code{config_tasks}) is set to the value of the
@@ -88,5 +93,21 @@ create_model_out_submit_tmpl(hub_con,
   round_id = "2022-10-29",
   required_vals_only = TRUE,
   complete_cases_only = FALSE
+)
+# Hub with sample output type
+config_tasks <- read_config_file(system.file("config", "tasks.json",
+  package = "hubData"
+))
+create_model_out_submit_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-12-26"
+)
+# Hub with sample output type and compound task ID structure
+config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
+  package = "hubData"
+))
+create_model_out_submit_tmpl(
+  config_tasks = config_tasks,
+  round_id = "2022-12-26"
 )
 }

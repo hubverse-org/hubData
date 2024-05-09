@@ -23,6 +23,11 @@
 #' To return a template of incomplete required cases, which includes `NA` columns, use
 #' `complete_cases_only = FALSE`.
 #'
+#' When sample output types are included in the output, the `output_type_id`
+#' column contains example sample indexes which are useful for identifying the
+#' compound task ID structure of multivariate sampling distributions in particular,
+#' i.e. which combinations of task ID values represent individual samples.
+#'
 #' When a round is set to `round_id_from_variable: true`,
 #' the value of the task ID from which round IDs are derived (i.e. the task ID
 #' specified in `round_id` property of `config_tasks`) is set to the value of the
@@ -60,6 +65,22 @@
 #'   required_vals_only = TRUE,
 #'   complete_cases_only = FALSE
 #' )
+#' # Hub with sample output type
+#' config_tasks <- read_config_file(system.file("config", "tasks.json",
+#'   package = "hubData"
+#' ))
+#' create_model_out_submit_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-12-26"
+#' )
+#' # Hub with sample output type and compound task ID structure
+#' config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
+#'   package = "hubData"
+#' ))
+#' create_model_out_submit_tmpl(
+#'   config_tasks = config_tasks,
+#'   round_id = "2022-12-26"
+#' )
 create_model_out_submit_tmpl <- function(hub_con, config_tasks, round_id,
                                          required_vals_only = FALSE,
                                          complete_cases_only = TRUE) {
@@ -73,7 +94,8 @@ create_model_out_submit_tmpl <- function(hub_con, config_tasks, round_id,
 
   tmpl_df <- expand_model_out_val_grid(config_tasks,
     round_id = round_id,
-    required_vals_only = required_vals_only
+    required_vals_only = required_vals_only,
+    include_sample_ids = TRUE
   )
 
   tmpl_cols <- c(

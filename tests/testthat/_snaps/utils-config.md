@@ -61,7 +61,7 @@
       [1] TRUE
       
       $rounds[[1]]$model_tasks[[1]]$output_type$sample$output_type_id_params$type
-      [1] "integer"
+      [1] "character"
       
       $rounds[[1]]$model_tasks[[1]]$output_type$sample$output_type_id_params$min_samples_per_task
       [1] 50

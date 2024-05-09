@@ -102,6 +102,37 @@ test_that("create_model_out_submit_tmpl works correctly", {
       required_vals_only = TRUE
     )
   ))
+
+  # Hub with sample output type
+  expect_snapshot(
+    create_model_out_submit_tmpl(
+      config_tasks = read_config_file(system.file("config", "tasks.json",
+        package = "hubData"
+      )),
+      round_id = "2022-12-26"
+    )
+  )
+
+  # Hub with sample output type and compound task ID structure
+  expect_snapshot(
+    create_model_out_submit_tmpl(
+      config_tasks = read_config_file(system.file("config", "tasks-comp-tid.json",
+        package = "hubData"
+      )),
+      round_id = "2022-12-26"
+    )
+  )
+  expect_snapshot(
+    create_model_out_submit_tmpl(
+      config_tasks = read_config_file(
+        system.file("config", "tasks-comp-tid.json",
+          package = "hubData"
+        )
+      ),
+      round_id = "2022-12-26"
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
 })
 
 test_that("create_model_out_submit_tmpl errors correctly", {
