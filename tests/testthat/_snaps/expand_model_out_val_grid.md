@@ -393,6 +393,29 @@
       10 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
       # i 56 more rows
 
+---
+
+    Code
+      expand_model_out_val_grid(read_config_file(test_path("testdata", "configs",
+        "tasks-samples-2mt.json")), round_id = "2022-12-26", include_sample_ids = TRUE) %>%
+        dplyr::filter(.data$output_type == "sample")
+    Output
+      # A tibble: 12 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>                <int>
+       1 2022-12-26    wk ahead inc flu h~       2 US       sample                   1
+       2 2022-12-26    wk ahead inc flu h~       2 01       sample                   1
+       3 2022-12-26    wk ahead inc flu h~       2 02       sample                   1
+       4 2022-12-26    wk ahead inc flu h~       1 US       sample                   2
+       5 2022-12-26    wk ahead inc flu h~       1 01       sample                   2
+       6 2022-12-26    wk ahead inc flu h~       1 02       sample                   2
+       7 2022-12-26    wk ahead inc flu d~       2 US       sample                   3
+       8 2022-12-26    wk ahead inc flu d~       2 01       sample                   3
+       9 2022-12-26    wk ahead inc flu d~       2 02       sample                   3
+      10 2022-12-26    wk ahead inc flu d~       1 US       sample                   4
+      11 2022-12-26    wk ahead inc flu d~       1 01       sample                   4
+      12 2022-12-26    wk ahead inc flu d~       1 02       sample                   4
+
 # expand_model_out_val_grid errors correctly
 
     Code

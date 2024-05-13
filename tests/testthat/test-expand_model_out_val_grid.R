@@ -286,6 +286,18 @@ test_that("expand_model_out_val_grid output controls with samples work correctly
       bind_model_tasks = FALSE
     )[[1]]
   )
+
+  # Check sample IDs unique across multiple modeling task groups
+  expect_snapshot(
+    expand_model_out_val_grid(
+      read_config_file(
+        test_path("testdata", "configs", "tasks-samples-2mt.json")
+      ),
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
 })
 
 test_that("expand_model_out_val_grid errors correctly", {
