@@ -263,6 +263,29 @@ test_that("expand_model_out_val_grid output controls with samples work correctly
       required_vals_only = TRUE
     )
   )
+  # Check back-compatibility on older sample specification
+  config_tasks <- read_config_file(
+    test_path("testdata", "configs", "tasks-samples-old-schema.json")
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26"
+    )
+  )
+  # check that included sample IDs are not generated for older versions
+  # of the sample specification
+  expect_equal(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE
+    )[[1]],
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = FALSE,
+      bind_model_tasks = FALSE
+    )[[1]]
+  )
 })
 
 test_that("expand_model_out_val_grid errors correctly", {

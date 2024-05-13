@@ -373,6 +373,26 @@
       5 2022-12-26          2 US       pmf         increase      
       6 2022-12-26          2 US       pmf         large_increase
 
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26")
+    Output
+      # A tibble: 66 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
+       2 2022-12-26    wk ahead inc flu h~       1 US       sample      1             
+       3 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
+       4 2022-12-26    wk ahead inc flu h~       1 01       sample      1             
+       5 2022-12-26    wk ahead inc flu h~       2 02       sample      1             
+       6 2022-12-26    wk ahead inc flu h~       1 02       sample      1             
+       7 2022-12-26    wk ahead inc flu h~       2 US       sample      2             
+       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
+       9 2022-12-26    wk ahead inc flu h~       2 01       sample      2             
+      10 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
+      # i 56 more rows
+
 # expand_model_out_val_grid errors correctly
 
     Code

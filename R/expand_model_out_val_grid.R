@@ -300,12 +300,24 @@ null_taskids_to_na <- function(model_task) {
   )
 }
 
-# Adds example sample ids to the output type id column across multiple modeling
-# task groups.
+# Adds example sample ids to the output type id column which are unique
+# across multiple modeling task groups. Only apply to v3 and above sample output
+# type configurations.
 add_sample_idx <- function(x, round_config, config_tid) {
+  spl_idx_0 <- 0L
   for (i in seq_along(x)) {
-    spl_idx_0 <- 0L
-    if ("sample" %in% x[[i]][["output_type"]]) {
+    # Check that the modeling task config has a v3 sample configuration
+    config_has_v3_spl <- purrr::pluck(
+      round_config[["model_tasks"]][[i]],
+      "output_type", "sample", "output_type_id_params"
+    ) %>%
+      is.null() %>%
+      isFALSE()
+
+    # Check that x (the output df) has a sample output type (e.g. samples could be
+    # missing where only required values are requested but samples are optional)
+    x_has_spl <- "sample" %in% x[[i]][["output_type"]]
+    if (all(config_has_v3_spl, x_has_spl)) {
       x[[i]] <- add_mt_sample_idx(
         x = x[[i]],
         config = round_config[["model_tasks"]][[i]],
