@@ -210,7 +210,7 @@ test_that("expand_model_out_val_grid output controls work correctly", {
 
 test_that("expand_model_out_val_grid output controls with samples work correctly", {
   # Hub with sample output type
-  config_tasks <- read_config_file(system.file("config", "tasks.json",
+  config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
     package = "hubData"
   ))
 
@@ -244,7 +244,7 @@ test_that("expand_model_out_val_grid output controls with samples work correctly
     )
   )
   # Hub with sample output type and compound task ID structure
-  config_tasks <- read_config_file(
+  config_tasks <- hubUtils::read_config_file(
     system.file("config", "tasks-comp-tid.json",
       package = "hubData"
     )
@@ -264,7 +264,7 @@ test_that("expand_model_out_val_grid output controls with samples work correctly
     )
   )
   # Check back-compatibility on older sample specification
-  config_tasks <- read_config_file(
+  config_tasks <- hubUtils::read_config_file(
     test_path("testdata", "configs", "tasks-samples-old-schema.json")
   )
   expect_snapshot(
@@ -290,7 +290,7 @@ test_that("expand_model_out_val_grid output controls with samples work correctly
   # Check sample IDs unique across multiple modeling task groups
   expect_snapshot(
     expand_model_out_val_grid(
-      read_config_file(
+      hubUtils::read_config_file(
         test_path("testdata", "configs", "tasks-samples-2mt.json")
       ),
       round_id = "2022-12-26",

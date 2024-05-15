@@ -106,7 +106,7 @@ test_that("create_model_out_submit_tmpl works correctly", {
   # Hub with sample output type
   expect_snapshot(
     create_model_out_submit_tmpl(
-      config_tasks = read_config_file(system.file("config", "tasks.json",
+      config_tasks = hubUtils::read_config_file(system.file("config", "tasks.json",
         package = "hubData"
       )),
       round_id = "2022-12-26"
@@ -116,7 +116,7 @@ test_that("create_model_out_submit_tmpl works correctly", {
   # Hub with sample output type and compound task ID structure
   expect_snapshot(
     create_model_out_submit_tmpl(
-      config_tasks = read_config_file(system.file("config", "tasks-comp-tid.json",
+      config_tasks = hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
         package = "hubData"
       )),
       round_id = "2022-12-26"
@@ -124,7 +124,7 @@ test_that("create_model_out_submit_tmpl works correctly", {
   )
   expect_snapshot(
     create_model_out_submit_tmpl(
-      config_tasks = read_config_file(
+      config_tasks = hubUtils::read_config_file(
         system.file("config", "tasks-comp-tid.json",
           package = "hubData"
         )

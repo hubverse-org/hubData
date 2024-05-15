@@ -97,7 +97,7 @@ expand_model_out_val_grid(config_tasks,
   as_arrow_table = TRUE
 )
 # Hub with sample output type
-config_tasks <- read_config_file(system.file("config", "tasks.json",
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
   package = "hubData"
 ))
 expand_model_out_val_grid(config_tasks,
@@ -109,7 +109,7 @@ expand_model_out_val_grid(config_tasks,
   include_sample_ids = TRUE
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
   package = "hubData"
 ))
 expand_model_out_val_grid(config_tasks,

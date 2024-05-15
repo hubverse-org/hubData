@@ -396,9 +396,9 @@
 ---
 
     Code
-      expand_model_out_val_grid(read_config_file(test_path("testdata", "configs",
-        "tasks-samples-2mt.json")), round_id = "2022-12-26", include_sample_ids = TRUE) %>%
-        dplyr::filter(.data$output_type == "sample")
+      expand_model_out_val_grid(hubUtils::read_config_file(test_path("testdata",
+        "configs", "tasks-samples-2mt.json")), round_id = "2022-12-26",
+      include_sample_ids = TRUE) %>% dplyr::filter(.data$output_type == "sample")
     Output
       # A tibble: 12 x 6
          forecast_date target              horizon location output_type output_type_id

@@ -44,7 +44,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.2.0)
 Remotes:
-    Infectious-Disease-Modeling-Hubs/hubUtils,
+    Infectious-Disease-Modeling-Hubs/hubUtils@enhancement/v3-utils,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: Infectious-Disease-Modeling-Hubs/hubStyle
 Depends: 

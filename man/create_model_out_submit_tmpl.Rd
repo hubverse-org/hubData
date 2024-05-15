@@ -95,7 +95,7 @@ create_model_out_submit_tmpl(hub_con,
   complete_cases_only = FALSE
 )
 # Hub with sample output type
-config_tasks <- read_config_file(system.file("config", "tasks.json",
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
   package = "hubData"
 ))
 create_model_out_submit_tmpl(
@@ -103,7 +103,7 @@ create_model_out_submit_tmpl(
   round_id = "2022-12-26"
 )
 # Hub with sample output type and compound task ID structure
-config_tasks <- read_config_file(system.file("config", "tasks-comp-tid.json",
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
   package = "hubData"
 ))
 create_model_out_submit_tmpl(

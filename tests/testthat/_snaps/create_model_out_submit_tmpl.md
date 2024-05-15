@@ -133,8 +133,8 @@
 ---
 
     Code
-      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
-        "config", "tasks.json", package = "hubData")), round_id = "2022-12-26")
+      create_model_out_submit_tmpl(config_tasks = hubUtils::read_config_file(
+        system.file("config", "tasks.json", package = "hubData")), round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -154,8 +154,8 @@
 ---
 
     Code
-      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
-        "config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26")
+      create_model_out_submit_tmpl(config_tasks = hubUtils::read_config_file(
+        system.file("config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26")
     Output
       # A tibble: 42 x 7
          forecast_date target        horizon location output_type output_type_id value
@@ -175,8 +175,8 @@
 ---
 
     Code
-      create_model_out_submit_tmpl(config_tasks = read_config_file(system.file(
-        "config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26") %>%
+      create_model_out_submit_tmpl(config_tasks = hubUtils::read_config_file(
+        system.file("config", "tasks-comp-tid.json", package = "hubData")), round_id = "2022-12-26") %>%
         dplyr::filter(.data$output_type == "sample")
     Output
       # A tibble: 6 x 7
