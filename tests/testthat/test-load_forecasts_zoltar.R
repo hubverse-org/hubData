@@ -38,8 +38,11 @@ test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()"
 })
 
 
+# todo xx blue sky call to load_forecasts_zoltar()
+
+
 #
-# test format_to_hub_model_output() individual output conditions
+# test format_to_hub_model_output() output
 #
 
 test_that("test that load_forecasts_zoltar() correctly handles empty forecasts", {
@@ -54,29 +57,59 @@ test_that("test that load_forecasts_zoltar() correctly handles empty forecasts",
   expect_equal(act_data_frame, exp_data_frame)
 })
 
-test_that("format_to_hub_model_output() expected output", {
+test_that("format_to_hub_model_output() expected output, default point_output_type", {
   zoltar_forecast_csv_file <- "testdata/zoltar_data/zoltar_forecasts.csv"
-  zoltar_forecasts <- utils::read.csv(zoltar_forecast_csv_file, stringsAsFactors = FALSE, colClasses = 'character')  # "NA" -> NA
+  zoltar_col_types <- c("character", "Date", "character", "character", "character", "character",
+                        NA, NA, NA, NA, NA, NA, NA, NA, NA)  # based on "cDcccc????d????" from zoltr::job_data()
+  zoltar_forecasts <- utils::read.csv(zoltar_forecast_csv_file, stringsAsFactors = FALSE, colClasses = zoltar_col_types)  # "NA" -> NA
   zoltar_forecasts["" == zoltar_forecasts] <- NA  # "" -> NA
   zoltar_targets_df <- data.frame(name = c("1 wk ahead inc case", "above baseline", "pct next week", "season severity", "Season peak week"),
                                   numeric_horizon = c(1, NA, 1, NA, NA))
-  act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df) |>
-    dplyr::arrange(target, output_type, output_type_id, value)
-  exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output.csv", stringsAsFactors = FALSE,
-                                    colClasses = 'character') |>  # "NA" -> NA
-    dplyr::arrange(target, output_type, output_type_id, value) |>
-    dplyr::mutate(horizon = as.numeric(horizon)) |>
+  act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df, point_output_type = "median") |>
+    dplyr::arrange(unit, target, output_type, output_type_id, value)
+  hub_col_types <- c("character", "Date", "character", "character", "numeric", "character", "character", "character", "numeric")
+  exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output_median.csv", stringsAsFactors = FALSE,
+                                    colClasses = hub_col_types) |>  # "NA" -> NA
+    dplyr::arrange(unit, target, output_type, output_type_id, value) |>
     tibble()
-  View(act_data_frame)
-  View(exp_data_frame)
   expect_equal(act_data_frame, exp_data_frame)
 })
 
 
 # todo: test these cases:
 # adding a warning whenever "points" are extracted from Zoltar. e.g. "The query you passed includes point forecasts which do not map cleanly to a hubverse output type."
-# allowing the user to specify a "point_output_type" argument as mean or median so it could be returned with output_type based on the user specified value.
 # test various cases of extracting horizon from zoltar target names, e.g., "1 wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1". document limits (one instance of horizon)
+
+
+#
+# test load_forecasts_zoltar() point_output_type argument
+#
+
+# allowing the user to specify a "point_output_type" argument as mean or median so it could be returned with output_type based on the user specified value. The default is “median”.
+test_that("format_to_hub_model_output() expected output, mean point_output_type", {
+  zoltar_forecast_csv_file <- "testdata/zoltar_data/zoltar_forecasts.csv"
+  zoltar_col_types <- c("character", "Date", "character", "character", "character", "character",
+                        NA, NA, NA, NA, NA, NA, NA, NA, NA)  # based on "cDcccc????d????" from zoltr::job_data()
+  zoltar_forecasts <- utils::read.csv(zoltar_forecast_csv_file, stringsAsFactors = FALSE, colClasses = zoltar_col_types)  # "NA" -> NA
+  zoltar_forecasts["" == zoltar_forecasts] <- NA  # "" -> NA
+  zoltar_targets_df <- data.frame(name = c("1 wk ahead inc case", "above baseline", "pct next week", "season severity", "Season peak week"),
+                                  numeric_horizon = c(1, NA, 1, NA, NA))
+
+  mockery::stub(load_forecasts_zoltar, 'zoltr::zoltar_authenticate', NULL)
+  mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
+  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", zoltar_forecasts)
+  mockery::stub(load_forecasts_zoltar, "zoltr::targets", zoltar_targets_df)
+
+  hub_col_types <- c("character", "Date", "character", "character", "numeric", "character", "character", "character", "numeric")
+  exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output_mean.csv", stringsAsFactors = FALSE,
+                                    colClasses = hub_col_types) |>  # "NA" -> NA
+    dplyr::arrange(unit, target, output_type, output_type_id, value) |>
+    tibble()
+  act_data_frame <- load_forecasts_zoltar("project 1", point_output_type = "mean") |>
+    dplyr::arrange(unit, target, output_type, output_type_id, value)
+  expect_equal(act_data_frame, exp_data_frame)
+})
+
 
 #
 # test validate_arguments() individual conditions
@@ -181,6 +214,33 @@ test_that("invalid as_of throws an error", {
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
                        "1 wk ahead inc death", "bin", "2021-05-x10 12:00 UTC"),
     "invalid as_of", fixed = TRUE
+  )
+})
+
+test_that("invalid point_output_type throws an error", {
+  mockery::stub(validate_arguments, 'zoltr::projects',
+                data.frame(name = c("project 1", "project 2"),
+                           url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
+  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
+
+  # case: valid: "median"
+  expect_no_error(
+    validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
+                       "1 wk ahead inc death", "bin", "2021-05-10 12:00 UTC", "median"))
+
+  # case: valid: "mean"
+  expect_no_error(
+    validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
+                       "1 wk ahead inc death", "bin", "2021-05-10 12:00 UTC", "mean"))
+
+  # case: invalid
+  expect_error(
+    validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
+                       "1 wk ahead inc death", "bin", "2021-05-10 12:00 UTC", "neither median nor mean"),
+    "invalid point_output_type", fixed = TRUE
   )
 })
 

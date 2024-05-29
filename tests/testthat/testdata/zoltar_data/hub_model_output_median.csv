@@ -8,8 +8,6 @@ docs_mod,2011-10-16,2011-2012,loc1,NA,season severity,pmf,severe,0.9
 docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-15,0.01
 docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-22,0.1
 docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-29,0.89
-docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,sample,1,2020-01-05
-docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,sample,2,2019-12-15
 docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,1.1,0.3
 docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,2.2,0.2
 docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,3.3,0.5
