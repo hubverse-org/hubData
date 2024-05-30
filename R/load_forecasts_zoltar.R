@@ -2,13 +2,12 @@ YYYY_MM_DD_DATE_FORMAT <- '%Y-%m-%d'  # e.g., '2017-01-17'
 
 # todo:
 # - add stringr dependency
-# - document kinds of zoltar target names we support. e.g., only one instance of numeric_horizon in target name
+# - document kinds of zoltar target names we support. e.g., only one instance of numeric_horizon in target name at the beginning or end. something about spaces too
 # - require stringr package
 # - rows with non-numeric values are not included/translated
 # - requires Z_USERNAME and Z_PASSWORD environment vars
 # - unsupported zoltar types: "named", "mode"
 # - as_of: the datatime eparsing function used below is extremely lenient when it comes to formatting, so please exercise caution
-# - note: we are using `suppressWarnings()` below to suppress warnings about intermediate conversions of the value column to NA. this might be better done via regexps or custom function as an `as.numeric()` alternative
 
 # todo docs:
 # - project_name (character): name of the Zoltar project hosting the hub's data. assumes hosted at zoltardata.com
@@ -39,11 +38,12 @@ load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL,
 }
 
 format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_output_type) {
-  # zoltar_targets_df: data.frame(id, url, name, type, description, outcome_variable, is_step_ahead, numeric_horizon, reference_date_type)
   hub_model_outputs <- forecasts |>
     dplyr::left_join(dplyr::select(zoltar_targets_df, name, numeric_horizon), by = c("target" = "name")) |>
-    dplyr::mutate(value = ifelse(class %in% c("bin", "sample"), TRUE, suppressWarnings(as.numeric(value)))) |>
-    dplyr::filter(!class %in% c("named", "mode"), !is.na(value)) |>
+    dplyr::mutate(numeric_value = ifelse(!is.na(value), stringr::str_detect(value, "[^\\d|\\.]", negate = TRUE), TRUE),
+                  numeric_sample = ifelse(!is.na(sample), stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE), TRUE)) |>
+    dplyr::filter(numeric_value, numeric_sample, !class %in% c("named", "mode")) |>
+    dplyr::mutate(value = as.numeric(value)) |>
     dplyr::mutate(hub_target = stringr::str_replace(target, paste0("\\s*\\b", numeric_horizon, "\\s*\\b"), "")) |>
     dplyr::group_split(class) |>
     purrr::map_dfr(.f = function(split_outputs) {
@@ -52,6 +52,8 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
         split_outputs |>
           dplyr::mutate(output_type = "pmf", output_type_id = cat, hub_value = as.numeric(prob))
       } else if (class == "point") {
+        cli::cli_warn(paste0("Passed query includes `point` forecasts, which do not map cleanly to a hubverse output",
+                             " type. They were mapped to {.val {point_output_type}}."))
         split_outputs |>
           dplyr::mutate(output_type = point_output_type, output_type_id = NA, hub_value = value)
       } else if (class %in% c("mean", "median")) {

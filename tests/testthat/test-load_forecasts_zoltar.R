@@ -38,9 +38,6 @@ test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()"
 })
 
 
-# todo xx blue sky call to load_forecasts_zoltar()
-
-
 #
 # test format_to_hub_model_output() output
 #
@@ -65,8 +62,10 @@ test_that("format_to_hub_model_output() expected output, default point_output_ty
   zoltar_forecasts["" == zoltar_forecasts] <- NA  # "" -> NA
   zoltar_targets_df <- data.frame(name = c("1 wk ahead inc case", "above baseline", "pct next week", "season severity", "Season peak week"),
                                   numeric_horizon = c(1, NA, 1, NA, NA))
-  act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df, point_output_type = "median") |>
-    dplyr::arrange(unit, target, output_type, output_type_id, value)
+  expect_warning(
+    act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df, point_output_type = "median") |>
+      dplyr::arrange(unit, target, output_type, output_type_id, value))
+
   hub_col_types <- c("character", "Date", "character", "character", "numeric", "character", "character", "character", "numeric")
   exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output_median.csv", stringsAsFactors = FALSE,
                                     colClasses = hub_col_types) |>  # "NA" -> NA
@@ -76,9 +75,16 @@ test_that("format_to_hub_model_output() expected output, default point_output_ty
 })
 
 
-# todo: test these cases:
-# adding a warning whenever "points" are extracted from Zoltar. e.g. "The query you passed includes point forecasts which do not map cleanly to a hubverse output type."
-# test various cases of extracting horizon from zoltar target names, e.g., "1 wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1". document limits (one instance of horizon)
+test_that("format_to_hub_model_output() outputs warning for point conversions", {
+  zoltar_point_forecast <- data.frame(model = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US",
+                                      target = "1 wk ahead inc case", class = "point", value = "1.1", cat = NA,
+                                      prob = NA, sample = NA, quantile = NA, family = NA, param1 = NA, param2 = NA,
+                                      param3 = NA)
+  zoltar_targets_df <- data.frame(name = "1 wk ahead inc case", numeric_horizon = 1)
+  expect_warning(format_to_hub_model_output(zoltar_point_forecast, zoltar_targets_df, point_output_type = "median"),
+                 "Passed query includes `point` forecasts, which do not map cleanly to a hubverse output type.",
+                 fixed = TRUE)
+})
 
 
 #
@@ -105,8 +111,9 @@ test_that("format_to_hub_model_output() expected output, mean point_output_type"
                                     colClasses = hub_col_types) |>  # "NA" -> NA
     dplyr::arrange(unit, target, output_type, output_type_id, value) |>
     tibble()
-  act_data_frame <- load_forecasts_zoltar("project 1", point_output_type = "mean") |>
-    dplyr::arrange(unit, target, output_type, output_type_id, value)
+  expect_warning(
+    act_data_frame <- load_forecasts_zoltar("project 1", point_output_type = "mean") |>
+      dplyr::arrange(unit, target, output_type, output_type_id, value))
   expect_equal(act_data_frame, exp_data_frame)
 })
 
@@ -114,6 +121,33 @@ test_that("format_to_hub_model_output() expected output, mean point_output_type"
 #
 # test validate_arguments() individual conditions
 #
+
+# test various cases of extracting horizon from zoltar target names, e.g., "1 wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1". document limits (one instance of horizon)
+test_that("format_to_hub_model_output() correctly parses target", {
+  # cases (input, output):
+  # - "1 wk ahead inc case"    ->  "wk ahead inc case"    # supported
+  # - "wk ahead inc case 1"    ->  "wk ahead inc case"    # ""
+  # - "wk 1 ahead inc case"    ->  "wkahead inc case"     # unsupported
+  # - "1 wk 1 ahead inc case"  ->  "wk 1 ahead inc case"  # ""
+  # - "1 wk ahead inc case 1"  ->  "wk ahead inc case 1"  # ""
+  zoltar_forecasts <- expand.grid(
+    model = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US",
+    target = c("1 wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1", "1 wk 1 ahead inc case", "1 wk ahead inc case 1"),
+    class = "mean", value = 10, cat = NA, prob = NA, sample = NA, quantile = NA, family = NA, param1 = NA, param2 = NA,
+    param3 = NA, stringsAsFactors = FALSE)
+  zoltar_targets_df <- data.frame(name = c("1 wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1", "1 wk 1 ahead inc case", "1 wk ahead inc case 1"),
+                                  numeric_horizon = c(1, 1, 1, 1, 1))
+  act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df, point_output_type = "median")
+  exp_data_frame <- expand.grid(
+    model_id = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US", horizon = 1,
+    target = c("wk ahead inc case", "wkahead inc case", "wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1"),
+    output_type = "mean", output_type_id = NA, value = 10, stringsAsFactors = FALSE) |>
+    tibble()
+  attributes(act_data_frame) <- NULL  # due to expand.grid()
+  attributes(exp_data_frame) <- NULL  # ""
+  expect_equal(act_data_frame, exp_data_frame)
+})
+
 
 test_that("invalid project_name throws error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
