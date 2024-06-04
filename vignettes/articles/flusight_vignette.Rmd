@@ -1,0 +1,144 @@
+---
+title: "FluSight Hubverse Cloud Vignette"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Library and system set up
+If you don't have the following packages, make sure to install them
+
+```{r install, eval=FALSE}
+remotes::install_github("Infectious-Disease-Modeling-Hubs/hubData")
+remotes::install_github("Infectious-Disease-Modeling-Hubs/hubEnsembles")
+remotes::install_github("Infectious-Disease-Modeling-Hubs/hubVis")
+```
+
+Once the required packages are installed, load the following:
+
+```{r libraries, message=FALSE}
+library(hubData)
+library(hubEnsembles)
+library(hubVis)
+
+library(arrow)
+library(dplyr)
+```
+
+
+## Load the data
+CDC's FluSight Forecast Hub, which began as a [GitHub repository](https://github.com/cdcepi/FluSight-forecast-hub/tree/main), has been mirrored to the cloud via a publicly-accessible AWS S3 bucket. This means that instead of relying on a local clone, the data can be directly accessed from the cloud.
+
+In particular, `hubData` makes it possible to access the model output data as an already-formatted tibble in a few simple steps.
+
+```{r}
+hub_path_cloud <- s3_bucket('cdcepi-flusight-forecast-hub/') # connect to bucket
+hub_con <- connect_hub(hub_path_cloud, file_format = "parquet") # connect to hub
+data_cloud <- hub_con |>
+  collect() # collect all model output into single tibble
+```
+
+This collected model output can then be changed with the common `dplyr` operations as desired
+
+```{r}
+# perform various operations on data
+filtered_outputs <- data_cloud |>
+  filter(output_type == "quantile", location == "US", horizon > -1) |>
+  mutate(output_type_id = as.numeric(output_type_id)) |>
+  as_model_out_tbl()
+
+# print data
+head(filtered_outputs)
+```
+
+Currently, there is no `hubData` integration to extract target data from the cloud (though this will likely be supported in the future), so instead we load it directly from a local file. This file contains observed influenza hospital admissions up through the final reference date of the 2023-2024 influenza season.
+
+```{r, message=FALSE}
+target_data <- readr::read_csv("target-hospital-admissions_2024-04-27.csv") |>
+  select(-X, -weekly_rate) # remove row numbers and weekly rate columns
+
+head(target_data) # print
+```
+
+## Calculate some ensembles
+See [hubEnsembles package](https://infectious-disease-modeling-hubs.github.io/hubEnsembles/index.html) for more information
+
+Quantile mean: 
+```{r}
+mean_ens <- filtered_outputs |>
+  hubEnsembles::simple_ensemble(model_id = "mean-ensemble")
+head(mean_ens)
+```
+
+Linear pool (with normal tails): 
+```{r}
+linear_pool <- filtered_outputs |>
+  hubEnsembles::linear_pool(model_id = "linear-pool")
+head(linear_pool)
+```
+
+## Plot the output
+See [hubVis package](https://infectious-disease-modeling-hubs.github.io/hubVis/index.html) for more information
+
+### Data processing
+Modify and filter the target data for plotting:
+
+```{r}
+target_data_plotted <- target_data |>
+  mutate(target = "wk inc flu hosp", observation = value) |>
+  filter(location == "US", date >= as.Date("2023-09-23"))
+```
+
+Modify and filter forecast data for plotting
+```{r}
+reference_dates <- unique(filtered_outputs$reference_date)
+model_outputs_plotted <- filtered_outputs |>
+  filter(model_id %in% c("FluSight-baseline", "MOBS-GLEAM_FLUH", "PSI-PROF")) |>
+  rbind(mean_ens, linear_pool) # bind with ensembles
+```
+
+### Plot
+Single plot, single set of forecasts for one reference date
+
+```{r}
+model_outputs_plotted |>
+  filter(reference_date == as.Date("2024-04-20")) |>
+  hubVis::plot_step_ahead_model_output(
+    target_data_plotted,
+    x_col_name = "target_end_date",
+    use_median_as_point = TRUE,
+    group = "reference_date",
+    interactive = FALSE
+  )
+```
+
+Single plot, multiple sets of forecasts for reference dates every 4 weeks
+```{r}  
+model_outputs_plotted |>
+  filter(reference_date %in% reference_dates[seq(3, 31, 4)]) |>
+  hubVis::plot_step_ahead_model_output(
+    target_data_plotted,
+    x_col_name = "target_end_date",
+    use_median_as_point = TRUE,
+    group = "reference_date",
+    interactive = FALSE
+  )
+```
+
+Faceted plot, multiple sets of forecasts for reference states every 4 weeks
+
+```{r}
+model_outputs_plotted |>
+  filter(reference_date %in% reference_dates[seq(3, 31, 4)]) |>
+  hubVis::plot_step_ahead_model_output(
+    target_data_plotted,
+    x_col_name = "target_end_date",
+    use_median_as_point = TRUE,
+    show_legend = FALSE,
+    facet = "model_id",
+    group = "reference_date",
+    interactive = FALSE
+  )
+```
