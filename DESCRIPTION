@@ -25,8 +25,9 @@ Imports:
     cli,
     dplyr,
     fs,
-    hubUtils (>= 0.0.1),
     hubEnsembles,
+    hubUtils (>= 0.0.1),
+    hubVis (>= 0.0.0.9100),
     magrittr,
     purrr,
     rlang,
@@ -46,6 +47,7 @@ Suggests:
     testthat (>= 3.2.0)
 Remotes:
     Infectious-Disease-Modeling-Hubs/hubEnsembles,
+    Infectious-Disease-Modeling-Hubs/hubVis,
     Infectious-Disease-Modeling-Hubs/hubUtils,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: Infectious-Disease-Modeling-Hubs/hubStyle
