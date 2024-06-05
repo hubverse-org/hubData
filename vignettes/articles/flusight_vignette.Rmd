@@ -34,7 +34,7 @@ CDC's FluSight Forecast Hub, which began as a [GitHub repository](https://github
 In particular, `hubData` makes it possible to access the model output data as an already-formatted tibble in a few simple steps.
 
 ```{r}
-hub_path_cloud <- s3_bucket('cdcepi-flusight-forecast-hub/') # connect to bucket
+hub_path_cloud <- s3_bucket("cdcepi-flusight-forecast-hub/") # connect to bucket
 hub_con <- connect_hub(hub_path_cloud, file_format = "parquet") # connect to hub
 data_cloud <- hub_con |>
   collect() # collect all model output into single tibble
