@@ -25,6 +25,7 @@ library(hubVis)
 
 library(arrow)
 library(dplyr)
+library(aws.s3)
 ```
 
 
@@ -53,10 +54,14 @@ filtered_outputs <- data_cloud |>
 head(filtered_outputs)
 ```
 
-Currently, there is no `hubData` integration to extract target data from the cloud (though this will likely be supported in the future), so instead we load it directly from a local file. This file contains observed influenza hospital admissions up through the final reference date of the 2023-2024 influenza season. This file is stored in the "vignettes/articles" directory of the `hubData` package.
+Currently, there is no specific `hubData` integration to extract target data from the cloud; however, we can instead use the `aws.s3` package to read the contents of the most up-to-date target data file stored in the cloud.
 
 ```{r, message=FALSE}
-target_data <- readr::read_csv("target-hospital-admissions_2024-04-27.csv") |>
+target_data <-
+  aws.s3::s3read_using(
+    readr::read_csv,
+    object = "s3://cdcepi-flusight-forecast-hub/target-data/target-hospital-admissions.csv"
+  ) |>
   select(date, location, value) # keep only required columns
 
 head(target_data) # print
