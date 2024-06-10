@@ -1,23 +1,46 @@
 YYYY_MM_DD_DATE_FORMAT <- '%Y-%m-%d'  # e.g., '2017-01-17'
 
-# todo:
-# - add stringr dependency
-# - document kinds of zoltar target names we support. e.g., only one instance of numeric_horizon in target name at the beginning or end. something about spaces too
-# - require stringr package
-# - rows with non-numeric values are not included/translated
-# - requires Z_USERNAME and Z_PASSWORD environment vars
-# - unsupported zoltar types: "named", "mode"
-# - as_of: the datatime eparsing function used below is extremely lenient when it comes to formatting, so please exercise caution
-
-# todo docs:
-# - project_name (character): name of the Zoltar project hosting the hub's data. assumes hosted at zoltardata.com
-# - models (character vector): which models to query. pass model abbreviations
-# - timezeros (character vector): which timezeroes to query. pass as dates in yyyy-mm-dd format
-# - units (character vector): which units to query. pass unit abbreviations
-# - targets (character vector): which targets to query. pass target names
-# - types (character vector): which forecast types to query. Choices are bin, named, point, sample, quantile, mean, median, and mode.
-# - as_of (character): datetime to load forecasts submitted as of this time (i.e., forecast version). It could use the format of one of the three examples: "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC". If you would like to set a timezone, it has to be UTC now. If not, a helper function will append the default timezone to your input based on hub parameter. Default to NULL to load the latest version.
-
+#' Load forecasts from zoltardata.com in hubverse format
+#'
+#' @param project_name a string naming the Zoltar project to load forecasts from. assumes the host is zoltardata.com
+#' @param models a character vector that specifies the models to query. must be model abbreviations. defaults to NULL,
+#'   which queries all models in the project
+#' @param timezeros a character vector that specifies the timezeros to query. must be yyyy-mm-dd format. defaults to
+#'   NULL, which queries all timezeros in the project
+#' @param units a character vector that specifies the units to query. must be unit abbreviations. defaults to NULL,
+#'   which queries all units in the project
+#' @param targets a character vector that specifies the targets to query. must be target names. defaults to NULL,
+#'   which queries all targets in the project
+#' @param types a character vector that specifies the forecast types to query. Choices are "bin", "point", "sample",
+#'   "quantile", "mean", and "median". defaults to NULL, which queries all types in the project. note: while Zoltar
+#'   supports "named" and "mode" forecasts, this function ignores them
+#' @param as_of a datetime string that specifies the forecast version. The as_of field format must be a datetime as
+#'   parsed by the \href{https://dateutil.readthedocs.io/}{dateutil python library}, which accepts a variety of styles.
+#'   You can find examples \href{https://dateutil.readthedocs.io/en/stable/examples.html#parse-examples}{here}.
+#'   importantly, the datetime must include timezone information for disambiguation, without which the query will fail.
+#'   also, the datatime parsing function used below is extremely lenient when it comes to formatting, so please exercise
+#'   caution. defaults to NULL to load the latest version
+#' @param point_output_type a string that specifies how to convert zoltar `point` forecast data to hubverse output type.
+#'   must be either "median" or "mean". defaults to "median"
+#'
+#' @details
+#'   notes:
+#'     - requires Z_USERNAME and Z_PASSWORD environment vars
+#'     - while Zoltar supports "named" and "mode" forecasts, this function ignores them
+#'     - rows with non-numeric values are ignored
+#'     - this function removes numeric_horizon mentions from zoltar target names. target names can contain a maximum of
+#'       one numeric_horizon. example: "1 wk ahead inc case" -> "wk ahead inc case"
+#'
+#' @return a hubverse model_out_tbl containing the following columns: "model_id", "timezero", "season", "unit",
+#'   "horizon", "target", "output_type", "output_type_id", and "value"
+#' @export
+#'
+#' @examples
+#' df <- load_forecasts_zoltar("Docs Example Project")
+#' df <-
+#'   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
+#'                         units = c("loc1", "loc3"), targets = c("pct next week", "1 wk ahead inc case"),
+#'                         types = c("point"), as_of = NULL, point_output_type = "mean")
 load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
                                   types = NULL, as_of = NULL, point_output_type = "median") {
   zoltar_connection <- zoltr::new_connection()
@@ -30,10 +53,12 @@ load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL,
   if (nrow(forecasts) == 0) {  # special case
     data.frame(model_id = character(), timezero = character(), season = character(), unit = character(),
                horizon = character(), target = character(), output_type = character(), output_type_id = character(),
-               value = character())
+               value = numeric()) |>
+      hubUtils::as_model_out_tbl()
   } else {
     zoltar_targets_df <- zoltr::targets(zoltar_connection, project_url)
-    format_to_hub_model_output(forecasts, zoltar_targets_df, point_output_type)
+    format_to_hub_model_output(forecasts, zoltar_targets_df, point_output_type) |>
+      hubUtils::as_model_out_tbl()
   }
 }
 
@@ -44,7 +69,7 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
                   numeric_sample = ifelse(!is.na(sample), stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE), TRUE)) |>
     dplyr::filter(numeric_value, numeric_sample, !class %in% c("named", "mode")) |>
     dplyr::mutate(value = as.numeric(value)) |>
-    dplyr::mutate(hub_target = stringr::str_replace(target, paste0("\\s*\\b", numeric_horizon, "\\s*\\b"), "")) |>
+    dplyr::mutate(hub_target = stringr::str_squish(stringr::str_remove(target, paste0(numeric_horizon)))) |>
     dplyr::group_split(class) |>
     purrr::map_dfr(.f = function(split_outputs) {
       class <- split_outputs$class[1]
@@ -82,8 +107,6 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
     dplyr::rename(model_id = model, horizon = numeric_horizon, target = hub_target, value = hub_value)
 }
 
-# todo docs
-# return: project_url
 validate_arguments <- function(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of, point_output_type = "median") {
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == project_name, "url"]

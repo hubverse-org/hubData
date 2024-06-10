@@ -10,7 +10,7 @@ test_that("test that load_forecasts_zoltar() calls validate_arguments()", {
   mockery::stub(load_forecasts_zoltar, 'zoltr::zoltar_authenticate', NULL)
   mockery::stub(load_forecasts_zoltar, "validate_arguments", validate_arguments_mock)
   mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", empty_zoltar_df)
-  load_forecasts_zoltar("project 1")
+  suppressWarnings(load_forecasts_zoltar("project 1"))
   expect_called(validate_arguments_mock, 1)
 })
 
@@ -19,7 +19,7 @@ test_that("test that load_forecasts_zoltar() calls do_zoltar_query()", {
   mockery::stub(load_forecasts_zoltar, 'zoltr::zoltar_authenticate', NULL)
   mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
   mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", do_zoltar_query_mock)
-  load_forecasts_zoltar("project 1")
+  suppressWarnings(load_forecasts_zoltar("project 1"))
   expect_called(do_zoltar_query_mock, 1)
 })
 
@@ -27,13 +27,17 @@ test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()"
   one_line_zoltar_df <- data.frame(model = NA, timezero = NA, season = NA, unit = NA, target = NA, class = NA,
                                    value = NA, cat = NA, prob = NA, sample = NA, quantile = NA, family = NA,
                                    param1 = NA, param2 = NA, param3 = NA)
-  format_to_hub_model_output_mock <- mock()
+  format_to_hub_model_output_df <-
+    data.frame(model_id = character(), timezero = character(), season = character(), unit = character(),
+               horizon = character(), target = character(), output_type = character(), output_type_id = character(),
+               value = numeric())
+  format_to_hub_model_output_mock <- mock(format_to_hub_model_output_df)
   mockery::stub(load_forecasts_zoltar, 'zoltr::zoltar_authenticate', NULL)
   mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
   mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", one_line_zoltar_df)
   mockery::stub(load_forecasts_zoltar, "format_to_hub_model_output", format_to_hub_model_output_mock)
   mockery::stub(load_forecasts_zoltar, 'zoltr::targets', NULL)
-  load_forecasts_zoltar("project 1")
+  suppressWarnings(load_forecasts_zoltar("project 1"))
   expect_called(format_to_hub_model_output_mock, 1)
 })
 
@@ -47,10 +51,13 @@ test_that("test that load_forecasts_zoltar() correctly handles empty forecasts",
   mockery::stub(load_forecasts_zoltar, 'zoltr::zoltar_authenticate', NULL)
   mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
   mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", empty_zoltar_df)
-  act_data_frame <- load_forecasts_zoltar("project 1")
+  act_data_frame <- suppressWarnings(load_forecasts_zoltar("project 1"))
   exp_data_frame <- data.frame(model_id = character(), timezero = character(), season = character(), unit = character(),
                                horizon = character(), target = character(), output_type = character(),
-                               output_type_id = character(), value = character())
+                               output_type_id = character(), value = numeric()) |>
+    tibble::tibble() |>
+    hubUtils::as_model_out_tbl() |>
+    suppressWarnings()
   expect_equal(act_data_frame, exp_data_frame)
 })
 
@@ -70,10 +77,9 @@ test_that("format_to_hub_model_output() expected output, default point_output_ty
   exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output_median.csv", stringsAsFactors = FALSE,
                                     colClasses = hub_col_types) |>  # "NA" -> NA
     dplyr::arrange(unit, target, output_type, output_type_id, value) |>
-    tibble()
+    tibble::tibble()
   expect_equal(act_data_frame, exp_data_frame)
 })
-
 
 test_that("format_to_hub_model_output() outputs warning for point conversions", {
   zoltar_point_forecast <- data.frame(model = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US",
@@ -110,7 +116,8 @@ test_that("format_to_hub_model_output() expected output, mean point_output_type"
   exp_data_frame <- utils::read.csv("testdata/zoltar_data/hub_model_output_mean.csv", stringsAsFactors = FALSE,
                                     colClasses = hub_col_types) |>  # "NA" -> NA
     dplyr::arrange(unit, target, output_type, output_type_id, value) |>
-    tibble()
+    tibble::tibble() |>
+    hubUtils::as_model_out_tbl()
   expect_warning(
     act_data_frame <- load_forecasts_zoltar("project 1", point_output_type = "mean") |>
       dplyr::arrange(unit, target, output_type, output_type_id, value))
@@ -127,8 +134,8 @@ test_that("format_to_hub_model_output() correctly parses target", {
   # cases (input, output):
   # - "1 wk ahead inc case"    ->  "wk ahead inc case"    # supported
   # - "wk ahead inc case 1"    ->  "wk ahead inc case"    # ""
-  # - "wk 1 ahead inc case"    ->  "wkahead inc case"     # unsupported
-  # - "1 wk 1 ahead inc case"  ->  "wk 1 ahead inc case"  # ""
+  # - "wk 1 ahead inc case"    ->  "wk ahead inc case"    # ""
+  # - "1 wk 1 ahead inc case"  ->  "wk 1 ahead inc case"  # unsupported
   # - "1 wk ahead inc case 1"  ->  "wk ahead inc case 1"  # ""
   zoltar_forecasts <- expand.grid(
     model = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US",
@@ -140,14 +147,14 @@ test_that("format_to_hub_model_output() correctly parses target", {
   act_data_frame <- format_to_hub_model_output(zoltar_forecasts, zoltar_targets_df, point_output_type = "median")
   exp_data_frame <- expand.grid(
     model_id = "the-model", timezero = "2022-02-01", season = "2011-2012", unit = "US", horizon = 1,
-    target = c("wk ahead inc case", "wkahead inc case", "wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1"),
+    target = c("wk ahead inc case", "wk ahead inc case", "wk ahead inc case", "wk 1 ahead inc case", "wk ahead inc case 1"),
     output_type = "mean", output_type_id = NA, value = 10, stringsAsFactors = FALSE) |>
-    tibble()
+    tibble::tibble() |>
+    hubUtils::as_model_out_tbl()
   attributes(act_data_frame) <- NULL  # due to expand.grid()
   attributes(exp_data_frame) <- NULL  # ""
   expect_equal(act_data_frame, exp_data_frame)
 })
-
 
 test_that("invalid project_name throws error", {
   mockery::stub(validate_arguments, 'zoltr::projects',

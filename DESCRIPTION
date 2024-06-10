@@ -29,6 +29,7 @@ Imports:
     magrittr,
     purrr,
     rlang,
+    stringr,
     tibble,
     yaml
 Suggests: 
