@@ -31,7 +31,8 @@ Imports:
     rlang,
     stringr,
     tibble,
-    yaml
+    yaml,
+    zoltr
 Suggests: 
     covr,
     curl,

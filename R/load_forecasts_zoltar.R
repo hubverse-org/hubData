@@ -1,4 +1,4 @@
-YYYY_MM_DD_DATE_FORMAT <- '%Y-%m-%d'  # e.g., '2017-01-17'
+yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 
 #' Load forecasts from zoltardata.com in hubverse format
 #'
@@ -41,12 +41,15 @@ YYYY_MM_DD_DATE_FORMAT <- '%Y-%m-%d'  # e.g., '2017-01-17'
 #'   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
 #'                         units = c("loc1", "loc3"), targets = c("pct next week", "cases next week"),
 #'                         types = c("point"), as_of = NULL, point_output_type = "mean")
+#'
+#' @importFrom rlang .data
 load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
                                   types = NULL, as_of = NULL, point_output_type = "median") {
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
 
-  project_url <- validate_arguments(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of, point_output_type)
+  project_url <- validate_arguments(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of,
+                                    point_output_type)
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection, project_url = project_url,
                                       query_type = "forecasts", units = units, timezeros = timezeros, models = models,
                                       targets = targets, types = types, as_of = as_of)
@@ -62,40 +65,51 @@ load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL,
   }
 }
 
+
+#' Load forecasts from zoltardata.com in hubverse format
+#'
+#' @param forecasts
+#' @param zoltar_targets_df
+#' @param point_output_type
+#' @importFrom rlang .data
 format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_output_type) {
   hub_model_outputs <- forecasts |>
-    dplyr::left_join(dplyr::select(zoltar_targets_df, name, numeric_horizon), by = c("target" = "name")) |>
-    dplyr::mutate(numeric_value = ifelse(!is.na(value), stringr::str_detect(value, "[^\\d|\\.]", negate = TRUE), TRUE),
-                  numeric_sample = ifelse(!is.na(sample), stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE), TRUE)) |>
-    dplyr::filter(numeric_value, numeric_sample, !class %in% c("named", "mode")) |>
-    dplyr::mutate(value = as.numeric(value)) |>
-    dplyr::mutate(hub_target = stringr::str_squish(stringr::str_remove(target, paste0(numeric_horizon)))) |>
+    dplyr::left_join(dplyr::select(zoltar_targets_df, .data$name, .data$numeric_horizon), by = c("target" = "name")) |>
+    dplyr::mutate(numeric_value = ifelse(!is.na(.data$value),
+                                         stringr::str_detect(.data$value, "[^\\d|\\.]", negate = TRUE),
+                                         TRUE),
+                  numeric_sample = ifelse(!is.na(sample),
+                                          stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE),
+                                          TRUE)) |>
+    dplyr::filter(.data$numeric_value, .data$numeric_sample, !class %in% c("named", "mode")) |>
+    dplyr::mutate(value = as.numeric(.data$value)) |>
+    dplyr::mutate(hub_target = stringr::str_squish(stringr::str_remove(.data$target, paste0(.data$numeric_horizon)))) |>
     dplyr::group_split(class) |>
     purrr::map_dfr(.f = function(split_outputs) {
       class <- split_outputs$class[1]
       if (class == "bin") {
         split_outputs |>
-          dplyr::mutate(output_type = "pmf", output_type_id = cat, hub_value = as.numeric(prob))
+          dplyr::mutate(output_type = "pmf", output_type_id = cat, hub_value = as.numeric(.data$prob))
       } else if (class == "point") {
         cli::cli_warn(paste0("Passed query includes `point` forecasts, which do not map cleanly to a hubverse output",
                              " type. They were mapped to {.val {point_output_type}}."))
         split_outputs |>
-          dplyr::mutate(output_type = point_output_type, output_type_id = NA, hub_value = value)
+          dplyr::mutate(output_type = point_output_type, output_type_id = NA, hub_value = .data$value)
       } else if (class %in% c("mean", "median")) {
         split_outputs |>
-          dplyr::mutate(output_type = class, output_type_id = NA, hub_value = value)
+          dplyr::mutate(output_type = class, output_type_id = NA, hub_value = .data$value)
       } else if (class == "quantile") {
         split_outputs |>
-          dplyr::mutate(output_type = "quantile", output_type_id = as.character(quantile), hub_value = value)
+          dplyr::mutate(output_type = "quantile", output_type_id = as.character(quantile), hub_value = .data$value)
       } else if (class == "sample") {
         split_outputs |>
           dplyr::mutate(output_type = "sample", hub_value = suppressWarnings(as.numeric(sample))) |>
-          dplyr::group_by(model, timezero, unit, target) |>
-          dplyr::mutate(output_type_id = as.character(dplyr::row_number()), .before = hub_value) |>
+          dplyr::group_by(.data$model, .data$timezero, .data$unit, .data$target) |>
+          dplyr::mutate(output_type_id = as.character(dplyr::row_number()), .before = .data$hub_value) |>
           dplyr::ungroup()
       }
     }) |>
-    dplyr::filter(!is.na(hub_value))
+    dplyr::filter(!is.na(.data$hub_value))
 
   # columns at this point:
   # - model,timezero,season,unit,target,class,value,cat,prob,sample,quantile,family,param1,param2,param3
@@ -103,11 +117,14 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
   # - hub_target, output_type, output_type_id, hub_value
 
   hub_model_outputs |>
-    dplyr::select(model, timezero, season, unit, numeric_horizon, hub_target, output_type, output_type_id, hub_value) |>
-    dplyr::rename(model_id = model, horizon = numeric_horizon, target = hub_target, value = hub_value)
+    dplyr::select(.data$model, .data$timezero, .data$season, .data$unit, .data$numeric_horizon, .data$hub_target,
+                  .data$output_type, .data$output_type_id, .data$hub_value) |>
+    dplyr::rename(model_id = .data$model, horizon = .data$numeric_horizon, target = .data$hub_target,
+                  value = .data$hub_value)
 }
 
-validate_arguments <- function(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of, point_output_type = "median") {
+validate_arguments <- function(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of,
+                               point_output_type = "median") {
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == project_name, "url"]
   if (length(project_url) == 0) {
@@ -116,14 +133,18 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
 
   project_models <- zoltr::models(zoltar_connection = zoltar_connection, project_url = project_url)
   if (!all(models %in% project_models$model_abbr)) {
+    # nolint start
     missing_models <- setdiff(models, project_models)
     cli::cli_abort("model(s) not found in project: {.val {missing_models}}")
+    # nolint end
   }
 
   input_timezeros_as_dates <- lapply(timezeros, FUN = function(x) {
     if (stringr::str_length(x) == 10) {
-      as.Date(x, YYYY_MM_DD_DATE_FORMAT)  # NA if invalid format
-    } else { NA }
+      as.Date(x, yyyy_mm_dd_date_format)  # NA if invalid format
+    } else {
+      NA
+    }
   })
   if (any(is.na(input_timezeros_as_dates))) {
     cli::cli_abort("one or more invalid timezero formats")
@@ -131,32 +152,40 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
 
   project_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection, project_url = project_url)$timezero_date
   if (!all(timezeros %in% project_timezeros)) {
+    # nolint start
     missing_timezeros <- setdiff(timezeros, project_timezeros)
     cli::cli_abort("timezero(s) not found in project: {.val {missing_timezeros}}")
+    # nolint end
   }
 
   project_units <- zoltr::zoltar_units(zoltar_connection = zoltar_connection, project_url = project_url)$abbreviation
   if (!all(units %in% project_units)) {
+    # nolint start
     missing_units <- setdiff(units, project_units)
     cli::cli_abort("unit(s) not found in project: {.val {missing_units}}")
+    # nolint end
   }
 
   project_targets <- zoltr::targets(zoltar_connection = zoltar_connection, project_url = project_url)$name
   if (!all(targets %in% project_targets)) {
+    # nolint start
     missing_targets <- setdiff(targets, project_targets)
     cli::cli_abort("target(s) not found in project: {.val {missing_targets}}")
+    # nolint end
   }
 
   valid_types <- c("bin", "point", "sample", "quantile", "mean", "median")
   if (!all(types %in% valid_types)) {
+    # nolint start
     missing_types <- setdiff(types, valid_types)
     cli::cli_abort("invalid type(s): {.val {missing_types}}")
+    # nolint end
   }
 
   tryCatch(
-  {
-    strftime(as_of, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE)
-  },
+    {
+      strftime(as_of, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE)
+    },
     error = function(e) {  # e.g., Error in as.POSIXlt.character(x, tz = tz)
       cli::cli_abort("invalid as_of")
     }
