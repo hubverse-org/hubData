@@ -66,11 +66,6 @@ load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL,
 }
 
 
-#' Load forecasts from zoltardata.com in hubverse format
-#'
-#' @param forecasts
-#' @param zoltar_targets_df
-#' @param point_output_type
 #' @importFrom rlang .data
 format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_output_type) {
   hub_model_outputs <- forecasts |>
