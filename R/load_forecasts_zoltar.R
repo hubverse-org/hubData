@@ -44,7 +44,7 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 #' }
 #'
 #' @importFrom rlang .data
-#' @importFrom zoltr new_connection zoltar_authenticate do_zoltar_query targets
+#' @importFrom zoltr do_zoltar_query
 load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
                                   types = NULL, as_of = NULL, point_output_type = "median") {
   zoltar_connection <- zoltr::new_connection()
