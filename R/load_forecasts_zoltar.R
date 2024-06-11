@@ -100,7 +100,8 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
           dplyr::mutate(output_type = class, output_type_id = NA, hub_value = .data$value)
       } else if (class == "quantile") {
         split_outputs |>
-          dplyr::mutate(output_type = "quantile", output_type_id = as.character(quantile), hub_value = .data$value)
+          dplyr::mutate(output_type = "quantile", output_type_id = as.character(.data$quantile),
+                        hub_value = .data$value)
       } else if (class == "sample") {
         split_outputs |>
           dplyr::mutate(output_type = "sample", hub_value = suppressWarnings(as.numeric(sample))) |>
