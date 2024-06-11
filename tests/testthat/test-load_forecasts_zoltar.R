@@ -170,7 +170,7 @@ test_that("missing model names throws error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   expect_error(
     validate_arguments(NULL, "project 1", c("the-model", "bad-model"), NULL, NULL, NULL, NULL, NULL),
     regexp = "model(s) not found in project", fixed = TRUE
@@ -181,7 +181,7 @@ test_that("invalid timezero format throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01x", NULL, NULL, NULL, NULL),
     "one or more invalid timezero formats", fixed = TRUE
@@ -192,7 +192,7 @@ test_that("missing timezero throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-02", NULL, NULL, NULL, NULL),
@@ -204,9 +204,9 @@ test_that("missing unit throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "00", NULL, NULL, NULL),
     "unit(s) not found in project", fixed = TRUE
@@ -217,9 +217,9 @@ test_that("missing target throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
@@ -232,9 +232,9 @@ test_that("invalid type throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
@@ -247,9 +247,9 @@ test_that("invalid as_of throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
   expect_error(
     validate_arguments(NULL, "project 1", "the-model", "2022-02-01", "US",
@@ -262,9 +262,9 @@ test_that("invalid point_output_type throws an error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
 
   # case: valid: "median"
@@ -289,9 +289,9 @@ test_that("NULL args does not throw error", {
   mockery::stub(validate_arguments, 'zoltr::projects',
                 data.frame(name = c("project 1", "project 2"),
                            url = c("http://example.com/api/project/1/", "http://example.com/api/project/2/")))
-  mockery::stub(validate_arguments, 'zoltr::models', "the-model")
+  mockery::stub(validate_arguments, 'zoltr::models', data.frame(model_abbr = c("the-model")))
   mockery::stub(validate_arguments, 'zoltr::timezeros', data.frame(timezero_date = c("2022-02-01")))
-  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(name = c("US")))
+  mockery::stub(validate_arguments, 'zoltr::zoltar_units', data.frame(abbreviation = c("US")))
   mockery::stub(validate_arguments, 'zoltr::targets', data.frame(name = c("1 wk ahead inc death")))
 
   # models

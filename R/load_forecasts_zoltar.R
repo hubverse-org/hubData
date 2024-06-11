@@ -39,7 +39,7 @@ YYYY_MM_DD_DATE_FORMAT <- '%Y-%m-%d'  # e.g., '2017-01-17'
 #' df <- load_forecasts_zoltar("Docs Example Project")
 #' df <-
 #'   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
-#'                         units = c("loc1", "loc3"), targets = c("pct next week", "1 wk ahead inc case"),
+#'                         units = c("loc1", "loc3"), targets = c("pct next week", "cases next week"),
 #'                         types = c("point"), as_of = NULL, point_output_type = "mean")
 load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
                                   types = NULL, as_of = NULL, point_output_type = "median") {
@@ -115,7 +115,7 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
   }
 
   project_models <- zoltr::models(zoltar_connection = zoltar_connection, project_url = project_url)
-  if (!all(models %in% project_models)) {
+  if (!all(models %in% project_models$model_abbr)) {
     missing_models <- setdiff(models, project_models)
     cli::cli_abort("model(s) not found in project: {.val {missing_models}}")
   }
@@ -135,13 +135,13 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
     cli::cli_abort("timezero(s) not found in project: {.val {missing_timezeros}}")
   }
 
-  project_units <- zoltr::zoltar_units(zoltar_connection = zoltar_connection, project_url = project_url)
+  project_units <- zoltr::zoltar_units(zoltar_connection = zoltar_connection, project_url = project_url)$abbreviation
   if (!all(units %in% project_units)) {
     missing_units <- setdiff(units, project_units)
     cli::cli_abort("unit(s) not found in project: {.val {missing_units}}")
   }
 
-  project_targets <- zoltr::targets(zoltar_connection = zoltar_connection, project_url = project_url)
+  project_targets <- zoltr::targets(zoltar_connection = zoltar_connection, project_url = project_url)$name
   if (!all(targets %in% project_targets)) {
     missing_targets <- setdiff(targets, project_targets)
     cli::cli_abort("target(s) not found in project: {.val {missing_targets}}")
