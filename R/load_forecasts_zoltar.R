@@ -35,12 +35,13 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 #'   "horizon", "target", "output_type", "output_type_id", and "value"
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
 #' df <- load_forecasts_zoltar("Docs Example Project")
 #' df <-
 #'   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
 #'                         units = c("loc1", "loc3"), targets = c("pct next week", "cases next week"),
 #'                         types = c("point"), as_of = NULL, point_output_type = "mean")
+#' }
 #'
 #' @importFrom rlang .data
 load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,

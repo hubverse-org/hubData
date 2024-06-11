@@ -60,10 +60,12 @@ notes:
 one numeric_horizon. example: "1 wk ahead inc case" -> "wk ahead inc case"
 }
 \examples{
+\dontrun{
 df <- load_forecasts_zoltar("Docs Example Project")
 df <-
   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
                         units = c("loc1", "loc3"), targets = c("pct next week", "cases next week"),
                         types = c("point"), as_of = NULL, point_output_type = "mean")
+}
 
 }
