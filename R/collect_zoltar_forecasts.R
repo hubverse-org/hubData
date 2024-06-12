@@ -2,6 +2,14 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 
 #' Load forecasts from zoltardata.com in hubverse format
 #'
+#' `collect_zoltar_forecasts` retrieves data from a \href{https://zoltardata.com/}{zoltardata.com} project and
+#' transforms it from Zoltar's native download format into a hubverse one. Zoltar (documentation
+#' \href{https://docs.zoltardata.com/}{here}) is a pre-hubverse research project that implements a repository of model
+#' forecast results, including tools to administer, query, and visualize uploaded data, along with R and Python APIs to
+#' access data programmatically (\href{https://github.com/reichlab/zoltr/}{zoltr} and
+#' \href{https://github.com/reichlab/zoltpy/}{zoltpy}, respectively.) (This hubData function is itself implemented using
+#' the zoltr package.)
+#'
 #' @param project_name a string naming the Zoltar project to load forecasts from. assumes the host is zoltardata.com
 #' @param models a character vector that specifies the models to query. must be model abbreviations. defaults to NULL,
 #'   which queries all models in the project
@@ -24,29 +32,40 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 #'   must be either "median" or "mean". defaults to "median"
 #'
 #' @details
-#'   notes:
-#'     - requires Z_USERNAME and Z_PASSWORD environment vars
-#'     - while Zoltar supports "named" and "mode" forecasts, this function ignores them
-#'     - rows with non-numeric values are ignored
-#'     - this function removes numeric_horizon mentions from zoltar target names. target names can contain a maximum of
-#'       one numeric_horizon. example: "1 wk ahead inc case" -> "wk ahead inc case"
+#' Zoltar's data model differs from that of the hubverse in a few important ways. While Zoltar's model has the
+#' concepts of unit, target, and timezero, hubverse projects have hub-configurable columns, which makes the mapping
+#' from the former to the latter imperfect. In particular, Zoltar units translate roughly to hubverse task IDs, Zoltar
+#' targets include both the target outcome and numeric horizon in the target name, and Zoltar timezeros map to round
+#' ids. Finally, Zoltar's forecast types differ from those of the hubverse. Whereas Zoltar has seven types (bin,
+#' named, point, sample, quantile, mean, median, and mode), the hubverse has six (cdf, mean, median, pmf, quantile,
+#' sample), only some of which overlap.
+#'
+#' Additional notes:
+#' * requires the user to have a Zoltar account (use the \href{https://zoltardata.com/about}{Zoltar contact page}
+#'   to request one)
+#' * requires `Z_USERNAME` and `Z_PASSWORD` environment vars to be set to those of the user's Zoltar account
+#' * while Zoltar supports "named" and "mode" forecasts, this function ignores them
+#' * rows with non-numeric values are ignored
+#' * this function removes numeric_horizon mentions from zoltar target names. target names can contain a maximum of
+#'   one numeric_horizon. example: "1 wk ahead inc case" -> "wk ahead inc case"
 #'
 #' @return a hubverse model_out_tbl containing the following columns: "model_id", "timezero", "season", "unit",
 #'   "horizon", "target", "output_type", "output_type_id", and "value"
 #' @export
 #'
 #' @examples \dontrun{
-#' df <- load_forecasts_zoltar("Docs Example Project")
+#' df <- collect_zoltar_forecasts("Docs Example Project")
 #' df <-
-#'   load_forecasts_zoltar("Docs Example Project", models = c("docs_mod"), timezeros = c("2011-10-16"),
-#'                         units = c("loc1", "loc3"), targets = c("pct next week", "cases next week"),
-#'                         types = c("point"), as_of = NULL, point_output_type = "mean")
+#'   collect_zoltar_forecasts("Docs Example Project", models = c("docs_mod"),
+#'                         timezeros = c("2011-10-16"), units = c("loc1", "loc3"),
+#'                         targets = c("pct next week", "cases next week"), types = c("point"),
+#'                         as_of = NULL, point_output_type = "mean")
 #' }
 #'
 #' @importFrom rlang .data
 #' @importFrom zoltr do_zoltar_query
-load_forecasts_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
-                                  types = NULL, as_of = NULL, point_output_type = "median") {
+collect_zoltar_forecasts <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
+                                     types = NULL, as_of = NULL, point_output_type = "median") {
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
 

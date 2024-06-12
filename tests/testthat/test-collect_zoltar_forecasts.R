@@ -5,25 +5,25 @@ empty_zoltar_df <- data.frame(model = character(), timezero = character(), seaso
                               prob = character(), sample = character(), quantile = character(), family = character(),
                               param1 = character(), param2 = character(), param3 = character())
 
-test_that("test that load_forecasts_zoltar() calls validate_arguments()", {
+test_that("test that collect_zoltar_forecasts() calls validate_arguments()", {
   validate_arguments_mock <- mock()
-  mockery::stub(load_forecasts_zoltar, "zoltr::zoltar_authenticate", NULL)
-  mockery::stub(load_forecasts_zoltar, "validate_arguments", validate_arguments_mock)
-  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", empty_zoltar_df)
-  suppressWarnings(load_forecasts_zoltar("project 1"))
+  mockery::stub(collect_zoltar_forecasts, "zoltr::zoltar_authenticate", NULL)
+  mockery::stub(collect_zoltar_forecasts, "validate_arguments", validate_arguments_mock)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::do_zoltar_query", empty_zoltar_df)
+  suppressWarnings(collect_zoltar_forecasts("project 1"))
   expect_called(validate_arguments_mock, 1)
 })
 
-test_that("test that load_forecasts_zoltar() calls do_zoltar_query()", {
+test_that("test that collect_zoltar_forecasts() calls do_zoltar_query()", {
   do_zoltar_query_mock <- mock(empty_zoltar_df)
-  mockery::stub(load_forecasts_zoltar, "zoltr::zoltar_authenticate", NULL)
-  mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
-  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", do_zoltar_query_mock)
-  suppressWarnings(load_forecasts_zoltar("project 1"))
+  mockery::stub(collect_zoltar_forecasts, "zoltr::zoltar_authenticate", NULL)
+  mockery::stub(collect_zoltar_forecasts, "validate_arguments", NULL)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::do_zoltar_query", do_zoltar_query_mock)
+  suppressWarnings(collect_zoltar_forecasts("project 1"))
   expect_called(do_zoltar_query_mock, 1)
 })
 
-test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()", {
+test_that("test that collect_zoltar_forecasts() calls format_to_hub_model_output()", {
   one_line_zoltar_df <- data.frame(model = NA, timezero = NA, season = NA, unit = NA, target = NA, class = NA,
                                    value = NA, cat = NA, prob = NA, sample = NA, quantile = NA, family = NA,
                                    param1 = NA, param2 = NA, param3 = NA)
@@ -32,12 +32,12 @@ test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()"
                horizon = character(), target = character(), output_type = character(), output_type_id = character(),
                value = numeric())
   format_to_hub_model_out_mock <- mock(format_to_hub_model_output_df)
-  mockery::stub(load_forecasts_zoltar, "zoltr::zoltar_authenticate", NULL)
-  mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
-  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", one_line_zoltar_df)
-  mockery::stub(load_forecasts_zoltar, "format_to_hub_model_output", format_to_hub_model_out_mock)
-  mockery::stub(load_forecasts_zoltar, "zoltr::targets", NULL)
-  suppressWarnings(load_forecasts_zoltar("project 1"))
+  mockery::stub(collect_zoltar_forecasts, "zoltr::zoltar_authenticate", NULL)
+  mockery::stub(collect_zoltar_forecasts, "validate_arguments", NULL)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::do_zoltar_query", one_line_zoltar_df)
+  mockery::stub(collect_zoltar_forecasts, "format_to_hub_model_output", format_to_hub_model_out_mock)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::targets", NULL)
+  suppressWarnings(collect_zoltar_forecasts("project 1"))
   expect_called(format_to_hub_model_out_mock, 1)
 })
 
@@ -46,11 +46,11 @@ test_that("test that load_forecasts_zoltar() calls format_to_hub_model_output()"
 # test format_to_hub_model_output() output
 #
 
-test_that("test that load_forecasts_zoltar() correctly handles empty forecasts", {
-  mockery::stub(load_forecasts_zoltar, "zoltr::zoltar_authenticate", NULL)
-  mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
-  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", empty_zoltar_df)
-  act_data_frame <- suppressWarnings(load_forecasts_zoltar("project 1"))
+test_that("test that collect_zoltar_forecasts() correctly handles empty forecasts", {
+  mockery::stub(collect_zoltar_forecasts, "zoltr::zoltar_authenticate", NULL)
+  mockery::stub(collect_zoltar_forecasts, "validate_arguments", NULL)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::do_zoltar_query", empty_zoltar_df)
+  act_data_frame <- suppressWarnings(collect_zoltar_forecasts("project 1"))
   exp_data_frame <- data.frame(model_id = character(), timezero = character(), season = character(), unit = character(),
                                horizon = character(), target = character(), output_type = character(),
                                output_type_id = character(), value = numeric()) |>
@@ -97,7 +97,7 @@ test_that("format_to_hub_model_output() outputs warning for point conversions", 
 
 
 #
-# test load_forecasts_zoltar() point_output_type argument
+# test collect_zoltar_forecasts() point_output_type argument
 #
 
 # allowing the user to specify a "point_output_type" argument as mean or median so it could be returned with
@@ -113,10 +113,10 @@ test_that("format_to_hub_model_output() expected output, mean point_output_type"
                                            "Season peak week"),
                                   numeric_horizon = c(1, NA, 1, NA, NA))
 
-  mockery::stub(load_forecasts_zoltar, "zoltr::zoltar_authenticate", NULL)
-  mockery::stub(load_forecasts_zoltar, "validate_arguments", NULL)
-  mockery::stub(load_forecasts_zoltar, "zoltr::do_zoltar_query", zoltar_forecasts)
-  mockery::stub(load_forecasts_zoltar, "zoltr::targets", zoltar_targets_df)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::zoltar_authenticate", NULL)
+  mockery::stub(collect_zoltar_forecasts, "validate_arguments", NULL)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::do_zoltar_query", zoltar_forecasts)
+  mockery::stub(collect_zoltar_forecasts, "zoltr::targets", zoltar_targets_df)
 
   hub_col_types <- c("character", "Date", "character", "character", "numeric", "character", "character", "character",
                      "numeric")
@@ -126,7 +126,7 @@ test_that("format_to_hub_model_output() expected output, mean point_output_type"
     tibble::tibble() |>
     hubUtils::as_model_out_tbl()
   expect_warning(
-    act_data_frame <- load_forecasts_zoltar("project 1", point_output_type = "mean") |>
+    act_data_frame <- collect_zoltar_forecasts("project 1", point_output_type = "mean") |>
       dplyr::arrange(unit, target, output_type, output_type_id, value)
   )
   expect_equal(act_data_frame, exp_data_frame)
