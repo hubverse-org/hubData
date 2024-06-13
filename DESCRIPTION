@@ -1,6 +1,6 @@
 Package: hubData
 Title: Tools for accessing and working with hubverse Hub data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2378-4915")),
@@ -29,9 +29,11 @@ Imports:
     magrittr,
     purrr,
     rlang,
+    stringr,
     tibble,
-    yaml
-Suggests: 
+    yaml,
+    zoltr (>= 1.0.1)
+Suggests:
     covr,
     curl,
     dbplyr,
@@ -45,6 +47,7 @@ Suggests:
     testthat (>= 3.2.0)
 Remotes:
     Infectious-Disease-Modeling-Hubs/hubUtils,
+    reichlab/zoltr,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: Infectious-Disease-Modeling-Hubs/hubStyle
 Depends: 
