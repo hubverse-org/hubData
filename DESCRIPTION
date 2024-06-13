@@ -32,8 +32,8 @@ Imports:
     stringr,
     tibble,
     yaml,
-    zoltr
-Suggests: 
+    zoltr (>= 1.0.1)
+Suggests:
     covr,
     curl,
     dbplyr,
