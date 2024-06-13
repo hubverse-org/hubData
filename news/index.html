@@ -10,7 +10,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,10 @@
       <small>Source: <a href="https://github.com/Infectious-Disease-Modeling-Hubs/hubData/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="hubdata-011">hubData 0.1.1<a class="anchor" aria-label="anchor" href="#hubdata-011"></a></h2>
+<ul><li>Add <code><a href="../reference/collect_zoltar.html">collect_zoltar()</a></code>, which retrieves data from a <a href="https://zoltardata.com/" class="external-link">zoltardata.com</a> project and transforms it from Zoltar’s native download format into a hubverse one. Zoltar (documentation <a href="https://docs.zoltardata.com/" class="external-link">here</a>) is a pre-hubverse research project that implements a repository of model forecast results, including tools to administer, query, and visualize uploaded data, along with R and Python APIs to access data programmatically (<a href="https://github.com/reichlab/zoltr/" class="external-link">zoltr</a> and <a href="https://github.com/reichlab/zoltpy/" class="external-link">zoltpy</a>, respectively.)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="hubdata-010">hubData 0.1.0<a class="anchor" aria-label="anchor" href="#hubdata-010"></a></h2>
 <ul><li>Add <code><a href="../reference/collect_hub.html">collect_hub()</a></code> which wraps <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">dplyr::collect()</a></code> and, where possible, converts the output to a <code>model_out_tbl</code> class object by default. The function also accepts additional arguments that can be passed to <code><a href="../reference/as_model_out_tbl.html">as_model_out_tbl()</a></code>.</li>
