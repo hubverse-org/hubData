@@ -65,7 +65,7 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 #' @importFrom rlang .data
 #' @importFrom zoltr do_zoltar_query
 collect_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
-                                     types = NULL, as_of = NULL, point_output_type = "median") {
+                           types = NULL, as_of = NULL, point_output_type = "median") {
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
 
@@ -135,7 +135,7 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
   # - hub_target, output_type, output_type_id, hub_value
 
   hub_model_outputs[, c("model", "timezero", "season", "unit", "numeric_horizon", "hub_target", "output_type",
-                      "output_type_id", "hub_value")] |>
+                        "output_type_id", "hub_value")] |>
     dplyr::rename(model_id = .data$model, horizon = .data$numeric_horizon, target = .data$hub_target,
                   value = .data$hub_value)
 }
