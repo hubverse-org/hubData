@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^hubData\.Rproj$
 ^\.Rproj\.user$
 ^\.DS_Store$

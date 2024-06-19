@@ -1,4 +1,5 @@
 Package: hubData
+
 Title: Tools for accessing and working with hubverse data
 Version: 0.2.0
 Authors@R: 
@@ -29,9 +30,11 @@ Imports:
     magrittr,
     purrr,
     rlang,
+    stringr,
     tibble,
-    yaml
-Suggests: 
+    yaml,
+    zoltr (>= 1.0.1)
+Suggests:
     covr,
     curl,
     dbplyr,
@@ -45,6 +48,7 @@ Suggests:
     testthat (>= 3.2.0)
 Remotes:
     hubverse-org/hubUtils@enhancement/v3-utils,
+    reichlab/zoltr,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: hubverse-org/hubStyle
 Depends: 

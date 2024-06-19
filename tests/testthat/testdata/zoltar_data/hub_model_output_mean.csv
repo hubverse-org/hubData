@@ -1,0 +1,41 @@
+model_id,timezero,season,unit,horizon,target,output_type,output_type_id,value
+docs_mod,2011-10-16,2011-2012,loc1,1,pct next week,mean,NA,2.1
+docs_mod,2011-10-16,2011-2012,loc1,1,pct next week,mean,NA,2.11
+docs_mod,2011-10-16,2011-2012,loc1,1,pct next week,median,NA,2.12
+docs_mod,2011-10-16,2011-2012,loc1,NA,season severity,pmf,mild,0.0
+docs_mod,2011-10-16,2011-2012,loc1,NA,season severity,pmf,moderate,0.1
+docs_mod,2011-10-16,2011-2012,loc1,NA,season severity,pmf,severe,0.9
+docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-15,0.01
+docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-22,0.1
+docs_mod,2011-10-16,2011-2012,loc1,NA,Season peak week,pmf,2019-12-29,0.89
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,1.1,0.3
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,2.2,0.2
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,pmf,3.3,0.5
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,mean,NA,2.0
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,quantile,0.025,1.0
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,quantile,0.25,2.2
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,quantile,0.5,2.2
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,quantile,0.75,5.0
+docs_mod,2011-10-16,2011-2012,loc2,1,pct next week,quantile,0.975,50.0
+docs_mod,2011-10-16,2011-2012,loc2,1,wk ahead inc case,mean,NA,5
+docs_mod,2011-10-16,2011-2012,loc2,1,wk ahead inc case,sample,1,0
+docs_mod,2011-10-16,2011-2012,loc2,1,wk ahead inc case,sample,2,2
+docs_mod,2011-10-16,2011-2012,loc2,1,wk ahead inc case,sample,3,5
+docs_mod,2011-10-16,2011-2012,loc2,NA,above baseline,pmf,True,0.9
+docs_mod,2011-10-16,2011-2012,loc2,NA,above baseline,pmf,False,0.1
+docs_mod,2011-10-16,2011-2012,loc2,NA,Season peak week,pmf,2019-12-15,0.01
+docs_mod,2011-10-16,2011-2012,loc2,NA,Season peak week,pmf,2019-12-22,0.05
+docs_mod,2011-10-16,2011-2012,loc2,NA,Season peak week,pmf,2019-12-29,0.05
+docs_mod,2011-10-16,2011-2012,loc2,NA,Season peak week,pmf,2020-01-05,0.89
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,mean,NA,3.567
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,sample,1,2.3
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,sample,2,6.5
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,sample,3,0.0
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,sample,4,10.0234
+docs_mod,2011-10-16,2011-2012,loc3,1,pct next week,sample,5,0.0001
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,pmf,0,0.0
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,pmf,2,0.1
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,pmf,50,0.9
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,mean,NA,10
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,quantile,0.25,0
+docs_mod,2011-10-16,2011-2012,loc3,1,wk ahead inc case,quantile,0.75,50
