@@ -1,5 +1,4 @@
 Package: hubData
-
 Title: Tools for accessing and working with hubverse data
 Version: 0.2.0
 Authors@R: 
