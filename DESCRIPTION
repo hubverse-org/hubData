@@ -25,7 +25,7 @@ Imports:
     cli,
     dplyr,
     fs,
-    hubUtils (>= 0.0.1),
+    hubUtils (>= 0.1.0),
     magrittr,
     purrr,
     rlang,
