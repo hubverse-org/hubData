@@ -46,7 +46,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.2.0)
 Remotes:
-    hubverse-org/hubUtils@enhancement/v3-utils,
+    hubverse-org/hubUtils,
     reichlab/zoltr,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: hubverse-org/hubStyle
