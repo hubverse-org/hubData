@@ -246,6 +246,176 @@
       $output_type_id <string>
       
 
+# expand_model_out_val_grid output controls with samples work correctly
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26")
+    Output
+      # A tibble: 42 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       sample      <NA>          
+       2 2022-12-26    wk ahead inc flu h~       1 US       sample      <NA>          
+       3 2022-12-26    wk ahead inc flu h~       2 01       sample      <NA>          
+       4 2022-12-26    wk ahead inc flu h~       1 01       sample      <NA>          
+       5 2022-12-26    wk ahead inc flu h~       2 02       sample      <NA>          
+       6 2022-12-26    wk ahead inc flu h~       1 02       sample      <NA>          
+       7 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
+       8 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
+       9 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
+      10 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
+      # i 32 more rows
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE) %>% dplyr::filter(.data$output_type == "sample")
+    Output
+      # A tibble: 6 x 6
+        forecast_date target               horizon location output_type output_type_id
+        <date>        <chr>                  <int> <chr>    <chr>       <chr>         
+      1 2022-12-26    wk ahead inc flu ho~       2 US       sample      s1            
+      2 2022-12-26    wk ahead inc flu ho~       1 US       sample      s2            
+      3 2022-12-26    wk ahead inc flu ho~       2 01       sample      s3            
+      4 2022-12-26    wk ahead inc flu ho~       1 01       sample      s4            
+      5 2022-12-26    wk ahead inc flu ho~       2 02       sample      s5            
+      6 2022-12-26    wk ahead inc flu ho~       1 02       sample      s6            
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, required_vals_only = TRUE, all_character = TRUE)
+    Output
+      # A tibble: 6 x 5
+        forecast_date horizon location output_type output_type_id
+        <chr>         <chr>   <chr>    <chr>       <chr>         
+      1 2022-12-26    2       US       sample      s1            
+      2 2022-12-26    2       US       pmf         large_decrease
+      3 2022-12-26    2       US       pmf         decrease      
+      4 2022-12-26    2       US       pmf         stable        
+      5 2022-12-26    2       US       pmf         increase      
+      6 2022-12-26    2       US       pmf         large_increase
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, required_vals_only = TRUE, as_arrow_table = TRUE)
+    Output
+      Table
+      6 rows x 5 columns
+      $forecast_date <date32[day]>
+      $horizon <int32>
+      $location <string>
+      $output_type <string>
+      $output_type_id <string>
+      
+      See $metadata for additional Schema metadata
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, bind_model_tasks = FALSE)
+    Output
+      [[1]]
+      # A tibble: 12 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       mean        <NA>          
+       2 2022-12-26    wk ahead inc flu h~       1 US       mean        <NA>          
+       3 2022-12-26    wk ahead inc flu h~       2 01       mean        <NA>          
+       4 2022-12-26    wk ahead inc flu h~       1 01       mean        <NA>          
+       5 2022-12-26    wk ahead inc flu h~       2 02       mean        <NA>          
+       6 2022-12-26    wk ahead inc flu h~       1 02       mean        <NA>          
+       7 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
+       8 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
+       9 2022-12-26    wk ahead inc flu h~       2 02       sample      1             
+      10 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
+      11 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
+      12 2022-12-26    wk ahead inc flu h~       1 02       sample      2             
+      
+      [[2]]
+      # A tibble: 30 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk flu hosp rate c~       2 US       pmf         large_decrease
+       2 2022-12-26    wk flu hosp rate c~       1 US       pmf         large_decrease
+       3 2022-12-26    wk flu hosp rate c~       2 01       pmf         large_decrease
+       4 2022-12-26    wk flu hosp rate c~       1 01       pmf         large_decrease
+       5 2022-12-26    wk flu hosp rate c~       2 02       pmf         large_decrease
+       6 2022-12-26    wk flu hosp rate c~       1 02       pmf         large_decrease
+       7 2022-12-26    wk flu hosp rate c~       2 US       pmf         decrease      
+       8 2022-12-26    wk flu hosp rate c~       1 US       pmf         decrease      
+       9 2022-12-26    wk flu hosp rate c~       2 01       pmf         decrease      
+      10 2022-12-26    wk flu hosp rate c~       1 01       pmf         decrease      
+      # i 20 more rows
+      
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26",
+        include_sample_ids = TRUE, required_vals_only = TRUE)
+    Condition
+      Warning:
+      The compound task ID target has all optional values. Representation of compound sample modeling tasks is not fully specified.
+    Output
+      # A tibble: 6 x 5
+        forecast_date horizon location output_type output_type_id
+        <date>          <int> <chr>    <chr>       <chr>         
+      1 2022-12-26          2 US       sample      1             
+      2 2022-12-26          2 US       pmf         large_decrease
+      3 2022-12-26          2 US       pmf         decrease      
+      4 2022-12-26          2 US       pmf         stable        
+      5 2022-12-26          2 US       pmf         increase      
+      6 2022-12-26          2 US       pmf         large_increase
+
+---
+
+    Code
+      expand_model_out_val_grid(config_tasks, round_id = "2022-12-26")
+    Output
+      # A tibble: 66 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>       <chr>         
+       1 2022-12-26    wk ahead inc flu h~       2 US       sample      1             
+       2 2022-12-26    wk ahead inc flu h~       1 US       sample      1             
+       3 2022-12-26    wk ahead inc flu h~       2 01       sample      1             
+       4 2022-12-26    wk ahead inc flu h~       1 01       sample      1             
+       5 2022-12-26    wk ahead inc flu h~       2 02       sample      1             
+       6 2022-12-26    wk ahead inc flu h~       1 02       sample      1             
+       7 2022-12-26    wk ahead inc flu h~       2 US       sample      2             
+       8 2022-12-26    wk ahead inc flu h~       1 US       sample      2             
+       9 2022-12-26    wk ahead inc flu h~       2 01       sample      2             
+      10 2022-12-26    wk ahead inc flu h~       1 01       sample      2             
+      # i 56 more rows
+
+---
+
+    Code
+      expand_model_out_val_grid(hubUtils::read_config_file(test_path("testdata",
+        "configs", "tasks-samples-2mt.json")), round_id = "2022-12-26",
+      include_sample_ids = TRUE) %>% dplyr::filter(.data$output_type == "sample")
+    Output
+      # A tibble: 12 x 6
+         forecast_date target              horizon location output_type output_type_id
+         <date>        <chr>                 <int> <chr>    <chr>                <int>
+       1 2022-12-26    wk ahead inc flu h~       2 US       sample                   1
+       2 2022-12-26    wk ahead inc flu h~       2 01       sample                   1
+       3 2022-12-26    wk ahead inc flu h~       2 02       sample                   1
+       4 2022-12-26    wk ahead inc flu h~       1 US       sample                   2
+       5 2022-12-26    wk ahead inc flu h~       1 01       sample                   2
+       6 2022-12-26    wk ahead inc flu h~       1 02       sample                   2
+       7 2022-12-26    wk ahead inc flu d~       2 US       sample                   3
+       8 2022-12-26    wk ahead inc flu d~       2 01       sample                   3
+       9 2022-12-26    wk ahead inc flu d~       2 02       sample                   3
+      10 2022-12-26    wk ahead inc flu d~       1 US       sample                   4
+      11 2022-12-26    wk ahead inc flu d~       1 01       sample                   4
+      12 2022-12-26    wk ahead inc flu d~       1 02       sample                   4
+
 # expand_model_out_val_grid errors correctly
 
     Code

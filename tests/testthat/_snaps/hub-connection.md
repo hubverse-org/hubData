@@ -32,13 +32,13 @@
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
        - attr(*, "config_admin")=List of 8
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
         ..$ name          : chr "Simple Forecast Hub"
         ..$ maintainer    : chr "Consortium of Infectious Disease Modeling Hubs"
         ..$ contact       :List of 2
         .. ..$ name : chr "Joe Bloggs"
         .. ..$ email: chr "j.bloggs@cidmh.com"
-        ..$ repository_url: chr "https://github.com/Infectious-Disease-Modeling-Hubs/example-simple-forecast-hub"
+        ..$ repository_url: chr "https://github.com/hubverse-org/example-simple-forecast-hub"
         ..$ hub_models    :List of 1
         .. ..$ :List of 3
         .. .. ..$ team_abbr : chr "simple_hub"
@@ -47,7 +47,7 @@
         ..$ file_format   : chr [1:3] "csv" "parquet" "arrow"
         ..$ timezone      : chr "US/Eastern"
        - attr(*, "config_tasks")=List of 2
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/tasks-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/tasks-schema.json"
         ..$ rounds        :List of 2
         .. ..$ :List of 4
         .. .. ..$ round_id_from_variable: logi TRUE
@@ -184,13 +184,13 @@
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
        - attr(*, "config_admin")=List of 8
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
         ..$ name          : chr "Simple Forecast Hub"
         ..$ maintainer    : chr "Consortium of Infectious Disease Modeling Hubs"
         ..$ contact       :List of 2
         .. ..$ name : chr "Joe Bloggs"
         .. ..$ email: chr "j.bloggs@cidmh.com"
-        ..$ repository_url: chr "https://github.com/Infectious-Disease-Modeling-Hubs/example-simple-forecast-hub"
+        ..$ repository_url: chr "https://github.com/hubverse-org/example-simple-forecast-hub"
         ..$ hub_models    :List of 1
         .. ..$ :List of 3
         .. .. ..$ team_abbr : chr "simple_hub"
@@ -199,7 +199,7 @@
         ..$ file_format   : chr [1:3] "csv" "parquet" "arrow"
         ..$ timezone      : chr "US/Eastern"
        - attr(*, "config_tasks")=List of 2
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/tasks-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/tasks-schema.json"
         ..$ rounds        :List of 2
         .. ..$ :List of 4
         .. .. ..$ round_id_from_variable: logi TRUE
@@ -363,7 +363,7 @@
        - attr(*, "hub_path")= chr "flusight"
        - attr(*, "model_output_dir")= chr "forecasts"
        - attr(*, "config_admin")=List of 9
-        ..$ schema_version  : chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+        ..$ schema_version  : chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
         ..$ name            : chr "US CDC FluSight"
         ..$ maintainer      : chr "US CDC"
         ..$ contact         :List of 2
@@ -375,7 +375,7 @@
         ..$ timezone        : chr "US/Eastern"
         ..$ model_output_dir: chr "forecasts"
        - attr(*, "config_tasks")=List of 2
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/tasks-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/tasks-schema.json"
         ..$ rounds        :List of 1
         .. ..$ :List of 4
         .. .. ..$ round_id_from_variable: logi TRUE
@@ -509,7 +509,7 @@
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
        - attr(*, "config_admin")=List of 9
-        ..$ schema_version  : chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+        ..$ schema_version  : chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
         ..$ name            : chr "US CDC FluSight"
         ..$ maintainer      : chr "US CDC"
         ..$ contact         :List of 2
@@ -521,7 +521,7 @@
         ..$ timezone        : chr "US/Eastern"
         ..$ model_output_dir: chr "forecasts"
        - attr(*, "config_tasks")=List of 2
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/tasks-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/tasks-schema.json"
         ..$ rounds        :List of 1
         .. ..$ :List of 4
         .. .. ..$ round_id_from_variable: logi TRUE
@@ -799,13 +799,13 @@
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
        - attr(*, "config_admin")=List of 8
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/admin-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/admin-schema.json"
         ..$ name          : chr "Simple Forecast Hub"
         ..$ maintainer    : chr "Consortium of Infectious Disease Modeling Hubs"
         ..$ contact       :List of 2
         .. ..$ name : chr "Joe Bloggs"
         .. ..$ email: chr "j.bloggs@cidmh.com"
-        ..$ repository_url: chr "https://github.com/Infectious-Disease-Modeling-Hubs/example-simple-forecast-hub"
+        ..$ repository_url: chr "https://github.com/hubverse-org/example-simple-forecast-hub"
         ..$ hub_models    :List of 1
         .. ..$ :List of 3
         .. .. ..$ team_abbr : chr "simple_hub"
@@ -814,7 +814,7 @@
         ..$ file_format   : chr [1:3] "csv" "parquet" "arrow"
         ..$ timezone      : chr "US/Eastern"
        - attr(*, "config_tasks")=List of 2
-        ..$ schema_version: chr "https://raw.githubusercontent.com/Infectious-Disease-Modeling-Hubs/schemas/main/v2.0.0/tasks-schema.json"
+        ..$ schema_version: chr "https://raw.githubusercontent.com/hubverse-org/schemas/main/v2.0.0/tasks-schema.json"
         ..$ rounds        :List of 2
         .. ..$ :List of 4
         .. .. ..$ round_id_from_variable: logi TRUE

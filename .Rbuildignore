@@ -16,3 +16,4 @@
 ^pkgdown$
 ^data-raw$
 ^vignettes/articles$
+^attic$

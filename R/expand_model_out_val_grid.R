@@ -14,6 +14,8 @@
 #' @param bind_model_tasks Logical. Whether to bind expanded grids of
 #' values from multiple modeling tasks into a single tibble/arrow table or
 #' return a list.
+#' @param include_sample_ids Logical. Whether to include sample identifiers in
+#' the `output_type_id` column.
 #'
 #' @return If `bind_model_tasks = TRUE` (default) a tibble or arrow table
 #' containing all possible task ID and related output type ID
@@ -32,6 +34,11 @@
 #' specified in `round_id` property of `config_tasks`) is set to the value of the
 #' `round_id` argument in the returned output.
 #'
+#' When sample output types are included in the output and `include_sample_ids = TRUE`,
+#' the `output_type_id` column contains example sample indexes which are useful
+#' for identifying the compound task ID structure of multivariate sampling
+#' distributions in particular, i.e. which combinations of task ID values
+#' represent individual samples.
 #' @export
 #'
 #' @examples
@@ -64,12 +71,33 @@
 #'   all_character = TRUE,
 #'   as_arrow_table = TRUE
 #' )
+#' # Hub with sample output type
+#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+#'   package = "hubData"
+#' ))
+#' expand_model_out_val_grid(config_tasks,
+#'   round_id = "2022-12-26"
+#' )
+#' # Include sample IDS
+#' expand_model_out_val_grid(config_tasks,
+#'   round_id = "2022-12-26",
+#'   include_sample_ids = TRUE
+#' )
+#' # Hub with sample output type and compound task ID structure
+#' config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+#'   package = "hubData"
+#' ))
+#' expand_model_out_val_grid(config_tasks,
+#'   round_id = "2022-12-26",
+#'   include_sample_ids = TRUE
+#' )
 expand_model_out_val_grid <- function(config_tasks,
                                       round_id,
                                       required_vals_only = FALSE,
                                       all_character = FALSE,
                                       as_arrow_table = FALSE,
-                                      bind_model_tasks = TRUE) {
+                                      bind_model_tasks = TRUE,
+                                      include_sample_ids = FALSE) {
   round_idx <- hubUtils::get_round_idx(config_tasks, round_id)
 
   round_config <- purrr::pluck(
@@ -83,6 +111,7 @@ expand_model_out_val_grid <- function(config_tasks,
     ~ .x[["task_ids"]] %>%
       null_taskids_to_na()
   ) %>%
+    # Fix round_id value to current round_id in round_id variable column
     fix_round_id(
       round_id = round_id,
       round_config = round_config,
@@ -101,35 +130,38 @@ expand_model_out_val_grid <- function(config_tasks,
       .x[["output_type"]]
     }
   ) %>%
-    purrr::map(function(.x) {
-      .x %>%
-        purrr::map(function(.x) {
-          .x[[config_tid]]
-        })
-    }) %>%
+    purrr::map(
+      ~ extract_mt_output_type_ids(.x, config_tid)
+    ) %>%
     process_grid_inputs(required_vals_only = required_vals_only) %>%
     purrr::map(function(.x) {
       purrr::compact(.x)
     })
 
-  # Expand output grid individually for each output type and coerce to hub schema
-  # data types.
-
-  purrr::map2(
+  # Expand output grid individually for each modeling task and output type.
+  grid <- purrr::map2(
     task_id_l, output_type_l,
     ~ expand_output_type_grid(
       task_id_values = .x,
       output_type_values = .y
     )
-  ) %>%
-    process_mt_grid_outputs(
-      config_tasks,
-      all_character = all_character,
-      as_arrow_table = as_arrow_table,
-      bind_model_tasks = bind_model_tasks
-    )
+  )
+
+  if (include_sample_ids) {
+    grid <- add_sample_idx(grid, round_config, config_tid)
+  }
+
+  process_mt_grid_outputs(
+    grid,
+    config_tasks,
+    all_character = all_character,
+    as_arrow_table = as_arrow_table,
+    bind_model_tasks = bind_model_tasks
+  )
 }
 
+# Extracts/collapses individual task ID values depending on whether all or just required
+# values are needed.
 process_grid_inputs <- function(x, required_vals_only = FALSE) {
   if (required_vals_only) {
     purrr::map(x, ~ .x %>% purrr::map(~ .x[["required"]]))
@@ -138,6 +170,8 @@ process_grid_inputs <- function(x, required_vals_only = FALSE) {
   }
 }
 
+# Function that expands modeling task level lists of task IDs and output type
+# values into a grid and combines them into a single tibble.
 expand_output_type_grid <- function(task_id_values,
                                     output_type_values) {
   purrr::imap(
@@ -152,6 +186,8 @@ expand_output_type_grid <- function(task_id_values,
     purrr::list_rbind()
 }
 
+# Given expanded grids are constructed for specific rounds, this functions fixes
+# the round_id in the any round_id variable column (if round_id_from_variable = TRUE)
 fix_round_id <- function(x, round_id, round_config, round_ids) {
   if (round_config[["round_id_from_variable"]] && !is.null(round_id)) {
     round_id <- rlang::arg_match(round_id,
@@ -178,7 +214,11 @@ fix_round_id <- function(x, round_id, round_config, round_ids) {
   }
 }
 
-
+# Function that processes lists of modeling tasks grids of output type values
+# and task IDs by (depending on settings):
+# - padding with NA columns.
+# - applying the required schema and converting to arrow tables.
+# - binding multiple modeling task grids together.
 process_mt_grid_outputs <- function(x, config_tasks, all_character,
                                     as_arrow_table = TRUE,
                                     bind_model_tasks = TRUE) {
@@ -223,7 +263,7 @@ process_mt_grid_outputs <- function(x, config_tasks, all_character,
   }
 }
 
-
+# Pad any columns in all_cols missing in x of with new NA columns
 pad_missing_cols <- function(x, all_cols) {
   if (inherits(x, "data.frame")) {
     x[, all_cols[!all_cols %in% names(x)]] <- NA
@@ -257,5 +297,118 @@ null_taskids_to_na <- function(model_task) {
       required = NA,
       optional = NULL
     )
+  )
+}
+
+# Adds example sample ids to the output type id column which are unique
+# across multiple modeling task groups. Only apply to v3 and above sample output
+# type configurations.
+add_sample_idx <- function(x, round_config, config_tid) {
+  spl_idx_0 <- 0L
+  for (i in seq_along(x)) {
+    # Check that the modeling task config has a v3 sample configuration
+    config_has_v3_spl <- purrr::pluck(
+      round_config[["model_tasks"]][[i]],
+      "output_type", "sample", "output_type_id_params"
+    ) %>%
+      is.null() %>%
+      isFALSE()
+
+    # Check that x (the output df) has a sample output type (e.g. samples could be
+    # missing where only required values are requested but samples are optional)
+    x_has_spl <- "sample" %in% x[[i]][["output_type"]]
+    if (all(config_has_v3_spl, x_has_spl)) {
+      x[[i]] <- add_mt_sample_idx(
+        x = x[[i]],
+        config = round_config[["model_tasks"]][[i]],
+        start_idx = spl_idx_0,
+        config_tid
+      )
+      spl_idx_0 <- spl_idx_0 + get_sample_n(x[[i]], config_tid)
+    }
+  }
+  x
+}
+
+# Add sample index to output type data frame of a single modeling task group
+# according the the compound task ID set.
+add_mt_sample_idx <- function(x, config, start_idx = 0L, config_tid) {
+  x_names <- names(x)
+
+  spl <- x[
+    x[["output_type"]] == "sample",
+    setdiff(names(x), hubUtils::std_colnames)
+  ]
+
+  comp_tids <- purrr::pluck(
+    config,
+    "output_type",
+    "sample",
+    "output_type_id_params",
+    "compound_taskid_set"
+  )
+
+  type <- purrr::pluck(
+    config,
+    "output_type",
+    "sample",
+    "output_type_id_params",
+    "type"
+  )
+
+  if (is.null(comp_tids)) {
+    comp_tids <- names(spl)
+  } else {
+    # Check whether some compound task IDs have only optional values
+    # (i.e. the columns are missing in spl) and warn.
+    # Only do so though if a specific compound task ID set is provided in the config.
+    opt_comp_tids <- setdiff(comp_tids, names(spl))
+    if (length(opt_comp_tids) > 0) {
+      cli::cli_warn(
+        "The compound task ID{?s} {.field {opt_comp_tids}} ha{?s/ve} all optional values.
+      Representation of compound sample modeling tasks is not fully specified."
+      )
+    }
+    # subset to compound task IDs that are present in spl
+    comp_tids <- intersect(comp_tids, names(spl))
+  }
+
+  spl <- unique(spl[, comp_tids]) %>%
+    dplyr::mutate(
+      output_type = "sample",
+      output_type_id = seq_len(nrow(.)) + start_idx
+    ) %>%
+    dplyr::left_join(spl, by = comp_tids)
+
+  if (!is.null(type) && type == "character") {
+    spl[[config_tid]] <- sprintf("s%s", spl[[config_tid]])
+  }
+
+  x[x[["output_type"]] != "sample", ] %>%
+    rbind(spl[, x_names])
+}
+
+get_sample_n <- function(x, config_tid) {
+  x[x[["output_type"]] == "sample", config_tid, drop = TRUE] %>%
+    unique() %>%
+    length()
+}
+
+extract_mt_output_type_ids <- function(x, config_tid) {
+  purrr::map(
+    x,
+    function(.x) {
+      if (config_tid %in% names(.x)) {
+        .x[[config_tid]]
+      } else if ("output_type_id_params" %in% names(.x)) {
+        if (.x[["output_type_id_params"]][["is_required"]]) {
+          list(required = NA, optional = NULL)
+        } else {
+          list(required = NULL, optional = NA)
+        }
+      } else {
+        NULL
+      }
+    }
   )
 }

@@ -156,7 +156,32 @@ get_output_type_id_type <- function(config_tasks) {
     ) %>%
     unlist()
 
-  get_data_type(values)
+  sample_values <- purrr::map(
+    config_tasks[["rounds"]],
+    function(x) {
+      x[["model_tasks"]]
+    }
+  ) %>%
+    unlist(recursive = FALSE) %>%
+    purrr::map(
+      function(x) {
+        x[["output_type"]][["sample"]]
+      }
+    ) %>%
+    purrr::map(
+      function(x) {
+        purrr::pluck(x, "output_type_id_params", "type")
+      }
+    ) %>%
+    unlist() %>%
+    # Instead of using R data type coercion by combining vectors of output type
+    # id values, create zero length vectors of sample output type id types
+    # using the function specified by output_type_id_params type.
+    # Get the appropriate function using `get`.
+    purrr::map(~get(.x)()) %>%
+    unlist()
+
+  get_data_type(c(values, sample_values))
 }
 
 

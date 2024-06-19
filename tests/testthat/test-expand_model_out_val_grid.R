@@ -207,9 +207,104 @@ test_that("expand_model_out_val_grid output controls work correctly", {
   )
 })
 
+
+test_that("expand_model_out_val_grid output controls with samples work correctly", {
+  # Hub with sample output type
+  config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+    package = "hubData"
+  ))
+
+
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26"
+    )
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE,
+      all_character = TRUE
+    )
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE,
+      as_arrow_table = TRUE
+    )
+  )
+  # Hub with sample output type and compound task ID structure
+  config_tasks <- hubUtils::read_config_file(
+    system.file("config", "tasks-comp-tid.json",
+      package = "hubData"
+    )
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE
+    )
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      required_vals_only = TRUE
+    )
+  )
+  # Check back-compatibility on older sample specification
+  config_tasks <- hubUtils::read_config_file(
+    test_path("testdata", "configs", "tasks-samples-old-schema.json")
+  )
+  expect_snapshot(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26"
+    )
+  )
+  # check that included sample IDs are not generated for older versions
+  # of the sample specification
+  expect_equal(
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE,
+      bind_model_tasks = FALSE
+    )[[1]],
+    expand_model_out_val_grid(config_tasks,
+      round_id = "2022-12-26",
+      include_sample_ids = FALSE,
+      bind_model_tasks = FALSE
+    )[[1]]
+  )
+
+  # Check sample IDs unique across multiple modeling task groups
+  expect_snapshot(
+    expand_model_out_val_grid(
+      hubUtils::read_config_file(
+        test_path("testdata", "configs", "tasks-samples-2mt.json")
+      ),
+      round_id = "2022-12-26",
+      include_sample_ids = TRUE
+    ) %>%
+      dplyr::filter(.data$output_type == "sample")
+  )
+})
+
 test_that("expand_model_out_val_grid errors correctly", {
   # Specifying a round in a hub with multiple rounds
-  hub_con <- hubData::connect_hub(system.file("testhubs/simple", package = "hubUtils"))
+  hub_con <- hubData::connect_hub(
+    system.file("testhubs/simple", package = "hubUtils")
+  )
   config_tasks <- attr(hub_con, "config_tasks")
 
   expect_snapshot(

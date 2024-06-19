@@ -10,7 +10,8 @@ expand_model_out_val_grid(
   required_vals_only = FALSE,
   all_character = FALSE,
   as_arrow_table = FALSE,
-  bind_model_tasks = TRUE
+  bind_model_tasks = TRUE,
+  include_sample_ids = FALSE
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ Task ID and related output type ID required values.}
 \item{bind_model_tasks}{Logical. Whether to bind expanded grids of
 values from multiple modeling tasks into a single tibble/arrow table or
 return a list.}
+
+\item{include_sample_ids}{Logical. Whether to include sample identifiers in
+the \code{output_type_id} column.}
 }
 \value{
 If \code{bind_model_tasks = TRUE} (default) a tibble or arrow table
@@ -55,6 +59,12 @@ When a round is set to \code{round_id_from_variable: true},
 the value of the task ID from which round IDs are derived (i.e. the task ID
 specified in \code{round_id} property of \code{config_tasks}) is set to the value of the
 \code{round_id} argument in the returned output.
+
+When sample output types are included in the output and \code{include_sample_ids = TRUE},
+the \code{output_type_id} column contains example sample indexes which are useful
+for identifying the compound task ID structure of multivariate sampling
+distributions in particular, i.e. which combinations of task ID values
+represent individual samples.
 }
 \examples{
 hub_con <- hubData::connect_hub(
@@ -85,5 +95,25 @@ expand_model_out_val_grid(config_tasks,
   round_id = "2022-10-29",
   all_character = TRUE,
   as_arrow_table = TRUE
+)
+# Hub with sample output type
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
+  package = "hubData"
+))
+expand_model_out_val_grid(config_tasks,
+  round_id = "2022-12-26"
+)
+# Include sample IDS
+expand_model_out_val_grid(config_tasks,
+  round_id = "2022-12-26",
+  include_sample_ids = TRUE
+)
+# Hub with sample output type and compound task ID structure
+config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
+  package = "hubData"
+))
+expand_model_out_val_grid(config_tasks,
+  round_id = "2022-12-26",
+  include_sample_ids = TRUE
 )
 }

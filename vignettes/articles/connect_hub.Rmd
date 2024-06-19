@@ -21,7 +21,7 @@ All data returned from connecting to and querying hubs can be read or validated 
  - `value`: a numeric variable that provides the information about the model's prediction.
  - `...` : other columns will be present depending on modeling tasks defined by the individual modeling hub. These columns are referred to in hubverse terminology as the `task-ID` variables.
 
-Other hubverse tools, designed for data validation, [ensemble building](https://infectious-disease-modeling-hubs.github.io/hubEnsembles/), [visualization](https://github.com/Infectious-Disease-Modeling-Hubs/hubVis), etc..., all are designed with the "promises" implicit in the data format specified by `model_out_tbl`. For example, [the `hubEnsembles::linear_pool()` function ](https://infectious-disease-modeling-hubs.github.io/hubEnsembles/reference/linear_pool.html) both accepts as input and returns as output `model_out_tbl` objects.
+Other hubverse tools, designed for data validation, [ensemble building](https://hubverse-org.github.io/hubEnsembles/), [visualization](https://github.com/hubverse-org/hubVis), etc..., all are designed with the "promises" implicit in the data format specified by `model_out_tbl`. For example, [the `hubEnsembles::linear_pool()` function ](https://hubverse-org.github.io/hubEnsembles/reference/linear_pool.html) both accepts as input and returns as output `model_out_tbl` objects.
 
 # Hub connections
 
