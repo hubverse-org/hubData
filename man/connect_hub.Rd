@@ -10,14 +10,16 @@ connect_hub(
   file_format = c("csv", "parquet", "arrow"),
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
-  partitions = list(model_id = arrow::utf8())
+  partitions = list(model_id = arrow::utf8()),
+  skip_checks = FALSE
 )
 
 connect_model_output(
   model_output_dir,
   file_format = c("csv", "parquet", "arrow"),
   partition_names = "model_id",
-  schema = NULL
+  schema = NULL,
+  skip_checks = FALSE
 )
 }
 \arguments{
@@ -54,6 +56,11 @@ behaviour so use with care.}
 
 \item{partitions}{a named list specifying the arrow data types of any
 partitioning column.}
+
+\item{skip_checks}{Logical. If \code{FALSE} (default), check file_format parameter against the
+hub's model output files. Also excludes invalid model output files when opening hub datasets.
+Setting to TRUE will improve performance but will result in an error if the model output
+directory includes invalid files.}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
@@ -123,7 +130,7 @@ mod_out_con \%>\%
 # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 \dontrun{
 hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-hub_con <- connect_hub(hub_path)
+hub_con <- connect_hub(hub_path, skip_checks = FALSE)
 hub_con
 }
 }

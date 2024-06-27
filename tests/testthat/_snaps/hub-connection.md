@@ -708,7 +708,7 @@
 ---
 
     Code
-      connect_model_output(mod_out_path)
+      connect_model_output(mod_out_path, skip_checks = FALSE)
     Condition
       Error in `connect_model_output()`:
       ! No files of file format "csv" found in model output directory.

@@ -77,7 +77,7 @@ test_that("connect_hub returns empty list when model output folder is empty", {
 
   # S3
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/empty/")
-  hub_con <- suppressWarnings(connect_hub(hub_path))
+  hub_con <- suppressWarnings(connect_hub(hub_path, skip_checks=FALSE))
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(hub_con)
@@ -256,7 +256,7 @@ test_that("connect_model_output fails on empty model_output_dir", {
   )
 
   mod_out_path <- s3_bucket("hubverse/hubutils/testhubs/empty/model-output")
-  expect_snapshot(connect_model_output(mod_out_path), error = TRUE)
+  expect_snapshot(connect_model_output(mod_out_path, skip_checks=FALSE), error = TRUE)
 })
 
 
@@ -325,7 +325,7 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   # Simple forecasting Hub example ----
 
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-  hub_con <- connect_hub(hub_path)
+  hub_con <- connect_hub(hub_path, skip_checks=FALSE)
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(

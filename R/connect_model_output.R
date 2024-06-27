@@ -10,7 +10,8 @@
 connect_model_output <- function(model_output_dir,
                                  file_format = c("csv", "parquet", "arrow"),
                                  partition_names = "model_id",
-                                 schema = NULL) {
+                                 schema = NULL,
+                                 skip_checks = FALSE) {
   UseMethod("connect_model_output")
 }
 
@@ -18,14 +19,23 @@ connect_model_output <- function(model_output_dir,
 connect_model_output.default <- function(model_output_dir,
                                          file_format = c("csv", "parquet", "arrow"),
                                          partition_names = "model_id",
-                                         schema = NULL) {
+                                         schema = NULL,
+                                         skip_checks = FALSE) {
   rlang::check_required(model_output_dir)
   if (!dir.exists(model_output_dir)) {
     cli::cli_abort(c("x" = "Directory {.path {model_output_dir}} does not exist."))
   }
+
   file_format <- rlang::arg_match(file_format)
-  # Only keep file formats of which files actually exist in model_output_dir.
-  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+  # Based on skip_checks param: 1) set a flag that determines whether or not to
+  # check for invalid files when opening model output data, and 2) if skip_checks
+  # is false, only keep file formats of which files actually exist in model_output_dir.
+  if (isTRUE(skip_checks)) {
+    exclude_invalid_files_flag <- FALSE
+  } else {
+    file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+    exclude_invalid_files_flag <- TRUE
+  }
 
   if (file_format == "csv") {
     dataset <- arrow::open_dataset(
@@ -35,7 +45,7 @@ connect_model_output.default <- function(model_output_dir,
       col_types = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = TRUE)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
     )
   } else {
     dataset <- arrow::open_dataset(
@@ -44,7 +54,7 @@ connect_model_output.default <- function(model_output_dir,
       partitioning = partition_names,
       schema = schema,
       unify_schemas = TRUE,
-      factory_options = list(exclude_invalid_files = TRUE)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
     )
   }
 
@@ -64,11 +74,25 @@ connect_model_output.default <- function(model_output_dir,
 connect_model_output.SubTreeFileSystem <- function(model_output_dir,
                                                    file_format = c("csv", "parquet", "arrow"),
                                                    partition_names = "model_id",
-                                                   schema = NULL) {
+                                                   schema = NULL,
+                                                   skip_checks = FALSE) {
   rlang::check_required(model_output_dir)
+
+  # set skip_checks value if not specified by user
+  if (missing(skip_checks)) {
+    skip_checks <- get_skip_check_option(model_output_dir)
+  }
+
   file_format <- rlang::arg_match(file_format)
-  # Only keep file formats of which files actually exist in model_output_dir.
-  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+  # Based on skip_checks param: 1) set a flag that determines whether or not to
+  # check for invalid files when opening model output data, and 2) if skip_checks
+  # is false, only keep file formats of which files actually exist in model_output_dir.
+  if (isTRUE(skip_checks)) {
+    exclude_invalid_files_flag <- FALSE
+  } else {
+    file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+    exclude_invalid_files_flag <- TRUE
+  }
 
   if (file_format == "csv") {
     dataset <- arrow::open_dataset(
@@ -78,7 +102,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
       schema = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = TRUE)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
     )
   } else {
     dataset <- arrow::open_dataset(
@@ -87,7 +111,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
       partitioning = partition_names,
       schema = schema,
       unify_schemas = TRUE,
-      factory_options = list(exclude_invalid_files = TRUE)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
     )
   }
 
