@@ -60,6 +60,9 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
     )
   )
 
+  # Tests that files are validated by default when connecting to local hub
+  expect_true(attr(hub_con, "format_verified"))
+
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
@@ -108,6 +111,9 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
     )
   )
 
+  # Tests that files are validated by default when connecting to local hub
+  expect_true(attr(hub_con, "format_verified"))
+
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- basename(attr(hub_con, "model_output_dir"))
   attr(hub_con, "hub_path") <- basename(attr(hub_con, "hub_path"))
@@ -150,6 +156,9 @@ test_that("connect_hub works on local flusight forecasting hub", {
     )
   )
 
+  # Tests that files are validated by default when connecting to local hub
+  expect_true(attr(hub_con, "format_verified"))
+
   expect_equal(
     purrr::map_int(
       hub_con$children,
@@ -182,6 +191,9 @@ test_that("connect_hub file_format override works on local hub", {
     attr(hub_con, "file_system"),
     "LocalFileSystem"
   )
+
+  # Tests that files are validated by default when connecting to local hub
+  expect_true(attr(hub_con, "format_verified"))
 
   expect_equal(
     class(hub_con),
@@ -325,7 +337,7 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   # Simple forecasting Hub example ----
 
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-  hub_con <- connect_hub(hub_path, skip_checks=FALSE)
+  hub_con <- connect_hub(hub_path, skip_checks = FALSE)
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
@@ -334,6 +346,8 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
       c("n_open", "n_in_dir"), c("csv", "parquet")
     ))
   )
+
+  expect_true(attr(hub_con, "format_verified"))
 
   expect_equal(
     attr(hub_con, "file_system"),
@@ -344,6 +358,50 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
     class(hub_con),
     c(
       "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "R6"
+    )
+  )
+
+  # overwrite path attributes to make snapshot portable
+  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
+  attr(hub_con, "hub_path") <- "test/hub_path"
+  expect_snapshot(str(hub_con))
+
+  expect_snapshot(hub_con %>%
+    dplyr::filter(
+      horizon == 2,
+      age_group == "65+"
+    ) %>%
+    dplyr::collect() %>%
+    str())
+})
+
+test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS", {
+  # Simple forecasting Hub example ----
+
+  hub_path <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
+  hub_con <- connect_hub(hub_path, file_format = "parquet")
+
+  # Tests that paths are assigned to attributes correctly
+  expect_equal(
+    attr(hub_con, "file_format"),
+    structure(c(4L, 4L), dim = c(2L, 1L), dimnames = list(
+      c("n_open", "n_in_dir"), c("parquet")
+    ))
+  )
+
+  # Tests that default behavior for S3-based hubs is not to validate file formats
+  expect_false(attr(hub_con, "format_verified"))
+
+  expect_equal(
+    attr(hub_con, "file_system"),
+    "S3FileSystem"
+  )
+
+  expect_equal(
+    class(hub_con),
+    c(
+      "hub_connection", "FileSystemDataset", "Dataset", "ArrowObject",
       "R6"
     )
   )

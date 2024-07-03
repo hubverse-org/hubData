@@ -34,6 +34,11 @@ print.hub_connection <- function(x, verbose = FALSE, ...) {
       "*" = "file_format: {.val {print_file_format_meta(x)}}"
     )
   }
+  if (!is.null(attr(x, "format_verified"))) {
+    print_msg <- c(print_msg,
+      "*" = "format_verified: {.val {attr(x, 'format_verified')}}"
+    )
+  }
   if (!is.null(attr(x, "file_system"))) {
     print_msg <- c(print_msg,
       "*" = "file_system: {.val {attr(x, 'file_system')[1]}}"
@@ -77,6 +82,11 @@ print.mod_out_connection <- function(x, verbose = FALSE, ...) {
   if (!is.null(attr(x, "file_format"))) {
     print_msg <- c(print_msg,
       "*" = "file_format: {.val {print_file_format_meta(x)}}"
+    )
+  }
+  if (!is.null(attr(x, "format_verified"))) {
+    print_msg <- c(print_msg,
+      "*" = "format_verified: {.val {attr(x, 'format_verified')}}"
     )
   }
   if (!is.null(attr(x, "file_system"))) {
