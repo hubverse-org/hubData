@@ -41,7 +41,8 @@ If \code{required_vals_only = TRUE}, values are limited to the combination of re
 values only.
 }
 \description{
-Create a model output submission file template
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}} This function has been moved to the \code{hubValidations}
+package and renamed to \code{submission_tmpl()}.
 }
 \details{
 For task IDs or output_type_ids where all values are optional, by default, columns
@@ -62,52 +63,4 @@ When a round is set to \code{round_id_from_variable: true},
 the value of the task ID from which round IDs are derived (i.e. the task ID
 specified in \code{round_id} property of \code{config_tasks}) is set to the value of the
 \code{round_id} argument in the returned output.
-}
-\examples{
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/flusight", package = "hubUtils")
-)
-create_model_out_submit_tmpl(hub_con, round_id = "2023-01-02")
-create_model_out_submit_tmpl(
-  hub_con,
-  round_id = "2023-01-02",
-  required_vals_only = TRUE
-)
-create_model_out_submit_tmpl(
-  hub_con,
-  round_id = "2023-01-02",
-  required_vals_only = TRUE,
-  complete_cases_only = FALSE
-)
-# Specifying a round in a hub with multiple rounds
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/simple", package = "hubUtils")
-)
-create_model_out_submit_tmpl(hub_con, round_id = "2022-10-01")
-create_model_out_submit_tmpl(hub_con, round_id = "2022-10-29")
-create_model_out_submit_tmpl(hub_con,
-  round_id = "2022-10-29",
-  required_vals_only = TRUE
-)
-create_model_out_submit_tmpl(hub_con,
-  round_id = "2022-10-29",
-  required_vals_only = TRUE,
-  complete_cases_only = FALSE
-)
-# Hub with sample output type
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
-  package = "hubData"
-))
-create_model_out_submit_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26"
-)
-# Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
-  package = "hubData"
-))
-create_model_out_submit_tmpl(
-  config_tasks = config_tasks,
-  round_id = "2022-12-26"
-)
 }

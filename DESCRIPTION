@@ -1,6 +1,6 @@
 Package: hubData
 Title: Tools for accessing and working with hubverse data
-Version: 0.2.0
+Version: 1.0.0
 Authors@R: 
     c(person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2378-4915")),
@@ -26,6 +26,7 @@ Imports:
     dplyr,
     fs,
     hubUtils (>= 0.1.0),
+    lifecycle,
     magrittr,
     purrr,
     rlang,
