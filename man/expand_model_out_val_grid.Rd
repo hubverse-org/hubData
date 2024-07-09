@@ -52,7 +52,8 @@ If \code{required_vals_only = TRUE}, values are limited to the combinations of r
 values only.
 }
 \description{
-Create expanded grid of valid task ID and output type value combinations
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}} This function has been moved to the \code{hubValidations}
+package and renamed to \code{expand_model_out_grid()}.
 }
 \details{
 When a round is set to \code{round_id_from_variable: true},
@@ -65,55 +66,4 @@ the \code{output_type_id} column contains example sample indexes which are usefu
 for identifying the compound task ID structure of multivariate sampling
 distributions in particular, i.e. which combinations of task ID values
 represent individual samples.
-}
-\examples{
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/flusight", package = "hubUtils")
-)
-config_tasks <- attr(hub_con, "config_tasks")
-expand_model_out_val_grid(config_tasks, round_id = "2023-01-02")
-expand_model_out_val_grid(
-  config_tasks,
-  round_id = "2023-01-02",
-  required_vals_only = TRUE
-)
-# Specifying a round in a hub with multiple round configurations.
-hub_con <- hubData::connect_hub(
-  system.file("testhubs/simple", package = "hubUtils")
-)
-config_tasks <- attr(hub_con, "config_tasks")
-expand_model_out_val_grid(config_tasks, round_id = "2022-10-01")
-# Later round_id maps to round config that includes additional task ID 'age_group'.
-expand_model_out_val_grid(config_tasks, round_id = "2022-10-29")
-# Coerce all columns to character
-expand_model_out_val_grid(config_tasks,
-  round_id = "2022-10-29",
-  all_character = TRUE
-)
-# Return arrow table
-expand_model_out_val_grid(config_tasks,
-  round_id = "2022-10-29",
-  all_character = TRUE,
-  as_arrow_table = TRUE
-)
-# Hub with sample output type
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks.json",
-  package = "hubData"
-))
-expand_model_out_val_grid(config_tasks,
-  round_id = "2022-12-26"
-)
-# Include sample IDS
-expand_model_out_val_grid(config_tasks,
-  round_id = "2022-12-26",
-  include_sample_ids = TRUE
-)
-# Hub with sample output type and compound task ID structure
-config_tasks <- hubUtils::read_config_file(system.file("config", "tasks-comp-tid.json",
-  package = "hubData"
-))
-expand_model_out_val_grid(config_tasks,
-  round_id = "2022-12-26",
-  include_sample_ids = TRUE
-)
 }
