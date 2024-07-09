@@ -1,6 +1,6 @@
 # hubData 1.0.0
 
-* Breaking change: `expand_model_out_val_grid()` and `create_model_out_submit_tmpl()` are now defunt. These functions have been moved to `hubValidations` and replaced by `hubValidations::expand_model_out_grid()` and `hubValidations::submission_tmpl()`, respectively. The old functions will now fail if called and will be removed in a future release.
+* Breaking change: `expand_model_out_val_grid()` and `create_model_out_submit_tmpl()` are now defunct. These functions have been moved to `hubValidations` and replaced by `hubValidations::expand_model_out_grid()` and `hubValidations::submission_tmpl()`, respectively. The old functions will now fail if called and will be removed in a future release.
 
 # hubData 0.2.0
 
