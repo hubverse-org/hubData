@@ -232,11 +232,3 @@ get_dir_file_formats <- function(model_output_dir) {
 
   intersect(all_ext, c("csv", "parquet", "arrow"))
 }
-
-get_skip_check_option <- function(dir_path) {
-  if (dir_path[["url_scheme"]] == "s3") {
-    skip_checks <- TRUE
-  } else {
-    skip_checks <- FALSE
-  }
-}

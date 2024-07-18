@@ -69,7 +69,7 @@
 #' # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 #' \dontrun{
 #' hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-#' hub_con <- connect_hub(hub_path, skip_checks = FALSE)
+#' hub_con <- connect_hub(hub_path)
 #' hub_con
 #' }
 connect_hub <- function(hub_path,
@@ -118,13 +118,13 @@ connect_hub.default <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  # Based on skip_checks param: 1) set a flag that determines whether or not to
-  # check for invalid files when opening model output data, and 2) if skip_checks
-  # is false, only keep file formats of which files actually exist in model_output_dir.
+  file_format <- check_file_format(model_output_dir, file_format)
+
+  # Based on skip_checks param, set a flag that determines whether or not to
+  # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
     exclude_invalid_files_flag <- FALSE
   } else {
-    file_format <- check_file_format(model_output_dir, file_format)
     exclude_invalid_files_flag <- TRUE
   }
 
@@ -190,11 +190,6 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
                        {.path {hub_path$base_path}}")
   }
 
-  # set skip_checks value if not specified by user
-  if (missing(skip_checks)) {
-    skip_checks <- get_skip_check_option(hub_path)
-  }
-
   config_admin <- hubUtils::read_config(hub_path, "admin")
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
@@ -208,13 +203,13 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  # Based on skip_checks param: 1) set a flag that determines whether or not to
-  # check for invalid files when opening model output data, and 2) if skip_checks
-  # is false, only keep file formats of which files actually exist in model_output_dir.
+  file_format <- check_file_format(model_output_dir, file_format)
+
+  # Based on skip_checks param, set a flag that determines whether or not to
+  # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
     exclude_invalid_files_flag <- FALSE
   } else {
-    file_format <- check_file_format(model_output_dir, file_format)
     exclude_invalid_files_flag <- TRUE
   }
 

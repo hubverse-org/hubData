@@ -27,13 +27,13 @@ connect_model_output.default <- function(model_output_dir,
   }
 
   file_format <- rlang::arg_match(file_format)
-  # Based on skip_checks param: 1) set a flag that determines whether or not to
-  # check for invalid files when opening model output data, and 2) if skip_checks
-  # is false, only keep file formats of which files actually exist in model_output_dir.
+  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+
+  # Based on skip_checks param set a flag that determines whether or not to
+  # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
     exclude_invalid_files_flag <- FALSE
   } else {
-    file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
     exclude_invalid_files_flag <- TRUE
   }
 
@@ -65,6 +65,7 @@ connect_model_output.default <- function(model_output_dir,
   structure(dataset,
     class = c("mod_out_connection", class(dataset)),
     file_format = file_format,
+    format_verified = exclude_invalid_files_flag,
     file_system = class(dataset$filesystem)[1],
     model_output_dir = model_output_dir
   )
@@ -78,19 +79,14 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
                                                    skip_checks = FALSE) {
   rlang::check_required(model_output_dir)
 
-  # set skip_checks value if not specified by user
-  if (missing(skip_checks)) {
-    skip_checks <- get_skip_check_option(model_output_dir)
-  }
-
   file_format <- rlang::arg_match(file_format)
-  # Based on skip_checks param: 1) set a flag that determines whether or not to
-  # check for invalid files when opening model output data, and 2) if skip_checks
-  # is false, only keep file formats of which files actually exist in model_output_dir.
+  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+
+  # Based on skip_checks param, set a flag that determines whether or not to
+  # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
     exclude_invalid_files_flag <- FALSE
   } else {
-    file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
     exclude_invalid_files_flag <- TRUE
   }
 
@@ -123,6 +119,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
   structure(dataset,
     class = c("mod_out_connection", class(dataset)),
     file_format = file_format,
+    format_verified = exclude_invalid_files_flag,
     file_system = class(dataset$filesystem$base_fs)[1],
     model_output_dir = model_output_dir$base_path
   )
