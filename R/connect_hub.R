@@ -242,7 +242,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   # files in dataset
   warn_unopened_files(file_format, dataset, model_output_dir)
 
-  x <- structure(dataset,
+  structure(dataset,
     class = c("hub_connection", class(dataset)),
     hub_name = hub_name,
     file_format = file_format,
