@@ -515,6 +515,46 @@ test_that("connect_hub & connect_model_output fail correctly", {
   )
 })
 
+
+test_that("connect_hub fails when skip_checks is true and hub has multiple file types", {
+  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_con <- connect_hub(hub_path)
+
+  expect_snapshot(connect_hub(hub_path, skip_checks = TRUE), error = TRUE)
+
+  expect_error(
+    connect_hub(connect_hub(hub_path, skip_checks = TRUE)),
+    regexp = "^Skip_checks cannot be TRUE"
+  )
+  # should also fail when attempting to connect with a specific file format
+  expect_error(
+    connect_hub(connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)),
+    regexp = "^Skip_checks cannot be TRUE"
+  )
+})
+
+
+test_that("connect_model_output fails when skip_checks is true and hub has multiple file types", {
+  mod_out_path <- system.file("testhubs/simple/model-output", package = "hubUtils")
+  mod_out_con <- connect_model_output(mod_out_path)
+
+  expect_snapshot(connect_model_output(mod_out_path, skip_checks = TRUE), error = TRUE)
+
+  expect_error(
+    connect_model_output(connect_model_output(mod_out_path, skip_checks = TRUE)),
+    regexp = "^Skip_checks cannot be TRUE"
+  )
+  # should also fail when attempting to connect with a specific file format
+  expect_error(
+    connect_model_output(connect_model_output(
+                                              mod_out_path,
+                                              file_format = "parquet",
+                                              skip_checks = TRUE)),
+    regexp = "^Skip_checks cannot be TRUE"
+  )
+})
+
+
 test_that("connect_hub detects unopenned files correctly", {
   hub_path <- testthat::test_path("testdata/error_file")
   expect_snapshot(connect_hub(hub_path))

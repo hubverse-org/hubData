@@ -27,7 +27,7 @@ connect_model_output.default <- function(model_output_dir,
   }
 
   file_format <- rlang::arg_match(file_format)
-  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+  file_format <- check_file_format(model_output_dir, file_format, skip_checks, error = TRUE)
 
   # Based on skip_checks param set a flag that determines whether or not to
   # check for invalid files when opening model output data.
@@ -80,7 +80,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
   rlang::check_required(model_output_dir)
 
   file_format <- rlang::arg_match(file_format)
-  file_format <- check_file_format(model_output_dir, file_format, error = TRUE)
+  file_format <- check_file_format(model_output_dir, file_format, skip_checks, error = TRUE)
 
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.

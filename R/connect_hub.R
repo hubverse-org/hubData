@@ -118,7 +118,7 @@ connect_hub.default <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  file_format <- check_file_format(model_output_dir, file_format)
+  file_format <- check_file_format(model_output_dir, file_format, skip_checks)
 
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
@@ -203,7 +203,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  file_format <- check_file_format(model_output_dir, file_format)
+  file_format <- check_file_format(model_output_dir, file_format, skip_checks)
 
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.

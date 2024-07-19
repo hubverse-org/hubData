@@ -102,7 +102,7 @@ get_file_format_meta <- function(dataset, model_output_dir, file_format) {
   rbind(n_open, n_in_dir)
 }
 
-check_file_format <- function(model_output_dir, file_format,
+check_file_format <- function(model_output_dir, file_format, skip_checks,
                               call = rlang::caller_env(), error = FALSE) {
   dir_file_formats <- get_dir_file_formats(model_output_dir)
   valid_file_format <- file_format[file_format %in% dir_file_formats]
@@ -118,6 +118,13 @@ check_file_format <- function(model_output_dir, file_format,
     cli::cli_warn("No files of file format{?s}
                    {.val {file_format}}
                    found in model output directory.",
+      call = call
+    )
+  }
+  if (length(dir_file_formats) > 1L && isTRUE(skip_checks)) {
+    cli::cli_abort("Skip_checks cannot be TRUE when there
+                   are multiple file formats in the model output directory
+                   ({.val {dir_file_formats}}).",
       call = call
     )
   }
