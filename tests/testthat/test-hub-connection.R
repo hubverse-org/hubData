@@ -547,9 +547,10 @@ test_that("connect_model_output fails when skip_checks is true and hub has multi
   # should also fail when attempting to connect with a specific file format
   expect_error(
     connect_model_output(connect_model_output(
-                                              mod_out_path,
-                                              file_format = "parquet",
-                                              skip_checks = TRUE)),
+      mod_out_path,
+      file_format = "parquet",
+      skip_checks = TRUE
+    )),
     regexp = "^Skip_checks cannot be TRUE"
   )
 })

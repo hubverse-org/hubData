@@ -27,8 +27,9 @@
 #' be supplied to `connect_hub` but only a single file format can be supplied to `connect_mod_out`.
 #' @param skip_checks Logical. If `FALSE` (default), check file_format parameter against the
 #' hub's model output files. Also excludes invalid model output files when opening hub datasets.
-#' Setting to TRUE will improve performance but will result in an error if the model output
-#' directory includes invalid files.
+#' Setting to `TRUE`` will improve performance but will result in an error if the model output
+#' directory includes invalid files. Cannot be `TRUE` when there are multiple file formats in
+#' the hub's model output directory.
 #' @inheritParams create_hub_schema
 #'
 #' @return
