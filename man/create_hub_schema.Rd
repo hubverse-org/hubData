@@ -7,8 +7,8 @@
 create_hub_schema(
   config_tasks,
   partitions = list(model_id = arrow::utf8()),
-  output_type_id_datatype = c("auto", "character", "double", "integer", "logical",
-    "Date"),
+  output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
+    "logical", "Date"),
   r_schema = FALSE
 )
 }
@@ -19,14 +19,19 @@ config file created using function \code{\link[hubUtils:read_config]{hubUtils::r
 \item{partitions}{a named list specifying the arrow data types of any
 partitioning column.}
 
-\item{output_type_id_datatype}{character string. One of \code{"auto"}, \code{"character"},
-\code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}. Defaults to \code{"auto"} indicating
-that \code{output_type_id} will be determined automatically from the \code{tasks.json}
-config file. Other data type values can be used to override automatic determination.
-Note that attempting to coerce \code{output_type_id} to a data type that is not possible
-(e.g. trying to coerce to \code{"double"} when the data contains \code{"character"} values)
-will likely result in an error or potentially unexpected behaviour so use with
-care.}
+\item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
+\code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
+Defaults to \code{"from_config"} which uses the setting in the \code{output_type_id_datatype}
+property in the \code{tasks.json} config file if available. If the property is
+not set in the config, the argument falls back to \code{"auto"} which determines
+the  \code{output_type_id} data type automatically from the \code{tasks.json}
+config file as the simplest data type required to represent all output
+type ID values across all output types in the hub.
+Other data type values can be used to override automatic determination.
+Note that attempting to coerce \code{output_type_id} to a data type that is
+not valid for the data (e.g. trying to coerce\code{"character"} values to
+\code{"double"}) will likely result in an error or potentially unexpected
+behaviour so use with care.}
 
 \item{r_schema}{Logical. If \code{FALSE} (default), return an \code{\link[arrow:schema]{arrow::schema()}} object.
 If \code{TRUE}, return a character vector of R data types.}

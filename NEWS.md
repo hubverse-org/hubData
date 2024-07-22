@@ -1,3 +1,7 @@
+# hubData 1.1.0
+
+* Add `"from_config"` option to the `output_type_id_datatype` argument in `create_hub_schema()`, `coerce_to_hub_schema()` and `connect_hub()`. This allows users to set the `output_type_id` column data type from the `tasks.json` `output_type_id_datatype` property. (#44)
+
 # hubData 1.0.0
 
 * Breaking change: `expand_model_out_val_grid()` and `create_model_out_submit_tmpl()` are now defunct. These functions have been moved to `hubValidations` and replaced by `hubValidations::expand_model_out_grid()` and `hubValidations::submission_tmpl()`, respectively. The old functions will now fail if called and will be removed in a future release.

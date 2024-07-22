@@ -11,11 +11,17 @@
 #' @describeIn coerce_to_hub_schema coerce columns to hub schema data types.
 #' @export
 coerce_to_hub_schema <- function(tbl, config_tasks, skip_date_coercion = FALSE,
-                                 as_arrow_table = FALSE) {
+                                 as_arrow_table = FALSE,
+                                 output_type_id_datatype = c(
+                                   "from_config", "auto", "character",
+                                   "double", "integer",
+                                   "logical", "Date"
+                                 )) {
   tbl_schema <- create_hub_schema(
     config_tasks,
     partitions = NULL,
-    r_schema = TRUE
+    r_schema = TRUE,
+    output_type_id_datatype = output_type_id_datatype
   )
   tbl_schema <- tbl_schema[names(tbl)]
 

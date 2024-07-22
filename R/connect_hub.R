@@ -71,7 +71,7 @@
 connect_hub <- function(hub_path,
                         file_format = c("csv", "parquet", "arrow"),
                         output_type_id_datatype = c(
-                          "auto", "character",
+                          "from_config", "auto", "character",
                           "double", "integer",
                           "logical", "Date"
                         ),
@@ -84,7 +84,7 @@ connect_hub <- function(hub_path,
 connect_hub.default <- function(hub_path,
                                 file_format = c("csv", "parquet", "arrow"),
                                 output_type_id_datatype = c(
-                                  "auto", "character",
+                                  "from_config", "auto", "character",
                                   "double", "integer",
                                   "logical", "Date"
                                 ),
@@ -157,6 +157,7 @@ connect_hub.default <- function(hub_path,
 connect_hub.SubTreeFileSystem <- function(hub_path,
                                           file_format = c("csv", "parquet", "arrow"),
                                           output_type_id_datatype = c(
+                                            "from_config",
                                             "auto",
                                             "character",
                                             "double",
@@ -232,6 +233,7 @@ open_hub_dataset <- function(model_output_dir,
                              file_format = c("csv", "parquet", "arrow"),
                              config_tasks,
                              output_type_id_datatype = c(
+                               "from_config",
                                "auto", "character",
                                "double", "integer",
                                "logical", "Date"
@@ -276,6 +278,7 @@ open_hub_datasets <- function(model_output_dir,
                               file_format = c("csv", "parquet", "arrow"),
                               config_tasks,
                               output_type_id_datatype = c(
+                                "from_config",
                                 "auto", "character",
                                 "double", "integer",
                                 "logical", "Date"
