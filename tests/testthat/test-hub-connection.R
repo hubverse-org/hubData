@@ -390,3 +390,22 @@ test_that("connect_hub detects unopenned files correctly", {
   hub_path <- testthat::test_path("testdata/error_file")
   expect_snapshot(connect_hub(hub_path))
 })
+
+test_that("output_type_id_datatype arg works in connect_hub on local hub", {
+  # Simple forecasting Hub example ----
+  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+
+  # Test default reverts to "auto"
+  expect_equal(
+    connect_hub(hub_path
+    )$schema$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: double"
+  )
+  # Test that override works
+  expect_equal(
+    connect_hub(
+      hub_path, output_type_id_datatype = "character"
+      )$schema$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: string"
+  )
+})
