@@ -97,3 +97,33 @@ test_that("create_hub_schema works with sample output types", {
     "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
   )
 })
+
+test_that("create_hub_schema works with config output_type_id_datatype", {
+  config_tasks_otid_datatype <- hubUtils::read_config_file(
+    testthat::test_path(
+      "testdata",
+      "configs",
+      "tasks-set-otid-datatype.json"
+    )
+  )
+  expect_equal(
+    create_hub_schema(
+      config_tasks_otid_datatype
+      )$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: string"
+  )
+  expect_equal(
+    create_hub_schema(
+      config_tasks_otid_datatype,
+      output_type_id_datatype = "double"
+    )$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: double"
+  )
+  expect_equal(
+    create_hub_schema(
+      config_tasks_otid_datatype,
+      output_type_id_datatype = "auto"
+    )$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: double"
+  )
+})
