@@ -397,15 +397,15 @@ test_that("output_type_id_datatype arg works in connect_hub on local hub", {
 
   # Test default reverts to "auto"
   expect_equal(
-    connect_hub(hub_path
-    )$schema$GetFieldByName("output_type_id")$ToString(),
+    connect_hub(hub_path)$schema$GetFieldByName("output_type_id")$ToString(),
     "output_type_id: double"
   )
   # Test that override works
   expect_equal(
     connect_hub(
-      hub_path, output_type_id_datatype = "character"
-      )$schema$GetFieldByName("output_type_id")$ToString(),
+      hub_path,
+      output_type_id_datatype = "character"
+    )$schema$GetFieldByName("output_type_id")$ToString(),
     "output_type_id: string"
   )
 })

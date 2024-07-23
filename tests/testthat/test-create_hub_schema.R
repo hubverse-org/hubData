@@ -109,7 +109,7 @@ test_that("create_hub_schema works with config output_type_id_datatype", {
   expect_equal(
     create_hub_schema(
       config_tasks_otid_datatype
-      )$GetFieldByName("output_type_id")$ToString(),
+    )$GetFieldByName("output_type_id")$ToString(),
     "output_type_id: string"
   )
   expect_equal(
