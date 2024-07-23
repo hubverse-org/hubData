@@ -119,9 +119,9 @@ connect_hub.default <- function(hub_path,
     dataset <- list()
   } else {
     dataset <- open_hub_datasets(
-      model_output_dir,
-      file_format,
-      config_tasks,
+      model_output_dir= model_output_dir,
+      file_format = file_format,
+      config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions
     )
@@ -194,9 +194,9 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
     dataset <- list()
   } else {
     dataset <- open_hub_datasets(
-      model_output_dir,
-      file_format,
-      config_tasks,
+      model_output_dir = model_output_dir,
+      file_format = file_format,
+      config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions
     )
@@ -287,9 +287,9 @@ open_hub_datasets <- function(model_output_dir,
                               call = rlang::caller_env()) {
   if (length(file_format) == 1L) {
     open_hub_dataset(
-      model_output_dir,
-      file_format,
-      config_tasks,
+      model_output_dir = model_output_dir,
+      file_format = file_format,
+      config_tasks = config_tasks,
       output_type_id_datatype,
       partitions = partitions
     )
@@ -297,10 +297,10 @@ open_hub_datasets <- function(model_output_dir,
     cons <- purrr::map(
       file_format,
       ~ open_hub_dataset(
-        model_output_dir,
-        .x,
-        config_tasks,
-        output_type_id_datatype,
+        model_output_dir = model_output_dir,
+        file_format = .x,
+        config_tasks = config_tasks,
+        output_type_id_datatype = output_type_id_datatype,
         partitions = partitions
       )
     )
