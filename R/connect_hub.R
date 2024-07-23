@@ -119,7 +119,7 @@ connect_hub.default <- function(hub_path,
     dataset <- list()
   } else {
     dataset <- open_hub_datasets(
-      model_output_dir= model_output_dir,
+      model_output_dir = model_output_dir,
       file_format = file_format,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
