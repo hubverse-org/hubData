@@ -43,6 +43,8 @@ create_hub_schema <- function(config_tasks,
     output_type_id_datatype <- config_tasks$output_type_id_datatype
     if (is.null(output_type_id_datatype)) {
       output_type_id_datatype <- "auto"
+    } else {
+      output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
     }
   }
 
@@ -189,7 +191,7 @@ get_output_type_id_type <- function(config_tasks) {
     # id values, create zero length vectors of sample output type id types
     # using the function specified by output_type_id_params type.
     # Get the appropriate function using `get`.
-    purrr::map(~get(.x)()) %>%
+    purrr::map(~ get(.x)()) %>%
     unlist()
 
   get_data_type(c(values, sample_values))
