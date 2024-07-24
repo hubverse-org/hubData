@@ -122,7 +122,7 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
         split_outputs |>
           dplyr::mutate(output_type = "sample", hub_value = suppressWarnings(as.numeric(sample))) |>
           dplyr::group_by(.data$model, .data$timezero, .data$unit, .data$target) |>
-          dplyr::mutate(output_type_id = as.character(dplyr::row_number()), .before = .data$hub_value) |>
+          dplyr::mutate(output_type_id = as.character(dplyr::row_number()), .before = "hub_value") |>
           dplyr::ungroup()
       }
     }) |>
@@ -136,8 +136,8 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
 
   hub_model_outputs[, c("model", "timezero", "season", "unit", "numeric_horizon", "hub_target", "output_type",
                         "output_type_id", "hub_value")] |>
-    dplyr::rename(model_id = .data$model, horizon = .data$numeric_horizon, target = .data$hub_target,
-                  value = .data$hub_value)
+    dplyr::rename(model_id = "model", horizon = "numeric_horizon", target = "hub_target",
+                  value = "hub_value")
 }
 
 validate_arguments <- function(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of,
