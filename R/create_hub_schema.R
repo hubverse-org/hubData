@@ -7,14 +7,19 @@
 #' config file created using function [hubUtils::read_config()].
 #' @param partitions a named list specifying the arrow data types of any
 #' partitioning column.
-#' @param output_type_id_datatype character string. One of `"auto"`, `"character"`,
-#' `"double"`, `"integer"`, `"logical"`, `"Date"`. Defaults to `"auto"` indicating
-#' that `output_type_id` will be determined automatically from the `tasks.json`
-#' config file. Other data type values can be used to override automatic determination.
-#' Note that attempting to coerce `output_type_id` to a data type that is not possible
-#' (e.g. trying to coerce to `"double"` when the data contains `"character"` values)
-#' will likely result in an error or potentially unexpected behaviour so use with
-#' care.
+#' @param output_type_id_datatype character string. One of `"from_config"`, `"auto"`,
+#' `"character"`, `"double"`, `"integer"`, `"logical"`, `"Date"`.
+#' Defaults to `"from_config"` which uses the setting in the `output_type_id_datatype`
+#' property in the `tasks.json` config file if available. If the property is
+#' not set in the config, the argument falls back to `"auto"` which determines
+#' the  `output_type_id` data type automatically from the `tasks.json`
+#' config file as the simplest data type required to represent all output
+#' type ID values across all output types in the hub.
+#' Other data type values can be used to override automatic determination.
+#' Note that attempting to coerce `output_type_id` to a data type that is
+#' not valid for the data (e.g. trying to coerce`"character"` values to
+#' `"double"`) will likely result in an error or potentially unexpected
+#' behaviour so use with care.
 #' @param r_schema Logical. If `FALSE` (default), return an [arrow::schema()] object.
 #' If `TRUE`, return a character vector of R data types.
 #'
@@ -29,11 +34,19 @@
 create_hub_schema <- function(config_tasks,
                               partitions = list(model_id = arrow::utf8()),
                               output_type_id_datatype = c(
-                                "auto", "character",
+                                "from_config", "auto", "character",
                                 "double", "integer",
                                 "logical", "Date"
                               ), r_schema = FALSE) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+  if (output_type_id_datatype == "from_config") {
+    output_type_id_datatype <- config_tasks$output_type_id_datatype
+    if (is.null(output_type_id_datatype)) {
+      output_type_id_datatype <- "auto"
+    } else {
+      output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+    }
+  }
 
   task_id_names <- hubUtils::get_task_id_names(config_tasks)
 
@@ -178,7 +191,7 @@ get_output_type_id_type <- function(config_tasks) {
     # id values, create zero length vectors of sample output type id types
     # using the function specified by output_type_id_params type.
     # Get the appropriate function using `get`.
-    purrr::map(~get(.x)()) %>%
+    purrr::map(~ get(.x)()) %>%
     unlist()
 
   get_data_type(c(values, sample_values))
