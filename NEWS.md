@@ -1,3 +1,8 @@
+# hubData 1.1.1
+
+* Fix {tidyselect} warnings by converting internal syntax
+* Bump required dplyr version to 1.1.0
+
 # hubData 1.1.0
 
 * Add `"from_config"` option to the `output_type_id_datatype` argument in `create_hub_schema()`, `coerce_to_hub_schema()` and `connect_hub()`. This allows users to set the hub level `output_type_id` column data type through the `tasks.json` `output_type_id_datatype` property introduced in schema version v3.0.1. (#44)
