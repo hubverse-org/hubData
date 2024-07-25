@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,11 @@
       <small>Source: <a href="https://github.com/hubverse-org/hubData/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.1" id="hubdata-111">hubData 1.1.1<a class="anchor" aria-label="anchor" href="#hubdata-111"></a></h2>
+<ul><li>Fix {tidyselect} warnings by converting internal syntax</li>
+<li>Bump required dplyr version to 1.1.0</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="hubdata-110">hubData 1.1.0<a class="anchor" aria-label="anchor" href="#hubdata-110"></a></h2>
 <ul><li>Add <code>"from_config"</code> option to the <code>output_type_id_datatype</code> argument in <code><a href="../reference/create_hub_schema.html">create_hub_schema()</a></code>, <code><a href="../reference/coerce_to_hub_schema.html">coerce_to_hub_schema()</a></code> and <code><a href="../reference/connect_hub.html">connect_hub()</a></code>. This allows users to set the hub level <code>output_type_id</code> column data type through the <code>tasks.json</code> <code>output_type_id_datatype</code> property introduced in schema version v3.0.1. (<a href="https://github.com/hubverse-org/hubData/issues/44" class="external-link">#44</a>)</li>
