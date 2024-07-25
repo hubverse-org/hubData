@@ -29,7 +29,8 @@
 #' hub's model output files. Also excludes invalid model output files when opening hub datasets.
 #' Setting to `TRUE`` will improve performance but will result in an error if the model output
 #' directory includes invalid files. Cannot be `TRUE` when there are multiple file formats in
-#' the hub's model output directory.
+#' the hub's model output directory or when the hub's model output directory contains files that
+#' are not model output data (for example, a README).
 #' @inheritParams create_hub_schema
 #'
 #' @return
@@ -124,9 +125,9 @@ connect_hub.default <- function(hub_path,
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
-    exclude_invalid_files_flag <- FALSE
+    exclude_invalid_files <- FALSE
   } else {
-    exclude_invalid_files_flag <- TRUE
+    exclude_invalid_files <- TRUE
   }
 
   if (length(file_format) == 0L) {
@@ -138,7 +139,7 @@ connect_hub.default <- function(hub_path,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files_flag = exclude_invalid_files_flag
+      exclude_invalid_files = exclude_invalid_files
     )
   }
   if (inherits(dataset, "UnionDataset")) {
@@ -160,7 +161,7 @@ connect_hub.default <- function(hub_path,
     class = c("hub_connection", class(dataset)),
     hub_name = hub_name,
     file_format = file_format,
-    format_verified = exclude_invalid_files_flag,
+    checks = exclude_invalid_files,
     file_system = file_system,
     hub_path = hub_path,
     model_output_dir = model_output_dir,
@@ -209,9 +210,9 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
-    exclude_invalid_files_flag <- FALSE
+    exclude_invalid_files <- FALSE
   } else {
-    exclude_invalid_files_flag <- TRUE
+    exclude_invalid_files <- TRUE
   }
 
   if (length(file_format) == 0L) {
@@ -223,7 +224,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files_flag = exclude_invalid_files_flag
+      exclude_invalid_files = exclude_invalid_files
     )
   }
 
@@ -246,7 +247,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
     class = c("hub_connection", class(dataset)),
     hub_name = hub_name,
     file_format = file_format,
-    format_verified = exclude_invalid_files_flag,
+    checks = exclude_invalid_files,
     file_system = file_system,
     hub_path = hub_path$base_path,
     model_output_dir = model_output_dir$base_path,
@@ -265,7 +266,7 @@ open_hub_dataset <- function(model_output_dir,
                                "logical", "Date"
                              ),
                              partitions = list(model_id = arrow::utf8()),
-                             exclude_invalid_files_flag) {
+                             exclude_invalid_files) {
   file_format <- rlang::arg_match(file_format)
   schema <- create_hub_schema(config_tasks,
     partitions = partitions,
@@ -280,7 +281,7 @@ open_hub_dataset <- function(model_output_dir,
       col_types = schema,
       unify_schemas = FALSE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     ),
     parquet = arrow::open_dataset(
       model_output_dir,
@@ -288,7 +289,7 @@ open_hub_dataset <- function(model_output_dir,
       partitioning = "model_id",
       schema = schema,
       unify_schemas = FALSE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     ),
     arrow = arrow::open_dataset(
       model_output_dir,
@@ -296,7 +297,7 @@ open_hub_dataset <- function(model_output_dir,
       partitioning = "model_id",
       schema = schema,
       unify_schemas = FALSE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     )
   )
 }
@@ -311,7 +312,7 @@ open_hub_datasets <- function(model_output_dir,
                                 "logical", "Date"
                               ),
                               partitions = list(model_id = arrow::utf8()),
-                              exclude_invalid_files_flag,
+                              exclude_invalid_files,
                               call = rlang::caller_env()) {
   if (length(file_format) == 1L) {
     open_hub_dataset(
@@ -320,7 +321,7 @@ open_hub_datasets <- function(model_output_dir,
       config_tasks = config_tasks,
       output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files_flag
+      exclude_invalid_files
     )
   } else {
     cons <- purrr::map(
@@ -331,7 +332,7 @@ open_hub_datasets <- function(model_output_dir,
         config_tasks = config_tasks,
         output_type_id_datatype = output_type_id_datatype,
         partitions = partitions,
-        exclude_invalid_files_flag
+        exclude_invalid_files
       )
     )
 

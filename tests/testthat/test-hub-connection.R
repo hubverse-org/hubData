@@ -60,7 +60,7 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
     )
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
@@ -117,7 +117,7 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
     )
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- basename(attr(hub_con, "model_output_dir"))
@@ -161,7 +161,7 @@ test_that("connect_hub works on local flusight forecasting hub", {
     )
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   expect_equal(
     purrr::map_int(
@@ -196,7 +196,7 @@ test_that("connect_hub file_format override works on local hub", {
     "LocalFileSystem"
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   expect_equal(
     class(hub_con),
@@ -229,7 +229,7 @@ test_that("connect_model_output works on local model_output_dir", {
     attr(mod_out_con, "file_format"),
     structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
   )
-  expect_true(attr(mod_out_con, "format_verified"))
+  expect_true(attr(mod_out_con, "checks"))
 
   expect_equal(
     attr(mod_out_con, "file_system"),
@@ -355,7 +355,7 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
     ))
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   expect_equal(
     attr(hub_con, "file_system"),
@@ -398,7 +398,7 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
     ))
   )
 
-  expect_true(attr(hub_con, "format_verified"))
+  expect_true(attr(hub_con, "checks"))
 
   expect_equal(
     attr(hub_con, "file_system"),
@@ -435,7 +435,7 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   hub_path <- system.file("testhubs/parquet", package = "hubUtils")
   hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
 
-  expect_false(attr(hub_con, "format_verified"))
+  expect_false(attr(hub_con, "checks"))
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(hub_con)
@@ -452,7 +452,7 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
     ))
   )
 
-  expect_false(attr(hub_con, "format_verified"))
+  expect_false(attr(hub_con, "checks"))
 
   expect_equal(
     attr(hub_con, "file_system"),

@@ -34,9 +34,9 @@ print.hub_connection <- function(x, verbose = FALSE, ...) {
       "*" = "file_format: {.val {print_file_format_meta(x)}}"
     )
   }
-  if (!is.null(attr(x, "format_verified"))) {
+  if (!is.null(attr(x, "checks"))) {
     print_msg <- c(print_msg,
-      "*" = "format_verified: {.val {attr(x, 'format_verified')}}"
+      "*" = "checks: {.val {attr(x, 'checks')}}"
     )
   }
   if (!is.null(attr(x, "file_system"))) {
@@ -84,9 +84,9 @@ print.mod_out_connection <- function(x, verbose = FALSE, ...) {
       "*" = "file_format: {.val {print_file_format_meta(x)}}"
     )
   }
-  if (!is.null(attr(x, "format_verified"))) {
+  if (!is.null(attr(x, "checks"))) {
     print_msg <- c(print_msg,
-      "*" = "format_verified: {.val {attr(x, 'format_verified')}}"
+      "*" = "checks: {.val {attr(x, 'checks')}}"
     )
   }
   if (!is.null(attr(x, "file_system"))) {

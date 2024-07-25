@@ -1,6 +1,8 @@
 # hubData 1.2.0
 
-* Adds a `skip_checks` parameter to the `connect_hub` and `connect_model_output` functions. When `skip_checks` is set to `TRUE`, these functions will bypass the default behavior of scanning the hub's model output directory for valid file types. Omitting these checks results in better performance when connecting to cloud-based hubs but can result in errors when querying the data. This option is only valid when connecting to hubs that use a single file format for model output data.
+* Adds a `skip_checks` parameter to the `connect_hub` and `connect_model_output` functions. When `skip_checks` is set to `TRUE`, these functions will bypass the default behavior of scanning the hub's model output directory for invalid files. Omitting these checks results in better performance when connecting to cloud-based hubs but can result in errors when querying the data. This option is only valid when connecting to hubs that meet the following criteria:
+    - the model output directory contains only model output data (no `README.md`, for example)
+    - the model output files use a single file format.
 
 # hubData 1.1.1
 

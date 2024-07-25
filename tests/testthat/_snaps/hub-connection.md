@@ -28,7 +28,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr [1:2] "csv" "parquet"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -181,7 +181,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr "parquet"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -311,7 +311,7 @@
       
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "local"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -327,7 +327,7 @@
       
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "s3"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -343,7 +343,7 @@
       
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
-      * format_verified: FALSE
+      * checks: FALSE
       * file_system: "s3"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -379,7 +379,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr [1:3] "csv" "parquet" "arrow"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "hub_path")= chr "flusight"
        - attr(*, "model_output_dir")= chr "forecasts"
@@ -526,7 +526,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr [1:3] "csv" "parquet" "arrow"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -637,7 +637,7 @@
       -- <mod_out_connection/FileSystemDataset> --
       
       * file_format: "csv(3/3)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       
@@ -685,7 +685,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr "csv"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
 
@@ -698,7 +698,7 @@
       -- <mod_out_connection/FileSystemDataset> --
       
       * file_format: "csv(3/3)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       
@@ -757,7 +757,7 @@
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
       * file_format: "csv(3/3)" and "parquet(1/1)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -787,7 +787,7 @@
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
       * file_format: "csv(3/3)" and "parquet(1/1)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -830,7 +830,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr [1:2] "csv" "parquet"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "LocalFileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -959,7 +959,7 @@
       -- <mod_out_connection/FileSystemDataset> --
       
       * file_format: "csv(3/3)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       
@@ -1055,7 +1055,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr [1:2] "csv" "parquet"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "S3FileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -1225,7 +1225,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr "parquet"
-       - attr(*, "format_verified")= logi TRUE
+       - attr(*, "checks")= logi TRUE
        - attr(*, "file_system")= chr "S3FileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -1373,7 +1373,7 @@
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'test/hub_path'
       * file_format: "parquet(4/4)"
-      * format_verified: FALSE
+      * checks: FALSE
       * file_system: "LocalFileSystem"
       * model_output_dir: "test/model_output_dir"
       * config_admin: 'hub-config/admin.json'
@@ -1425,7 +1425,7 @@
         ..- attr(*, "dimnames")=List of 2
         .. ..$ : chr [1:2] "n_open" "n_in_dir"
         .. ..$ : chr "parquet"
-       - attr(*, "format_verified")= logi FALSE
+       - attr(*, "checks")= logi FALSE
        - attr(*, "file_system")= chr "S3FileSystem"
        - attr(*, "hub_path")= chr "test/hub_path"
        - attr(*, "model_output_dir")= chr "test/model_output_dir"
@@ -1601,7 +1601,7 @@
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'testdata/error_file'
       * file_format: "csv(8/9)"
-      * format_verified: TRUE
+      * checks: TRUE
       * file_system: "LocalFileSystem"
       * model_output_dir: "testdata/error_file/model-output"
       * config_admin: 'hub-config/admin.json'
@@ -1630,7 +1630,7 @@
       * hub_name: "Simple Forecast Hub"
       * hub_path: 'testdata/error_file'
       * file_format: "csv(9/9)"
-      * format_verified: FALSE
+      * checks: FALSE
       * file_system: "LocalFileSystem"
       * model_output_dir: "testdata/error_file/model-output"
       * config_admin: 'hub-config/admin.json'

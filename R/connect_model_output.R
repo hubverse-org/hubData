@@ -33,9 +33,9 @@ connect_model_output.default <- function(model_output_dir,
   # Based on skip_checks param set a flag that determines whether or not to
   # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
-    exclude_invalid_files_flag <- FALSE
+    exclude_invalid_files <- FALSE
   } else {
-    exclude_invalid_files_flag <- TRUE
+    exclude_invalid_files <- TRUE
   }
 
   if (file_format == "csv") {
@@ -46,7 +46,7 @@ connect_model_output.default <- function(model_output_dir,
       col_types = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     )
   } else {
     dataset <- arrow::open_dataset(
@@ -55,7 +55,7 @@ connect_model_output.default <- function(model_output_dir,
       partitioning = partition_names,
       schema = schema,
       unify_schemas = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     )
   }
 
@@ -66,7 +66,7 @@ connect_model_output.default <- function(model_output_dir,
   structure(dataset,
     class = c("mod_out_connection", class(dataset)),
     file_format = file_format,
-    format_verified = exclude_invalid_files_flag,
+    checks = exclude_invalid_files,
     file_system = class(dataset$filesystem)[1],
     model_output_dir = model_output_dir
   )
@@ -87,9 +87,9 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
   if (isTRUE(skip_checks)) {
-    exclude_invalid_files_flag <- FALSE
+    exclude_invalid_files <- FALSE
   } else {
-    exclude_invalid_files_flag <- TRUE
+    exclude_invalid_files <- TRUE
   }
 
   if (file_format == "csv") {
@@ -100,7 +100,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
       schema = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     )
   } else {
     dataset <- arrow::open_dataset(
@@ -109,7 +109,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
       partitioning = partition_names,
       schema = schema,
       unify_schemas = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files_flag)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files)
     )
   }
 
@@ -121,7 +121,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
   structure(dataset,
     class = c("mod_out_connection", class(dataset)),
     file_format = file_format,
-    format_verified = exclude_invalid_files_flag,
+    checks = exclude_invalid_files,
     file_system = class(dataset$filesystem$base_fs)[1],
     model_output_dir = model_output_dir$base_path
   )
