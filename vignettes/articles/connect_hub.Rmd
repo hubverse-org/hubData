@@ -68,6 +68,18 @@ hub_con_cloud <- connect_hub(hub_path_cloud)
 hub_con_cloud
 ```
 
+If the cloud-based hub uses a single file type for model output data, you can improve performance by using the `skip_checks` argument. This argument will bypass the default behavior of scanning the hub's model output directory for invalid files before connecting.
+
+Using this argument will improve performance but will result in errors unless the hub meets the following criteria:
+
+- the model output directory contains only model output data (no `README.md`, for example)
+- the model output files use a single file format.
+
+```{r}
+hub_path_cloud <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
+hub_con_cloud <- connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
+hub_con_cloud
+```
 
 # Accessing data
 
