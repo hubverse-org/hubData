@@ -224,7 +224,7 @@ Like `connect_hub`, `connect_model_output` has an optional `skip_checks` argumen
 
 ```{r}
 mod_out_dir_cloud <- s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
-mod_out_con_cloud <- connect_hub(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
+mod_out_con_cloud <- connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
 mod_out_con_cloud
 ```
 
