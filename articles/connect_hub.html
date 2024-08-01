@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -177,6 +177,7 @@ through the <code>file_format</code> argument.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"US CDC FluSight"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">/home/runner/work/_temp/Library/hubUtils/testhubs/flusight</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(5/5)"</span>, <span style="color: #0000BB;">"parquet(2/2)"</span>, and <span style="color: #0000BB;">"arrow(1/1)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir:</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/flusight/forecasts"</span></span></span>
@@ -216,6 +217,7 @@ storage (S3, GCS)</a>).</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">hubverse/hubutils/testhubs/simple/</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span> and <span style="color: #0000BB;">"parquet(1/1)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"S3FileSystem"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir: <span style="color: #0000BB;">"model-output/"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> config_admin: <span style="color: #0000BB;">hub-config/admin.json</span></span></span>
@@ -232,6 +234,52 @@ storage (S3, GCS)</a>).</p>
 <span><span class="co">#&gt; value: int32</span></span>
 <span><span class="co">#&gt; model_id: string</span></span>
 <span><span class="co">#&gt; age_group: string</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="performance-considerations">Performance considerations<a class="anchor" aria-label="anchor" href="#performance-considerations"></a>
+</h4>
+<p>By default, <code>connect_hub</code> will ignore invalid files in the
+hub’s model output directory when it creates a connection. This check
+prevents errors when working with the data, but it negatively impacts
+performance.</p>
+<p>If the cloud-based hub uses a single file type for model output data,
+you can improve performance by using the <code>skip_checks</code>
+argument. This argument will bypass the default behavior of scanning the
+hub’s model output directory for invalid files before connecting.</p>
+<p>Using this argument will fail unless the hub meets the following
+criteria:</p>
+<ul>
+<li>the model output directory contains only model output data (no
+<code>README.md</code>, for example)</li>
+<li>the model output files use a single file format.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hub_path_cloud</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"hubverse/hubutils/testhubs/parquet/"</span><span class="op">)</span></span>
+<span><span class="va">hub_con_cloud</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/connect_hub.html">connect_hub</a></span><span class="op">(</span><span class="va">hub_path_cloud</span>, file_format <span class="op">=</span> <span class="st">"parquet"</span>, skip_checks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">hub_con_cloud</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">&lt;hub_connection/FileSystemDataset&gt;</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">hubverse/hubutils/testhubs/parquet/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"parquet(4/4)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">FALSE</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"S3FileSystem"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir: <span style="color: #0000BB;">"model-output/"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> config_admin: <span style="color: #0000BB;">hub-config/admin.json</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> config_tasks: <span style="color: #0000BB;">hub-config/tasks.json</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Connection schema</span></span>
+<span><span class="co">#&gt; hub_connection with 4 Parquet files</span></span>
+<span><span class="co">#&gt; origin_date: date32[day]</span></span>
+<span><span class="co">#&gt; target: string</span></span>
+<span><span class="co">#&gt; horizon: int32</span></span>
+<span><span class="co">#&gt; location: string</span></span>
+<span><span class="co">#&gt; age_group: string</span></span>
+<span><span class="co">#&gt; output_type: string</span></span>
+<span><span class="co">#&gt; output_type_id: double</span></span>
+<span><span class="co">#&gt; value: int32</span></span>
+<span><span class="co">#&gt; model_id: string</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -241,23 +289,23 @@ storage (S3, GCS)</a>).</p>
 construct querying pipelines.</p>
 <p>To perform the queries, you can use <code>dplyr</code>’s
 <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> function:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 276 × 8</span></span></span>
 <span><span class="co">#&gt;    forecast_date horizon target        location output_type output_type_id value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-04-24          1 wk ahead inc… US       quantile    0.01            232.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-04-24          1 wk ahead inc… US       quantile    0.025           331.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-04-24          1 wk ahead inc… US       quantile    0.05            423.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-04-24          1 wk ahead inc… US       quantile    0.1             512.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-04-24          1 wk ahead inc… US       quantile    0.15            610.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-04-24          1 wk ahead inc… US       quantile    0.2             670.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-04-24          1 wk ahead inc… US       quantile    0.25            724.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-04-24          1 wk ahead inc… US       quantile    0.3             773.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-04-24          1 wk ahead inc… US       quantile    0.35            812.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-04-24          1 wk ahead inc… US       quantile    0.4             893.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-04-24          1 wk ahead inc… US       quantile    0.01               0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-04-24          1 wk ahead inc… US       quantile    0.025              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-04-24          1 wk ahead inc… US       quantile    0.05               0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-04-24          1 wk ahead inc… US       quantile    0.1              281</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-04-24          1 wk ahead inc… US       quantile    0.15             600</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-04-24          1 wk ahead inc… US       quantile    0.2              717</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-04-24          1 wk ahead inc… US       quantile    0.25             817</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-04-24          1 wk ahead inc… US       quantile    0.3              877</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-04-24          1 wk ahead inc… US       quantile    0.35             913</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-04-24          1 wk ahead inc… US       quantile    0.4              965</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 266 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: model_id &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Note however that in the above example, while the output contains the
@@ -274,7 +322,7 @@ columns is not standardised.</p>
 <code><a href="../reference/collect_hub.html">collect_hub()</a></code> which converts the output of
 <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">dplyr::collect()</a></code> to a <code>model_out_tbl</code> class
 object where possible:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -303,7 +351,7 @@ object where possible:</p>
 <h3 id="accessing-data-from-cloud-hubs">Accessing data from cloud hubs<a class="anchor" aria-label="anchor" href="#accessing-data-from-cloud-hubs"></a>
 </h3>
 <p>Accessing data from hubs in the cloud is exactly the same:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_con_cloud</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -332,7 +380,7 @@ datasets<a class="anchor" aria-label="anchor" href="#limitations-of-dplyr-querie
 datasets.</p>
 <p>For example, if you wanted to get all quantile predictions for the
 last forecast date in the hub, you might try:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span>,</span>
@@ -347,7 +395,7 @@ types.</p>
 <p>In such a situation, you could collect after applying the first
 filtering level which does work for arrow and then finish the filtering
 on the in-memory data returned by collect.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -373,7 +421,7 @@ to filter the data in two steps:</p>
 <li>get the last forecast date available for the filtered subset.</li>
 <li>use the last forecast date in the filtering query.</li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">last_forecast</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">forecast_date</span>, as_vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -412,7 +460,7 @@ data before collecting.</p>
 <p><em>For more details see <a href="https://duckdb.org/2021/12/03/duck-arrow.html" class="external-link">DuckDB quacks
 Arrow: A zero-copy data integration between Apache Arrow and
 DuckDB</a>.</em></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/to_duckdb.html" class="external-link">to_duckdb</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -449,7 +497,7 @@ overall unifying schema cannot be determined from the config files so
 the ability of <code><a href="https://arrow.apache.org/docs/r/reference/open_dataset.html" class="external-link">open_dataset()</a></code> to connect and parse data
 correctly cannot be guaranteed across files.</p>
 <p>In addition, only a single file_format dataset can be opened.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_output_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/simple/model-output"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span>
 <span><span class="va">mod_out_con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/connect_hub.html">connect_model_output</a></span><span class="op">(</span><span class="va">model_output_dir</span>, file_format <span class="op">=</span> <span class="st">"csv"</span><span class="op">)</span></span>
 <span><span class="va">mod_out_con</span></span>
@@ -457,6 +505,7 @@ correctly cannot be guaranteed across files.</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">&lt;mod_out_connection/FileSystemDataset&gt;</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir:</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span></span>
@@ -473,7 +522,7 @@ correctly cannot be guaranteed across files.</p>
 <span><span class="co">#&gt; model_id: string</span></span></code></pre></div>
 <p>Accessing data follows the same procedure described for fully
 configured hubs:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_out_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -493,7 +542,7 @@ configured hubs:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 128 more rows</span></span></span></code></pre></div>
 <p>And connecting to cloud model output data follows the same procedure
 described for fully configured cloud hubs:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_out_dir_cloud</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/s3_bucket.html">s3_bucket</a></span><span class="op">(</span></span>
 <span>  <span class="st">"hubverse/hubutils/testhubs/simple/model-output/"</span></span>
 <span><span class="op">)</span></span>
@@ -506,6 +555,7 @@ described for fully configured cloud hubs:</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">&lt;mod_out_connection/FileSystemDataset&gt;</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"NULL"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir: <span style="color: #0000BB;">"hubverse/hubutils/testhubs/simple/model-output/"</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -519,6 +569,32 @@ described for fully configured cloud hubs:</p>
 <span><span class="co">#&gt; output_type_id: double</span></span>
 <span><span class="co">#&gt; value: int64</span></span>
 <span><span class="co">#&gt; model_id: string</span></span></code></pre></div>
+<p>Like <code>connect_hub</code>, <code>connect_model_output</code> has
+an optional <code>skip_checks</code> argument that improves
+performance:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod_out_dir_cloud</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"hubverse/hubutils/testhubs/parquet/model-output/"</span><span class="op">)</span></span>
+<span><span class="va">mod_out_con_cloud</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/connect_hub.html">connect_model_output</a></span><span class="op">(</span><span class="va">mod_out_dir_cloud</span>, file_format <span class="op">=</span> <span class="st">"parquet"</span>, skip_checks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mod_out_con_cloud</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">&lt;mod_out_connection/FileSystemDataset&gt;</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"parquet(4/4)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">FALSE</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"NULL"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir: <span style="color: #0000BB;">"hubverse/hubutils/testhubs/parquet/model-output/"</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Connection schema</span></span>
+<span><span class="co">#&gt; mod_out_connection with 4 Parquet files</span></span>
+<span><span class="co">#&gt; origin_date: date32[day]</span></span>
+<span><span class="co">#&gt; target: string</span></span>
+<span><span class="co">#&gt; horizon: int32</span></span>
+<span><span class="co">#&gt; location: string</span></span>
+<span><span class="co">#&gt; output_type: string</span></span>
+<span><span class="co">#&gt; output_type_id: double</span></span>
+<span><span class="co">#&gt; value: int32</span></span>
+<span><span class="co">#&gt; age_group: string</span></span>
+<span><span class="co">#&gt; model_id: string</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="providing-a-custom-schema">Providing a custom schema<a class="anchor" aria-label="anchor" href="#providing-a-custom-schema"></a>
 </h3>
@@ -526,7 +602,7 @@ described for fully configured cloud hubs:</p>
 schema to override the default arrow schema auto-detection. This can
 help at times to resolve conflicts in data types across different
 dataset files.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/apache/arrow/" class="external-link">arrow</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'arrow'</span></span>
@@ -554,6 +630,7 @@ dataset files.</p>
 <span><span class="co">#&gt; ── <span style="color: #0000BB; font-weight: bold;">&lt;mod_out_connection/FileSystemDataset&gt;</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> model_output_dir:</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span></span>
@@ -574,7 +651,7 @@ with field <code>output_type</code> cast as <code>int32</code> data
 type. As column <code>output_type</code> actually contain character type
 data which cannot be coerced to integer, connecting to the model output
 directory produces an <code>arrow</code> error.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_output_schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/schema.html" class="external-link">schema</a></span><span class="op">(</span></span>
 <span>  origin_date <span class="op">=</span> <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">date32</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  target <span class="op">=</span> <span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">string</a></span><span class="op">(</span><span class="op">)</span>,</span>
