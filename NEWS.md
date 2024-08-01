@@ -1,6 +1,7 @@
 # hubData 1.2.1
 
 * Removed depedency on development version of `zoltr` package.
+* Fixed minor error in `connect_hub()` article.
 
 # hubData 1.2.0
 
