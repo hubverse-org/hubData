@@ -57,10 +57,14 @@ behaviour so use with care.}
 \item{partitions}{a named list specifying the arrow data types of any
 partitioning column.}
 
-\item{skip_checks}{Logical. If \code{FALSE} (default), check file_format parameter against the
-hub's model output files. Also excludes invalid model output files when opening hub datasets.
-Setting to TRUE will improve performance but will result in an error if the model output
-directory includes invalid files.}
+\item{skip_checks}{Logical. If \code{FALSE} (default), check \code{file_format} parameter
+against the hub's model output files. Also excludes invalid model output files
+when opening hub datasets.
+Setting to \code{TRUE} will improve performance but will result in an error if
+the model output directory includes invalid files. \strong{Cannot be \code{TRUE}} when
+there are \strong{multiple file formats} in the hub's model output directory or when
+the hub's model output directory contains \strong{files that are not model output
+data} (for example, a README).}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
