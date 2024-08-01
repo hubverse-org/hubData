@@ -48,7 +48,6 @@ Suggests:
     testthat (>= 3.2.0)
 Remotes:
     hubverse-org/hubUtils,
-    reichlab/zoltr,
     apache/arrow/r@apache-arrow-15.0.2
 Config/Needs/website: hubverse-org/hubStyle
 Depends: 
