@@ -6,9 +6,6 @@
 \value{
 \code{tbl} with either \code{team_abbr} and \code{model_abbr} merged into a single \code{model_id}
 column or \code{model_id} split into columns \code{team_abbr} and \code{model_abbr}.
-
-a \link[tibble:tibble]{tibble} with \code{model_id} column split into separate
-\code{team_abbr} and \code{model_abbr} columns
 }
 \description{
 See \code{\link[hubUtils:model_id_merge]{hubUtils::model_id_merge()}} for details.
