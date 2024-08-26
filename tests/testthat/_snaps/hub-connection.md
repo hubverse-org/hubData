@@ -644,6 +644,7 @@
       -- Connection schema 
     Output
       mod_out_connection with 3 csv files
+      8 columns
       origin_date: date32[day]
       target: string
       horizon: int64
@@ -705,6 +706,7 @@
       -- Connection schema 
     Output
       mod_out_connection with 3 csv files
+      8 columns
       origin_date: date32[day]
       target: string
       horizon: int32
@@ -766,6 +768,7 @@
       -- Connection schema 
     Output
       hub_connection
+      9 columns
       origin_date: date32[day]
       target: string
       horizon: int32
@@ -796,6 +799,7 @@
       -- Connection schema 
     Output
       hub_connection
+      9 columns
       origin_date: date32[day]
       target: string
       horizon: int32
@@ -966,6 +970,7 @@
       -- Connection schema 
     Output
       mod_out_connection with 3 csv files
+      8 columns
       origin_date: date32[day]
       target: string
       horizon: int64
@@ -1382,6 +1387,7 @@
       -- Connection schema 
     Output
       hub_connection with 4 Parquet files
+      9 columns
       origin_date: date32[day]
       target: string
       horizon: int32
@@ -1586,6 +1592,22 @@
       Error in `connect_hub()`:
       x 'hub-config' directory not found in root of Hub.
 
+# connect_hub fails when skip_checks is true and hub has multiple file types
+
+    Code
+      connect_hub(hub_path, skip_checks = TRUE)
+    Condition
+      Error in `connect_hub()`:
+      ! Skip_checks cannot be TRUE when there are multiple file formats in the model output directory ("csv" and "parquet").
+
+# connect_model_output fails when skip_checks is true and hub has multiple file types
+
+    Code
+      connect_model_output(mod_out_path, skip_checks = TRUE)
+    Condition
+      Error in `connect_model_output()`:
+      ! Skip_checks cannot be TRUE when there are multiple file formats in the model output directory ("csv" and "parquet").
+
 # connect_hub detects unopenned files correctly
 
     Code
@@ -1610,6 +1632,7 @@
       -- Connection schema 
     Output
       hub_connection with 8 csv files
+      8 columns
       origin_date: date32[day]
       horizon: int32
       location: string
@@ -1639,6 +1662,7 @@
       -- Connection schema 
     Output
       hub_connection with 9 csv files
+      8 columns
       origin_date: date32[day]
       horizon: int32
       location: string

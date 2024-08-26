@@ -1,3 +1,8 @@
+# hubData 1.2.2
+
+* Remove dependency on development version of `arrow` package and bump required version to 17.0.0.
+
+
 # hubData 1.2.1
 
 * Removed dependency on development version of `zoltr` package.
