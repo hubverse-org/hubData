@@ -1,3 +1,6 @@
 url: https://hubverse-org.github.io/hubData/
 template:
   package: hubStyle
+development:
+  mode: auto
+
