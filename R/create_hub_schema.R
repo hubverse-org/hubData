@@ -166,7 +166,7 @@ get_output_type_id_type <- function(config_tasks) {
       function(x) {
         purrr::pluck(x, config_tid) %>%
           # Currently, no output type id values are allowed to be Dates but a use
-          # of ISO character codes in output type id values would return an erroneous
+          # of ISO Date character codes in output type id values would return an erroneous
           # Date type. This is a safeguard against this. If Dates are introduced as
           # output type id values in the future, this will need to be revisited.
           purrr::modify_if(~ inherits(.x, "Date"), as.character)
