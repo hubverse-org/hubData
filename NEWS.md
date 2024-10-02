@@ -1,3 +1,7 @@
+# hubData (development version)
+
+* Fix bug in `create_hub_schema()` where `output_type_id` data type was being incorrectly determined as `Date` instead of `character` (Reported in https://github.com/reichlab/variant-nowcast-hub/pull/87#issuecomment-2387372238).
+
 # hubData 1.2.2
 
 * Remove dependency on development version of `arrow` package and bump required version to 17.0.0.

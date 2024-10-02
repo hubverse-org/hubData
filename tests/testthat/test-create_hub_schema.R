@@ -126,4 +126,12 @@ test_that("create_hub_schema works with config output_type_id_datatype", {
     )$GetFieldByName("output_type_id")$ToString(),
     "output_type_id: double"
   )
+  expect_equal(
+    create_hub_schema(
+      hubUtils::read_config_file(
+        testthat::test_path("testdata", "configs", "nowcast-tasks.json")
+      )
+    )$ToString(),
+    "nowcast_date: date32[day]\ntarget_date: date32[day]\nlocation: string\nclade: string\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
+  )
 })
