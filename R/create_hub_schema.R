@@ -164,7 +164,8 @@ get_output_type_id_type <- function(config_tasks) {
     unlist(recursive = FALSE) %>%
     purrr::map(
       function(x) {
-        purrr::pluck(x, config_tid)
+        purrr::pluck(x, config_tid) %>%
+          purrr::modify_if(~ inherits(.x, "Date"), as.character)
       }
     ) %>%
     unlist()
@@ -188,10 +189,10 @@ get_output_type_id_type <- function(config_tasks) {
     ) %>%
     unlist() %>%
     # Instead of using R data type coercion by combining vectors of output type
-    # id values, create zero length vectors of sample output type id types
+    # id values, create length 1 vectors of sample output type id types
     # using the function specified by output_type_id_params type.
     # Get the appropriate function using `get`.
-    purrr::map(~ get(.x)()) %>%
+    purrr::map(~ get(.x)(length = 1L)) %>%
     unlist()
 
   get_data_type(c(values, sample_values))
@@ -238,7 +239,9 @@ coerce_datatype <- function(types) {
 }
 
 test_iso_date <- function(x) {
-  class(try(as.Date(x), silent = TRUE)) == "Date"
+  to_date <- try(as.Date(x), silent = TRUE)
+  isFALSE(inherits(to_date, "try-error")) &&
+    isTRUE(all.equal(which(is.na(x)), which(is.na(to_date))))
 }
 
 get_partition_r_datatype <- function(partitions, arrow_datatypes) {
