@@ -165,6 +165,10 @@ get_output_type_id_type <- function(config_tasks) {
     purrr::map(
       function(x) {
         purrr::pluck(x, config_tid) %>%
+          # Currently, no output type id values are allowed to be Dates but a use
+          # of ISO character codes in output type id values would return an erroneous
+          # Date type. This is a safeguard against this. If Dates are introduced as
+          # output type id values in the future, this will need to be revisited.
           purrr::modify_if(~ inherits(.x, "Date"), as.character)
       }
     ) %>%
@@ -196,6 +200,10 @@ get_output_type_id_type <- function(config_tasks) {
     unlist()
 
   get_data_type(c(values, sample_values))
+  # Currently, no output type id values are allowed to be Dates so no need to use
+  # `get_data_type()` which checks characters for ISO date format.
+  # Should Dates be introduced as output type id values in the future,
+  # this will need to be revisited.
 }
 
 
@@ -241,7 +249,13 @@ coerce_datatype <- function(types) {
 test_iso_date <- function(x) {
   to_date <- try(as.Date(x), silent = TRUE)
   isFALSE(inherits(to_date, "try-error")) &&
-    isTRUE(all.equal(which(is.na(x)), which(is.na(to_date))))
+    # Check that coercion to Date does not introduce NA values
+    isTRUE(
+      all.equal(
+        which(is.na(x)),
+        which(is.na(to_date))
+      )
+    )
 }
 
 get_partition_r_datatype <- function(partitions, arrow_datatypes) {
