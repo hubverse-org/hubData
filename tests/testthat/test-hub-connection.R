@@ -486,7 +486,7 @@ test_that("connect_hub & connect_model_output fail correctly", {
   expect_snapshot(connect_hub("random/hub/path"), error = TRUE)
   expect_snapshot(connect_model_output("random/model-output/"), error = TRUE)
 
-  temp_dir <- tempdir()
+  temp_dir <- withr::local_tempdir()
   expect_snapshot(connect_hub(temp_dir), error = TRUE)
 
   dir.create(fs::path(temp_dir, "hub-config"))
