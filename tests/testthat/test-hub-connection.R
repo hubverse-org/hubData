@@ -93,7 +93,7 @@ test_that("connect_hub returns empty list when model output folder is empty", {
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/empty/")
   suppressWarnings({
     suppressMessages({
-      expect_message(hub_con <- connect_hub(hub_path, skip_checks = TRUE), 
+      expect_message(hub_con <- connect_hub(hub_path, skip_checks = TRUE),
         "superseded URL"
       )
     })
