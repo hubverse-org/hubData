@@ -71,22 +71,33 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
 test_that("connect_hub returns empty list when model output folder is empty", {
   # Local
   hub_path <- system.file("testhubs/empty", package = "hubUtils")
-  expect_warning(connect_hub(hub_path))
-  hub_con <- suppressWarnings(connect_hub(hub_path))
+  suppressWarnings({
+    expect_warning(hub_con <- connect_hub(hub_path), "No files of file formats")
+  })
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(hub_con)
 
   # S3
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/empty/")
-  hub_con <- suppressWarnings(connect_hub(hub_path))
+  suppressWarnings({
+    suppressMessages({
+      expect_message(hub_con <- connect_hub(hub_path), "superseded URL")
+    })
+  })
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(hub_con)
 
   # S3, skip_checks is TRUE
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/empty/")
-  hub_con <- suppressWarnings(connect_hub(hub_path, skip_checks = TRUE))
+  suppressWarnings({
+    suppressMessages({
+      expect_message(hub_con <- connect_hub(hub_path, skip_checks = TRUE), 
+        "superseded URL"
+      )
+    })
+  })
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(hub_con)
@@ -345,7 +356,9 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   # Simple forecasting Hub example ----
 
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-  hub_con <- connect_hub(hub_path)
+  suppressMessages({
+    expect_message(hub_con <- connect_hub(hub_path), "superseded URL")
+  })
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
@@ -388,7 +401,11 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
   # Simple forecasting Hub example ----
 
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
-  hub_con <- connect_hub(hub_path, file_format = "parquet")
+  suppressMessages({
+    expect_message(hub_con <- connect_hub(hub_path, file_format = "parquet"),
+      "superseded URL"
+    )
+  })
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
@@ -442,7 +459,11 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
 
   # S3
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
-  hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
+  suppressMessages({
+    expect_message({
+      hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
+    }, "superseded URL")
+  })
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
