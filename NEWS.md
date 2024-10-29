@@ -1,3 +1,5 @@
+# hubData (development version)
+
 # hubData 1.2.3
 
 * Fix bug in `create_hub_schema()` where `output_type_id` data type was being incorrectly determined as `Date` instead of `character` (Reported in https://github.com/reichlab/variant-nowcast-hub/pull/87#issuecomment-2387372238).
