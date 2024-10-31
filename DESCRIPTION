@@ -1,6 +1,6 @@
 Package: hubData
 Title: Tools for accessing and working with hubverse data
-Version: 1.2.3
+Version: 1.2.3.9000
 Authors@R: 
     c(person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2378-4915")),
@@ -45,7 +45,8 @@ Suggests:
     knitr,
     mockery,
     rmarkdown,
-    testthat (>= 3.2.0)
+    testthat (>= 3.2.0),
+    withr
 Remotes:
     hubverse-org/hubUtils
 Config/Needs/website: hubverse-org/hubStyle
