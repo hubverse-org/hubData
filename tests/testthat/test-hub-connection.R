@@ -320,7 +320,6 @@ test_that("connect_hub data extraction works on simple forecasting hub", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   hub_con <- connect_hub(hub_path)
 
-  suppressMessages(library(dplyr))
   expect_snapshot(hub_con %>%
     dplyr::filter(
       origin_date == "2022-10-08",
