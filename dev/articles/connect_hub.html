@@ -339,16 +339,16 @@ object where possible:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 276 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id     forecast_date horizon target location output_type output_type_id</span></span>
 <span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.01          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.025         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.05          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.1           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.15          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.2           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.25          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.3           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.35          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-ensemble 2023-04-24          1 wk ah… US       quantile    0.4           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.01          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.025         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.05          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.1           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.15          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.2           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.25          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.3           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.35          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-baseline 2023-04-24          1 wk ah… US       quantile    0.4           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 266 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: value &lt;dbl&gt;</span></span></span>
 <span></span>
@@ -364,18 +364,18 @@ object where possible:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 230 × 9</span></span></span>
-<span><span class="co">#&gt;    model_id        origin_date target     horizon location age_group output_type</span></span>
-<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt;    model_id     origin_date target        horizon location age_group output_type</span></span>
+<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-baseline 2022-10-01  wk inc flu h…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 220 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;dbl&gt;, value &lt;int&gt;</span></span></span></code></pre></div>
 </div>
@@ -539,16 +539,16 @@ configured hubs:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 138 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id origin_date target horizon location output_type output_type_id value</span></span>
 <span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 128 more rows</span></span></span></code></pre></div>
 <p>And connecting to cloud model output data follows the same procedure
 described for fully configured cloud hubs:</p>
