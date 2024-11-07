@@ -11,16 +11,6 @@ error.
 See \code{\link[hubUtils:validate_model_out_tbl]{hubUtils::validate_model_out_tbl()}} for details.
 }
 \examples{
-if (requireNamespace("hubData", quietly = TRUE)) {
-  library(dplyr)
-  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
-  hub_con <- hubData::connect_hub(hub_path)
-  md_out <- hub_con \%>\%
-    filter(output_type == "quantile", location == "US") \%>\%
-    collect() \%>\%
-    filter(forecast_date == max(forecast_date)) \%>\%
-    as_model_out_tbl()
-
-  validate_model_out_tbl(md_out)
-}
+md_out <- as_model_out_tbl(hub_con_output)
+validate_model_out_tbl(md_out)
 }

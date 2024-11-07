@@ -10,14 +10,5 @@ A \code{model_out_tbl} class object.
 See \code{\link[hubUtils:as_model_out_tbl]{hubUtils::as_model_out_tbl()}} for details.
 }
 \examples{
-if (requireNamespace("hubData", quietly = TRUE)) {
-  library(dplyr)
-  hub_path <- system.file("testhubs/flusight", package = "hubUtils")
-  hub_con <- hubData::connect_hub(hub_path)
-  hub_con \%>\%
-    filter(output_type == "quantile", location == "US") \%>\%
-    collect() \%>\%
-    filter(forecast_date == max(forecast_date)) \%>\%
-    as_model_out_tbl()
-}
+as_model_out_tbl(hub_con_output)
 }

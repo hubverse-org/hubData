@@ -61,6 +61,14 @@ test_that("create_hub_schema works correctly", {
       output_type_id = "character", value = "integer", model_id = "character"
     )
   )
+
+  # Validate that configs with only point estimate output types returns character (the default)
+  # not logical
+  config_tasks <- hubUtils::read_config_file(test_path("testdata/configs/v3-tasks-point.json"))
+  expect_equal(
+    create_hub_schema(config_tasks)$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: string"
+  )
 })
 
 test_that("create_hub_schema works with sample output types", {
@@ -133,5 +141,32 @@ test_that("create_hub_schema works with config output_type_id_datatype", {
       )
     )$ToString(),
     "nowcast_date: date32[day]\ntarget_date: date32[day]\nlocation: string\nclade: string\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
+  )
+})
+
+test_that("create_hub_schema works with v4 output_type_id configuration", {
+  config_tasks <- suppressWarnings(
+    hubUtils::read_config_file(test_path("testdata/configs/v4-tasks.json"))
+  )
+  expect_equal(
+    create_hub_schema(config_tasks)$ToString(),
+    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\ntarget_date: date32[day]\noutput_type: string\noutput_type_id: string\nvalue: double\nmodel_id: string"
+  )
+
+  # Validate that configs with only point estimate output types returns character (the default)
+  config_tasks <- suppressWarnings(
+    hubUtils::read_config_file(test_path("testdata/configs/v4-tasks-point.json"))
+  )
+  expect_equal(
+    create_hub_schema(config_tasks)$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: string"
+  )
+  # Ensure `output_type_id_datatype` arg works with v4 configs
+  expect_equal(
+    create_hub_schema(
+      config_tasks,
+      output_type_id_datatype = "double"
+    )$GetFieldByName("output_type_id")$ToString(),
+    "output_type_id: double"
   )
 })

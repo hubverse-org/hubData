@@ -27,6 +27,9 @@ not set in the config, the argument falls back to \code{"auto"} which determines
 the  \code{output_type_id} data type automatically from the \code{tasks.json}
 config file as the simplest data type required to represent all output
 type ID values across all output types in the hub.
+When only point estimate output types (where \code{output_type_id}s are \code{NA},) are
+being collected by a hub, the \code{output_type_id} column is assigned a \code{character}
+data type when auto-determined.
 Other data type values can be used to override automatic determination.
 Note that attempting to coerce \code{output_type_id} to a data type that is
 not valid for the data (e.g. trying to coerce\code{"character"} values to
