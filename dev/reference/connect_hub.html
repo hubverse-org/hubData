@@ -97,6 +97,9 @@ not set in the config, the argument falls back to <code>"auto"</code> which dete
 the  <code>output_type_id</code> data type automatically from the <code>tasks.json</code>
 config file as the simplest data type required to represent all output
 type ID values across all output types in the hub.
+When only point estimate output types (where <code>output_type_id</code>s are <code>NA</code>,) are
+being collected by a hub, the <code>output_type_id</code> column is assigned a <code>character</code>
+data type when auto-determined.
 Other data type values can be used to override automatic determination.
 Note that attempting to coerce <code>output_type_id</code> to a data type that is
 not valid for the data (e.g. trying to coerce<code>"character"</code> values to
@@ -245,6 +248,14 @@ model output directory which is not part of a fully configured hub.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model_id: string</span>
 <span class="r-in"><span><span class="co"># Query hub_connection for data</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
 <span class="r-in"><span><span class="va">hub_con</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">origin_date</span> <span class="op">==</span> <span class="st">"2022-10-08"</span>,</span></span>

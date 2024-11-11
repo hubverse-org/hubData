@@ -8,7 +8,6 @@
 <url><loc>https://hubverse-org.github.io/hubData/dev/authors.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/index.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/news/index.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubData/dev/reference/as_model_out_tbl.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/coerce_to_hub_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/collect_hub.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/collect_zoltar.html</loc></url>
@@ -20,11 +19,9 @@
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/hubData-package.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/index.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/load_model_metadata.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubData/dev/reference/model_id_merge.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubData/dev/reference/model_id_split.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/pipe.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/print.hub_connection.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/reexports.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/s3_bucket.html</loc></url>
-<url><loc>https://hubverse-org.github.io/hubData/dev/reference/validate_model_out_tbl.html</loc></url>
 </urlset>
 
