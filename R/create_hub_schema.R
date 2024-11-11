@@ -15,6 +15,9 @@
 #' the  `output_type_id` data type automatically from the `tasks.json`
 #' config file as the simplest data type required to represent all output
 #' type ID values across all output types in the hub.
+#' When only point estimate output types (where `output_type_id`s are `NA`,) are
+#' being collected by a hub, the `output_type_id` column is assigned a `character`
+#' data type when auto-determined.
 #' Other data type values can be used to override automatic determination.
 #' Note that attempting to coerce `output_type_id` to a data type that is
 #' not valid for the data (e.g. trying to coerce`"character"` values to
@@ -149,6 +152,8 @@ get_output_type_id_type <- function(config_tasks) {
   # retired
   config_tid <- hubUtils::get_config_tid(config_tasks = config_tasks)
 
+  # Get the values of all output type id values across all output types and rounds
+  # in the hub config
   values <- purrr::map(
     config_tasks[["rounds"]],
     function(x) {
@@ -203,7 +208,12 @@ get_output_type_id_type <- function(config_tasks) {
   # `get_data_type()` which checks characters for ISO date format.
   # Should Dates be introduced as output type id values in the future,
   # this will need to be revisited.
-  typeof(c(values, sample_values))
+  type <- typeof(c(values, sample_values))
+
+  if (type %in% c("NULL", "logical")) {
+    type <- "character"
+  }
+  type
 }
 
 
