@@ -36,7 +36,7 @@ Both functions are also able to connect to files that are stored locally or in t
 Where multiple file formats are accepted in a single Hub, file format specific `FileSystemDataset`s are combined into a single `UnionDataset` for single point access to the entire Hub `model-output` dataset. 
 This only applies to `connect_hub()` in fully configured Hubs, where config files can be used to determine a unifying schema across all file formats. 
 
-In contract, `connect_model_output()` can only be used to open single file format datasets of the format defined explicitly through the `file_format` argument.
+In contrast, `connect_model_output()` can only be used to open single file format datasets of the format defined explicitly through the `file_format` argument.
 
 
 ```{r setup}
