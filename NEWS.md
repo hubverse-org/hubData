@@ -1,3 +1,5 @@
+# hubData (development version)
+
 # hubData 1.3.0
 
 * Support the determination of hub schema from v4 configuration files (#63). Also fixes bug in `create_hub_schema()` where `output_type_id` data type was being incorrectly auto-determined as `logical` when only point estimate output types where being collected by a hub. Now `character` data type is returned for the `output_type_id` for all schema versions in such situations when auto-determined.
