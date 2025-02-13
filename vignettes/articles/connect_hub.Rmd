@@ -30,11 +30,11 @@ There are two functions for connecting to `model-output` data:
 - `connect_hub()` is used for connecting to fully configured hubs (i.e. which contain valid `admin.json` and `tasks.json` in a `hub-config` directory). This function uses configurations defined in config files in the `hub-config/` directory and allows for connecting to hubs with files in multiple file formats (allowable formats specified by the `file_format` property of `admin.json`).
 - `connect_model_output()` allows for connecting directly to the contents of a `model-output` directory and is useful for connecting to appropriately organised files in an informal hub (i.e. which has not been fully configured with appropriate `hub-config/` files.)
 
-Both functions establish connections through the [`arrow`](https://arrow.apache.org/docs/r/) package, specifically by opening datasets as [`FileSystemDataset`s](https://arrow.apache.org/docs/r/reference/Dataset.html), one for each file format. 
+Both functions establish connections through the [`arrow`](https://arrow.apache.org/docs/r/) package, specifically by opening datasets as [`FileSystemDataset`s](https://arrow.apache.org/docs/r/reference/Dataset.html), one for each file format.
 Both functions are also able to connect to files that are stored locally or in the cloud (e.g. in AWS S3 buckets).
 
-Where multiple file formats are accepted in a single Hub, file format specific `FileSystemDataset`s are combined into a single `UnionDataset` for single point access to the entire Hub `model-output` dataset. 
-This only applies to `connect_hub()` in fully configured Hubs, where config files can be used to determine a unifying schema across all file formats. 
+Where multiple file formats are accepted in a single Hub, file format specific `FileSystemDataset`s are combined into a single `UnionDataset` for single point access to the entire Hub `model-output` dataset.
+This only applies to `connect_hub()` in fully configured Hubs, where config files can be used to determine a unifying schema across all file formats.
 
 In contrast, `connect_model_output()` can only be used to open single file format datasets of the format defined explicitly through the `file_format` argument.
 
@@ -157,7 +157,7 @@ Alternatively, depending on the size of the data, in might be quicker to filter 
 last_forecast <- hub_con %>%
   dplyr::filter(output_type == "quantile", location == "US") %>%
   dplyr::pull(forecast_date, as_vector = TRUE) %>%
-  dplyr::max(na.rm = TRUE)
+  max(na.rm = TRUE)
 
 
 hub_con %>%
@@ -168,7 +168,7 @@ hub_con %>%
   hubData::collect_hub()
 ```
 
-### Use `arrow::to_duckdb()` to extend available queries 
+### Use `arrow::to_duckdb()` to extend available queries
 
 You could alternatively use `arrow::to_duckdb()` to first convert the dataset connection to an in memory virtual DuckDB table. This will allows you to run queries that are supported by DuckDB but not by arrow, extending the potential queries that can be run against hub data before collecting.
 
@@ -187,7 +187,7 @@ hub_con %>%
 
 # Connecting to a model output directory
 
-There is also an option to connect directly to a model output directory without using any metadata in a hub config file. This can be useful when a hub has not been fully configured yet. 
+There is also an option to connect directly to a model output directory without using any metadata in a hub config file. This can be useful when a hub has not been fully configured yet.
 
 The approach does have certain limitations though. For example, an overall unifying schema cannot be determined from the config files so the ability of `open_dataset()` to connect and parse data correctly cannot be guaranteed across files.
 
@@ -228,7 +228,7 @@ mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_forma
 mod_out_con_cloud
 ```
 
-## Providing a custom schema 
+## Providing a custom schema
 
 When connecting to a model output directly, you can also specify a schema to override the default arrow schema auto-detection. This can help at times to resolve conflicts in data types across different dataset files.
 
@@ -253,7 +253,7 @@ mod_out_con <- hubData::connect_model_output(model_output_dir,
 mod_out_con
 ```
 
-Using a schema can however also produce new errors which can sometimes be hard to debug. For example, here we are defining a schema with field `output_type` cast as `int32` data type. As column `output_type` actually contain character type data which cannot be coerced to integer, connecting to the model output directory produces an `arrow` error. 
+Using a schema can however also produce new errors which can sometimes be hard to debug. For example, here we are defining a schema with field `output_type` cast as `int32` data type. As column `output_type` actually contain character type data which cannot be coerced to integer, connecting to the model output directory produces an `arrow` error.
 
 
 ```{r, error=TRUE}
