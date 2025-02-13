@@ -63,7 +63,7 @@ To connect to a hub in the cloud, first use one of the re-exported `arrow` helpe
 Then supply the resulting `*FileSystem` object to `connect_hub()`.
 
 ```{r}
-hub_path_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/simple/")
 hub_con_cloud <- hubData::connect_hub(hub_path_cloud)
 hub_con_cloud
 ```
@@ -80,7 +80,7 @@ Using this argument will fail unless the hub meets the following criteria:
 - the model output files use a single file format.
 
 ```{r}
-hub_path_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/parquet/")
+hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/")
 hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
 hub_con_cloud
 ```
@@ -210,7 +210,7 @@ mod_out_con %>%
 And connecting to cloud model output data follows the same procedure described for fully configured cloud hubs:
 
 ```{r}
-mod_out_dir_cloud <- arrow::s3_bucket(
+mod_out_dir_cloud <- hubData::s3_bucket(
   "hubverse/hubutils/testhubs/simple/model-output/"
 )
 mod_out_con_cloud <- hubData::connect_model_output(
@@ -223,7 +223,7 @@ mod_out_con_cloud
 Like `connect_hub()`, `connect_model_output()` has an optional `skip_checks` argument that improves performance:
 
 ```{r}
-mod_out_dir_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
+mod_out_dir_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
 mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
 mod_out_con_cloud
 ```
