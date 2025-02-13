@@ -52,7 +52,7 @@ To connect to a local hub, supply the path to the hub to `connect_hub()`
 
 ```{r}
 hub_path <- system.file("testhubs/flusight", package = "hubUtils")
-hub_con <- connect_hub(hub_path)
+hub_con <- hubData::connect_hub(hub_path)
 hub_con
 ```
 
@@ -63,14 +63,14 @@ To connect to a hub in the cloud, first use one of the re-exported `arrow` helpe
 Then supply the resulting `*FileSystem` object to `connect_hub()`.
 
 ```{r}
-hub_path_cloud <- s3_bucket("hubverse/hubutils/testhubs/simple/")
-hub_con_cloud <- connect_hub(hub_path_cloud)
+hub_path_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/simple/")
+hub_con_cloud <- hubData::connect_hub(hub_path_cloud)
 hub_con_cloud
 ```
 
 ### Performance considerations
 
-By default, `connect_hub` will ignore invalid files in the hub's model output directory when it creates a connection. This check prevents errors when working with the data, but it negatively impacts performance.
+By default, `connect_hub()` will ignore invalid files in the hub's model output directory when it creates a connection. This check prevents errors when working with the data, but it negatively impacts performance.
 
 If the cloud-based hub uses a single file type for model output data, you can improve performance by using the `skip_checks` argument. This argument will bypass the default behavior of scanning the hub's model output directory for invalid files before connecting.
 
@@ -80,8 +80,8 @@ Using this argument will fail unless the hub meets the following criteria:
 - the model output files use a single file format.
 
 ```{r}
-hub_path_cloud <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
-hub_con_cloud <- connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
+hub_path_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/parquet/")
+hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
 hub_con_cloud
 ```
 
@@ -92,8 +92,8 @@ To access data from a hub connection you can use dplyr verbs and construct query
 To perform the queries, you can use `dplyr`'s `collect()` function:
 ```{r}
 hub_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  collect()
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  dplyr::collect()
 ```
 
 Note however that in the above example, while the output contains the required `model_id`, `output_type`, `output_type_id` and `value` columns for a `model_out_tbl` object, it is returned as a `tbl_df` or `tibble` object and the order of the columns is not standardised.
@@ -104,8 +104,8 @@ Conveniently, you can use the `hubData` wrapper `collect_hub()` which converts t
 
 ```{r}
 tbl <- hub_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  collect_hub()
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  hubData::collect_hub()
 
 tbl
 
@@ -118,8 +118,8 @@ Accessing data from hubs in the cloud is exactly the same:
 
 ```{r}
 hub_con_cloud %>%
-  filter(output_type == "quantile", location == "US") %>%
-  collect_hub()
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  hubData::collect_hub()
 ```
 
 ## Limitations of `dplyr` queries on `arrow` datasets
@@ -130,11 +130,11 @@ For example, if you wanted to get all quantile predictions for the last forecast
 
 ```{r, error=TRUE}
 hub_con %>%
-  filter(
+  dplyr::filter(
     output_type == "quantile", location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
-  collect_hub()
+  hubData::collect_hub()
 ```
 
 This doesn't work however as `arrow` does not have an equivalent `max` method for `Date[32]` data types.
@@ -143,9 +143,9 @@ In such a situation, you could collect after applying the first filtering level 
 
 ```{r}
 hub_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  collect_hub() %>%
-  filter(forecast_date == max(forecast_date))
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  hubData::collect_hub() %>%
+  dplyr::filter(forecast_date == max(forecast_date))
 ```
 
 Alternatively, depending on the size of the data, in might be quicker to filter the data in two steps:
@@ -155,17 +155,17 @@ Alternatively, depending on the size of the data, in might be quicker to filter 
 
 ```{r}
 last_forecast <- hub_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  pull(forecast_date, as_vector = TRUE) %>%
-  max(na.rm = TRUE)
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  dplyr::pull(forecast_date, as_vector = TRUE) %>%
+  dplyr::max(na.rm = TRUE)
 
 
 hub_con %>%
-  filter(
+  dplyr::filter(
     output_type == "quantile", location == "US",
     forecast_date == last_forecast
   ) %>%
-  collect_hub()
+  hubData::collect_hub()
 ```
 
 ### Use `arrow::to_duckdb()` to extend available queries 
@@ -177,11 +177,11 @@ _For more details see [DuckDB quacks Arrow: A zero-copy data integration between
 ```{r}
 hub_con %>%
   arrow::to_duckdb() %>%
-  filter(
+  dplyr::filter(
     output_type == "quantile", location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
-  collect_hub()
+  hubData::collect_hub()
 ```
 
 
@@ -195,7 +195,7 @@ In addition, only a single file_format dataset can be opened.
 
 ```{r}
 model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
-mod_out_con <- connect_model_output(model_output_dir, file_format = "csv")
+mod_out_con <- hubData::connect_model_output(model_output_dir, file_format = "csv")
 mod_out_con
 ```
 
@@ -203,28 +203,28 @@ Accessing data follows the same procedure described for fully configured hubs:
 
 ```{r}
 mod_out_con %>%
-  filter(output_type == "quantile", location == "US") %>%
-  collect_hub()
+  dplyr::filter(output_type == "quantile", location == "US") %>%
+  hubData::collect_hub()
 ```
 
 And connecting to cloud model output data follows the same procedure described for fully configured cloud hubs:
 
 ```{r}
-mod_out_dir_cloud <- s3_bucket(
+mod_out_dir_cloud <- arrow::s3_bucket(
   "hubverse/hubutils/testhubs/simple/model-output/"
 )
-mod_out_con_cloud <- connect_model_output(
+mod_out_con_cloud <- hubData::connect_model_output(
   mod_out_dir_cloud,
   file_format = "csv"
 )
 mod_out_con_cloud
 ```
 
-Like `connect_hub`, `connect_model_output` has an optional `skip_checks` argument that improves performance:
+Like `connect_hub()`, `connect_model_output()` has an optional `skip_checks` argument that improves performance:
 
 ```{r}
-mod_out_dir_cloud <- s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
-mod_out_con_cloud <- connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
+mod_out_dir_cloud <- arrow::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
+mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
 mod_out_con_cloud
 ```
 
@@ -235,7 +235,7 @@ When connecting to a model output directly, you can also specify a schema to ove
 ```{r}
 library(arrow)
 
-model_output_schema <- schema(
+model_output_schema <- arrow::schema(
   origin_date = date32(),
   target = string(),
   horizon = int32(),
@@ -246,7 +246,7 @@ model_output_schema <- schema(
   model_id = string()
 )
 
-mod_out_con <- connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
@@ -257,7 +257,7 @@ Using a schema can however also produce new errors which can sometimes be hard t
 
 
 ```{r, error=TRUE}
-model_output_schema <- schema(
+model_output_schema <- arrow::schema(
   origin_date = date32(),
   target = string(),
   horizon = int32(),
@@ -268,7 +268,7 @@ model_output_schema <- schema(
   model_id = string()
 )
 
-mod_out_con <- connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
