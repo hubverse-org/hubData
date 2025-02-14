@@ -29,6 +29,3 @@ repos:
     - id: lintr
       verbose: true
       args: [--warn_only]
-
-
-

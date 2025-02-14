@@ -70,9 +70,12 @@ hub_con_cloud
 
 ### Performance considerations
 
-By default, `connect_hub()` will ignore invalid files in the hub's model output directory when it creates a connection. This check prevents errors when working with the data, but it negatively impacts performance.
+By default, `connect_hub()` will ignore invalid files in the hub's model output directory when it creates a connection.
+This check prevents errors when working with the data, but it negatively impacts performance.
 
-If the cloud-based hub uses a single file type for model output data, you can improve performance by using the `skip_checks` argument. This argument will bypass the default behavior of scanning the hub's model output directory for invalid files before connecting.
+If the cloud-based hub uses a single file type for model output data, you can improve performance by using the
+`skip_checks` argument. This argument will bypass the default behavior of scanning the hub's model output directory for
+invalid files before connecting.
 
 Using this argument will fail unless the hub meets the following criteria:
 
