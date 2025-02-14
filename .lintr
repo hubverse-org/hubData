@@ -1,9 +1,11 @@
 linters: linters_with_defaults(
     line_length_linter = line_length_linter(120L),
-    commented_code_linter = NULL
+    commented_code_linter = NULL,
+    return_linter = NULL
   )
 exclusions: list(
     "tests/testthat/test-create_hub_schema.R" = list(
       line_length_linter = Inf
     )
   )
+
