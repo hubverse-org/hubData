@@ -13,7 +13,7 @@ create_timeseries_schema(hub_path)
 an arrow \verb{<schema>} class object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Create time-series target data file schema
 }
 \examples{
 #' # Clone example hub

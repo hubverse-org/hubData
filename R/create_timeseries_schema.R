@@ -1,6 +1,5 @@
 #' Create time-series target data file schema
 #'
-#' `r lifecycle::badge("experimental")`
 #' @param hub_path Path to hub directory
 #'
 #' @return an arrow `<schema>` class object
