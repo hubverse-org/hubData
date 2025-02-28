@@ -125,6 +125,13 @@ test_that("connect_target_timeseries on single file works on local hub", {
 
 test_that("connect_target_timeseries fails correctly", {
   skip_if_offline()
+
+  # Test that non-existent hub directory is flagged appropriately
+  expect_error(
+    connect_target_timeseries("random_path"),
+    regexp = "Assertion on 'hub_path' failed: Directory 'random_path' does not exist."
+  )
+
   ts_path <- validate_target_data_path(ts_dir_hub_path, "time-series")
 
   # Test that multiple files/directories with time-series data are flagged appropriately
@@ -164,6 +171,12 @@ test_that("connect_target_timeseries fails correctly", {
   )
   expect_error(connect_target_timeseries(ts_dir_hub_path),
     regexp = "Multiple data file formats .*csv.* and .*parquet"
+  )
+
+  # TEST when no time-series data found in target-data directory ================
+  fs::dir_delete(ts_dir)
+  expect_error(connect_target_timeseries(ts_dir_hub_path),
+    regexp = "No .*time-series.* data found in .*target-data.* directory"
   )
 })
 
