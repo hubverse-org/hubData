@@ -1,5 +1,9 @@
 # hubData (development version)
 
+* Added `connect_target_timeseries()` function (experimental) for accessing time-series target data from a hub (#71)
+* Added `create_timeseries_schema()` function for creating a schema for time-series target data (#71)
+
+
 # hubData 1.3.0
 
 * Support the determination of hub schema from v4 configuration files (#63). Also fixes bug in `create_hub_schema()` where `output_type_id` data type was being incorrectly auto-determined as `logical` when only point estimate output types where being collected by a hub. Now `character` data type is returned for the `output_type_id` for all schema versions in such situations when auto-determined.
