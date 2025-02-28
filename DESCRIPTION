@@ -41,6 +41,7 @@ Suggests:
     digest,
     duckdb,
     gh,
+    git2r,
     jsonlite,
     knitr,
     mockery,
