@@ -3,6 +3,9 @@
 #' `r lifecycle::badge("experimental")` Open the time-series target data file(s)
 #' in a hub as an arrow dataset.
 #' @param hub_path Path to hub directory. Defaults to current working directory.
+#' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
+#' Useful when the required date column is a partitioning column in the target data
+#' and does not have the same name as a date typed task ID variable in the config.
 #'
 #' @returns An arrow dataset object of subclass <target_timeseries>.
 #' @export
@@ -29,13 +32,13 @@
 #' ts_con |>
 #'   dplyr::filter(location == "US") |>
 #'   dplyr::collect()
-connect_target_timeseries <- function(hub_path = ".") {
+connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
   checkmate::assert_character(hub_path, len = 1L)
   checkmate::assert_directory_exists(hub_path)
 
   ts_path <- validate_target_data_path(hub_path, "time-series")
   ts_ext <- get_target_file_ext(ts_path)
-  ts_schema <- create_timeseries_schema(hub_path)
+  ts_schema <- create_timeseries_schema(hub_path, date_col)
 
   ts_data <- if (ts_ext == "csv") {
     arrow::open_dataset(ts_path,

@@ -4,10 +4,14 @@
 \alias{connect_target_timeseries}
 \title{Open connection to time-series target data}
 \usage{
-connect_target_timeseries(hub_path = ".")
+connect_target_timeseries(hub_path = ".", date_col = NULL)
 }
 \arguments{
 \item{hub_path}{Path to hub directory. Defaults to current working directory.}
+
+\item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
+Useful when the required date column is a partitioning column in the target data
+and does not have the same name as a date typed task ID variable in the config.}
 }
 \value{
 An arrow dataset object of subclass <target_timeseries>.

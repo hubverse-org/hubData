@@ -27,4 +27,34 @@ test_that("create_timeseries_schema works", {
     test_as_of_schema$as_of$type$ToString(),
     "date32[day]"
   )
+
+  # Create target time-series schema partitioned on the date column which is not
+  # a date task ID. date_col needs to be specified for schema to be created successfully.
+  ts_dir <- fs::path(tmp_hub_path, "target-data", "time-series")
+  fs::dir_create(ts_dir)
+  ts_dat <- arrow::read_csv_arrow(ts_path)
+  arrow::write_dataset(ts_dat, ts_dir, partitioning = "date", format = "parquet")
+  fs::file_delete(ts_path)
+
+  expect_error(
+    create_timeseries_schema(tmp_hub_path),
+    "No .*date.* type column found in .*time-series.*."
+  )
+  expect_equal(
+    create_timeseries_schema(tmp_hub_path, date_col = "date")$ToString(),
+    "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ndate: date32[day]"
+  )
+
+  # Create target time-series schema partitioned on a target_end_date column. As this is
+  # a valid date task ID, schema should be created successfully without specifying date_col.
+  fs::dir_delete(ts_dir)
+  fs::dir_create(ts_dir)
+  ts_dat |>
+    dplyr::rename(target_end_date = date) |>
+    arrow::write_dataset(ts_dir, partitioning = "target_end_date", format = "parquet")
+
+  expect_equal(
+    create_timeseries_schema(tmp_hub_path)$ToString(),
+    "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ntarget_end_date: date32[day]"
+  )
 })
