@@ -9,18 +9,19 @@
 #'
 #' @returns The path to the appropriate target data file/directory invisibly.
 #' @noRd
-validate_target_data_path <- function(hub_path, target_type = c(
-  "time-series",
-  "oracle-output"
-),
-call = rlang::caller_env()) {
+validate_target_data_path <- function(
+    hub_path, target_type = c(
+      "time-series",
+      "oracle-output"
+    ),
+    call = rlang::caller_env()) {
   target_type <- rlang::arg_match(target_type)
   target_data_path <- fs::path(hub_path, "target-data")
   checkmate::assert_directory(target_data_path)
 
   ts_path <- fs::dir_ls(target_data_path,
-                        regexp = target_type,
-                        type = c("file", "directory")
+    regexp = target_type,
+    type = c("file", "directory")
   )
 
   if (length(ts_path) == 0L) {
@@ -52,7 +53,7 @@ call = rlang::caller_env()) {
 #' @noRd
 validate_target_file_ext <- function(ts_path, call = rlang::caller_env()) {
   ts_ext <- get_target_file_ext(ts_path)
-  target_type <- fs::path_file(ts_path) |> fs::path_ext_remove()
+  target_type <- fs::path_file(ts_path) |> fs::path_ext_remove() # nolint: object_usage_linter
 
   if (length(ts_ext) > 1L) {
     cli::cli_abort(

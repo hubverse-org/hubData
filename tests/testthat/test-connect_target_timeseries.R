@@ -273,8 +273,7 @@ test_that("connect_target_timeseries on multiple non-partitioned files works on 
   )
 })
 
-test_that("connect_target_timeseries works on local multi-file NON-PARTTIONED timeseries
-          data with sub directory structure", {
+test_that("connect_target_timeseries works on local multi-file timeseries data with sub directory structure", {
   skip_if_offline()
   fs::dir_delete(ts_dir_hub_path)
   fs::dir_copy(ts_hub_path, ts_dir_hub_path)

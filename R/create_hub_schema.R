@@ -238,7 +238,7 @@ get_data_type <- function(x) {
   if (type == "character" && test_iso_date(x)) {
     type <- "Date"
   }
-  return(type)
+  type
 }
 
 coerce_datatype <- function(types) {
@@ -252,7 +252,7 @@ coerce_datatype <- function(types) {
     return("integer")
   }
   if ("logical" %in% types) {
-    return("logical")
+    "logical"
   }
 }
 
