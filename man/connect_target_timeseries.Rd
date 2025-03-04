@@ -29,7 +29,7 @@ No other types of flies are currently allowed in a \code{time-series} directory.
 # Clone example hub
 tmp_hub_path <- withr::local_tempdir()
 example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-git2r::clone(url = example_hub, local_path = tmp_hub_path)
+gert::git_clone(url = example_hub, path = tmp_hub_path)
 # Connect to time-series data
 ts_con <- connect_target_timeseries(tmp_hub_path)
 ts_con

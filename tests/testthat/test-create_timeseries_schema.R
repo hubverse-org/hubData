@@ -2,7 +2,7 @@ test_that("create_timeseries_schema works", {
   skip_if_offline()
   tmp_hub_path <- withr::local_tempdir()
   example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-  git2r::clone(url = example_hub, local_path = tmp_hub_path, progress = FALSE)
+  gert::git_clone(url = example_hub, path = tmp_hub_path)
   # Create target time-series schema
   test_schema <- create_timeseries_schema(tmp_hub_path)
 

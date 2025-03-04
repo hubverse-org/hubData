@@ -4,7 +4,7 @@ if (curl::has_internet()) {
   ts_hub_path <- fs::path(tmp_dir, "ts_file")
   ts_dir_hub_path <- fs::path(tmp_dir, "ts_dir")
   example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-  git2r::clone(url = example_hub, local_path = ts_hub_path, progress = FALSE)
+  gert::git_clone(url = example_hub, path = ts_hub_path)
   fs::dir_copy(ts_hub_path, ts_dir_hub_path)
 }
 
