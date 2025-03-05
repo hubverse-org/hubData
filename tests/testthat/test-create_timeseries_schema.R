@@ -58,3 +58,17 @@ test_that("create_timeseries_schema works", {
     "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ntarget_end_date: date32[day]"
   )
 })
+
+test_that(
+  "create_timeseries_schema works on single-file S3 SubTreeFileSystem hub",
+  {
+    skip_if_offline()
+    hub_path <- s3_bucket("example-complex-forecast-hub")
+    ts_schema <- create_timeseries_schema(hub_path)
+
+    expect_equal(
+      ts_schema$ToString(),
+      "date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+    )
+  }
+)

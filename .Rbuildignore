@@ -18,3 +18,4 @@
 ^vignettes/articles$
 ^attic$
 ^\.vscode$
+^\.pre-commit-config\.yaml$

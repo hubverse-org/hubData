@@ -1,8 +1,9 @@
 # hubData (development version)
 
-* Added `connect_target_timeseries()` function (experimental) for accessing time-series target data from a hub (#71)
-* Added `create_timeseries_schema()` function for creating a schema for time-series target data (#71)
-
+* Added `connect_target_timeseries()` function (experimental) for accessing time-series target data from a hub (#71). This includes accessing target data from cloud hubs (#75).
+* Added `create_timeseries_schema()` function for creating a schema for time-series target data (#71).
+* Added `get_target_path()` function for retrieving the path to the appropriate target data file or directory in a hub.
+* Added `get_s3_bucket_name()` for extracting the bucket name of a cloud enabled hub from a hub's config (#75).
 
 # hubData 1.3.0
 
