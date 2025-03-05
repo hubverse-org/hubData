@@ -152,6 +152,6 @@ get_target_path.SubTreeFileSystem <- function(hub_path, target_type = c("time-se
   target_data_path <- hub_path$path("target-data")
 
   td_files <- target_data_path$ls(allow_not_found = TRUE)
-  ts_files <- td_files[grepl("time-series", td_files, ignore.case = TRUE)]
+  ts_files <- td_files[grepl(target_type, td_files, ignore.case = TRUE)]
   paste0(target_data_path$base_path, ts_files)
 }
