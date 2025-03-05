@@ -2,7 +2,7 @@
 #'
 #' `r lifecycle::badge("experimental")` Open the time-series target data file(s)
 #' in a hub as an arrow dataset.
-#' @param hub_path Path to hub directory. Defaults to current working directory.
+#' @inheritParams connect_hub
 #' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
 #' Useful when the required date column is a partitioning column in the target data
 #' and does not have the same name as a date typed task ID variable in the config.
@@ -32,6 +32,11 @@
 #' ts_con |>
 #'   dplyr::filter(location == "US") |>
 #'   dplyr::collect()
+#' # Access Target time-series data from a cloud hub
+#' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
+#' s3_con <- connect_target_timeseries(s3_hub_path)
+#' s3_con
+#' s3_con |> dplyr::collect()
 connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
   ts_path <- validate_target_data_path(hub_path, "time-series")
   ts_ext <- get_target_file_ext(hub_path, ts_path)

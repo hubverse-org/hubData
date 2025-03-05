@@ -1,6 +1,6 @@
 #' Create time-series target data file schema
 #'
-#' @param hub_path Path to hub directory
+#' @inheritParams connect_hub
 #' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
 #' Useful when the required date column is a partitioning column in the target data
 #' and does not have the same name as a date typed task ID variable in the config.
@@ -16,6 +16,9 @@
 #' gert::git_clone(url = example_hub, path = tmp_hub_path)
 #' # Create target time-series schema
 #' create_timeseries_schema(tmp_hub_path)
+#' #  target time-series schema from a cloud hub
+#' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
+#' create_timeseries_schema(s3_hub_path)
 create_timeseries_schema <- function(hub_path, date_col = NULL) {
   ts_path <- validate_target_data_path(hub_path, "time-series")
 
