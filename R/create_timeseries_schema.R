@@ -8,6 +8,7 @@
 #' @return an arrow `<schema>` class object
 #' @export
 #' @importFrom rlang !!!
+#' @importFrom hubUtils read_config
 #' @examples
 #' #' # Clone example hub
 #' tmp_hub_path <- withr::local_tempdir()
@@ -16,14 +17,15 @@
 #' # Create target time-series schema
 #' create_timeseries_schema(tmp_hub_path)
 create_timeseries_schema <- function(hub_path, date_col = NULL) {
-  checkmate::assert_character(hub_path, len = 1L)
-  checkmate::assert_directory_exists(hub_path)
   ts_path <- validate_target_data_path(hub_path, "time-series")
 
-  config_tasks <- hubUtils::read_config(hub_path)
+  config_tasks <- read_config(hub_path)
   hub_schema <- create_hub_schema(config_tasks)
 
-  ts_ext <- validate_target_file_ext(ts_path)
+  ts_ext <- validate_target_file_ext(ts_path, hub_path)
+  if (inherits(hub_path, "SubTreeFileSystem")) {
+    ts_path <- file_system_path(hub_path, ts_path, uri = TRUE)
+  }
   file_schema <- arrow::open_dataset(ts_path, format = ts_ext)$schema
 
   ts_schema <- hub_schema[hub_schema$names %in% file_schema$names]

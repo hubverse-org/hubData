@@ -33,13 +33,18 @@
 #'   dplyr::filter(location == "US") |>
 #'   dplyr::collect()
 connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
-  checkmate::assert_character(hub_path, len = 1L)
-  checkmate::assert_directory_exists(hub_path)
-
   ts_path <- validate_target_data_path(hub_path, "time-series")
-  ts_ext <- get_target_file_ext(ts_path)
+  ts_ext <- get_target_file_ext(hub_path, ts_path)
   ts_schema <- create_timeseries_schema(hub_path, date_col)
-
+  if (inherits(hub_path, "SubTreeFileSystem")) {
+    # We create URI paths for cloud storage to ensure we can open single file
+    # data correctly.
+    ts_path <- file_system_path(hub_path, ts_path, uri = TRUE)
+    hub_path <- file_system_path(hub_path, "", uri = TRUE)
+    out_path <- ts_path
+  } else {
+    out_path <- as.character(fs::path_rel(ts_path, hub_path))
+  }
   ts_data <- if (ts_ext == "csv") {
     arrow::open_dataset(ts_path,
       format = "csv", schema = ts_schema,
@@ -50,9 +55,9 @@ connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
       format = "parquet", schema = ts_schema
     )
   }
-
   structure(ts_data,
     class = c("target_timeseries", class(ts_data)),
-    ts_path = as.character(fs::path_rel(ts_path, hub_path))
+    ts_path = out_path,
+    hub_path = hub_path
   )
 }
