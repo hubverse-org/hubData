@@ -12,8 +12,10 @@
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/collect_hub.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/collect_zoltar.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/connect_hub.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/connect_target_timeseries.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_hub_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_model_out_submit_tmpl.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_timeseries_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/expand_model_out_val_grid.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/gs_bucket.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/hubData-package.html</loc></url>
