@@ -28,6 +28,7 @@ Imports:
     hubUtils (>= 0.4.0.9000),
     lifecycle,
     magrittr,
+    memoise,
     purrr,
     rlang,
     stringr,
