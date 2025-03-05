@@ -40,6 +40,7 @@ Suggests:
     dbplyr,
     digest,
     duckdb,
+    gert,
     gh,
     jsonlite,
     knitr,
