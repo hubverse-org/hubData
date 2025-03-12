@@ -156,5 +156,5 @@ get_target_path.SubTreeFileSystem <- function(hub_path,
 
   td_files <- target_data_path$ls(allow_not_found = TRUE)
   ts_files <- td_files[fs::path_ext_remove(td_files) == target_type]
-  paste0(target_data_path$base_path, ts_files)
+  fs::path(target_data_path$base_path, ts_files)
 }
