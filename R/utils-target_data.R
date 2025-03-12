@@ -134,7 +134,8 @@ get_target_path <- function(hub_path, target_type = c("time-series", "oracle-out
 
 #' @export
 #' @noRd
-get_target_path.default <- function(hub_path, target_type = c("time-series", "oracle-output")) {
+get_target_path.default <- function(hub_path,
+                                    target_type = c("time-series", "oracle-output")) {
   target_type <- rlang::arg_match(target_type)
   target_data_path <- fs::path(hub_path, "target-data")
   checkmate::assert_directory(target_data_path)
@@ -148,7 +149,8 @@ get_target_path.default <- function(hub_path, target_type = c("time-series", "or
 
 #' @export
 #' @noRd
-get_target_path.SubTreeFileSystem <- function(hub_path, target_type = c("time-series", "oracle-output")) {
+get_target_path.SubTreeFileSystem <- function(hub_path,
+                                              target_type = c("time-series", "oracle-output")) {
   target_type <- rlang::arg_match(target_type)
   target_data_path <- hub_path$path("target-data")
 

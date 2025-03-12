@@ -30,4 +30,3 @@ test_that("get_target_path works", {
     "oracle-output.csv"
   )
 })
-
