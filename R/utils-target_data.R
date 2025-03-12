@@ -139,10 +139,11 @@ get_target_path.default <- function(hub_path, target_type = c("time-series", "or
   target_data_path <- fs::path(hub_path, "target-data")
   checkmate::assert_directory(target_data_path)
 
-  fs::dir_ls(target_data_path,
+  td_files <- fs::dir_ls(target_data_path,
     regexp = target_type,
     type = c("file", "directory")
   )
+  td_files[fs::path_ext_remove(basename(td_files)) == target_type]
 }
 
 #' @export
@@ -152,6 +153,6 @@ get_target_path.SubTreeFileSystem <- function(hub_path, target_type = c("time-se
   target_data_path <- hub_path$path("target-data")
 
   td_files <- target_data_path$ls(allow_not_found = TRUE)
-  ts_files <- td_files[grepl(target_type, td_files, ignore.case = TRUE)]
+  ts_files <- td_files[fs::path_ext_remove(td_files) == target_type]
   paste0(target_data_path$base_path, ts_files)
 }

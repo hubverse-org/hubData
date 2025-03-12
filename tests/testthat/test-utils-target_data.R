@@ -11,6 +11,15 @@ test_that("get_target_path works", {
     "oracle-output.csv"
   )
 
+  # Check that trailing or preceding characters arounf target_type are ignored
+  write.csv(data.frame(a = 1:10), file.path(hub_path, "target-data", "showtime-series.csv"))
+  write.csv(data.frame(a = 1:10), file.path(hub_path, "target-data", "time-seriesss.csv"))
+  expect_equal(
+    basename(get_target_path(hub_path)),
+    "time-series.csv"
+  )
+
+  # Check cloud data
   s3_hub_path <- s3_bucket("example-complex-forecast-hub")
   expect_equal(
     basename(get_target_path(s3_hub_path)),
@@ -21,3 +30,4 @@ test_that("get_target_path works", {
     "oracle-output.csv"
   )
 })
+
