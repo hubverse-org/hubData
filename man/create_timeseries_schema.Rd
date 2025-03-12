@@ -7,7 +7,15 @@
 create_timeseries_schema(hub_path, date_col = NULL)
 }
 \arguments{
-\item{hub_path}{Path to hub directory}
+\item{hub_path}{Either a character string path to a local Modeling Hub directory
+or an object of class \verb{<SubTreeFileSystem>} created using functions \code{\link[=s3_bucket]{s3_bucket()}}
+or \code{\link[=gs_bucket]{gs_bucket()}} by providing a string S3 or GCS bucket name or path to a
+Modeling Hub directory stored in the cloud.
+For more details consult the
+\href{https://arrow.apache.org/docs/r/articles/fs.html}{Using cloud storage (S3, GCS)}
+in the \code{arrow} package.
+The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
+files within the \code{hub-config} directory.}
 
 \item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
 Useful when the required date column is a partitioning column in the target data
@@ -26,4 +34,7 @@ example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git
 gert::git_clone(url = example_hub, path = tmp_hub_path)
 # Create target time-series schema
 create_timeseries_schema(tmp_hub_path)
+#  target time-series schema from a cloud hub
+s3_hub_path <- s3_bucket("example-complex-forecast-hub")
+create_timeseries_schema(s3_hub_path)
 }

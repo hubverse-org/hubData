@@ -129,7 +129,7 @@ test_that("connect_target_timeseries fails correctly", {
   # Test that non-existent hub directory is flagged appropriately
   expect_error(
     connect_target_timeseries("random_path"),
-    regexp = "Assertion on 'hub_path' failed: Directory 'random_path' does not exist."
+    regexp = "Assertion on 'target_data_path' failed: Directory 'random_path/target-data' does not exist."
   )
 
   ts_path <- validate_target_data_path(ts_dir_hub_path, "time-series")
@@ -367,7 +367,7 @@ test_that("connect_target_timeseries works on local multi-file timeseries data w
   )
 })
 
-test_that("connect_target_timeseries on HIVE-PARTTIONED timeseries data works on local hub", {
+test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hub", {
   skip_if_offline()
   fs::dir_delete(ts_dir_hub_path)
   fs::dir_copy(ts_hub_path, ts_dir_hub_path)
@@ -436,3 +436,181 @@ test_that("connect_target_timeseries on HIVE-PARTTIONED timeseries data works on
     )
   )
 })
+
+
+test_that(
+  "connect_target_timeseries works on single-file S3 SubTreeFileSystem hub",
+  {
+    skip_if_offline()
+    hub_path <- s3_bucket("example-complex-forecast-hub")
+    ts_con <- connect_target_timeseries(hub_path)
+
+    expect_s3_class(ts_con,
+      c(
+        "target_timeseries", "FileSystemDataset", "Dataset", "ArrowObject",
+        "R6"
+      ),
+      exact = TRUE
+    )
+
+    # Check files opened correctly as ts_path captured correctly
+    expect_equal(
+      basename(attr(ts_con, "ts_path")),
+      "time-series.csv"
+    )
+    expect_equal(
+      attr(ts_con, "hub_path"),
+      "s3://example-complex-forecast-hub"
+    )
+    expect_length(ts_con$files, 1L)
+
+    expect_equal(
+      ts_con$schema$ToString(),
+      "date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+    )
+    # Test the collect method
+    all <- dplyr::collect(ts_con)
+
+    expect_equal(dim(all), c(20510L, 4L))
+    expect_s3_class(all, "tbl_df", exact = FALSE)
+    expect_equal(names(all), c("date", "target", "location", "observation"))
+    expect_equal(
+      sapply(all, class),
+      c(
+        date = "Date", target = "character", location = "character",
+        observation = "numeric"
+      )
+    )
+    expect_equal(
+      sapply(all, typeof),
+      c(
+        date = "double", target = "character", location = "character",
+        observation = "double"
+      )
+    )
+  }
+)
+
+test_that(
+  "connect_target_timeseries works with multi-file SubTreeFileSystem hub",
+  {
+    skip_if_offline()
+    fs::dir_delete(ts_dir_hub_path)
+    fs::dir_copy(ts_hub_path, ts_dir_hub_path)
+    ts_path <- validate_target_data_path(ts_dir_hub_path, "time-series")
+    # Read timeseries data from single file
+    ts_dat <- arrow::read_csv_arrow(ts_path)
+    # Delete single time-series file in preparation for creating time-series directory
+    fs::file_delete(ts_path)
+
+    # Create a seperate file for each target in a time-series directory
+    ts_dir <- fs::path(ts_dir_hub_path, "target-data", "time-series")
+    fs::dir_create(ts_dir)
+    split(ts_dat, ts_dat$target) |> purrr::iwalk(
+      ~ {
+        target <- gsub(" ", "_", .y)
+        path <- file.path(ts_dir, paste0("target-", target, ".csv"))
+        arrow::write_csv_arrow(.x, file = path)
+      }
+    )
+
+    hub_path <- withr::local_tempdir()
+    # Create a SubTreeFileSystem hub to mimick cloud hub and copy example hub contents
+    # into it
+    loc_fs <- arrow::SubTreeFileSystem$create(hub_path)
+    arrow::copy_files(ts_dir_hub_path, loc_fs)
+    config_tasks <- read_config(hub_path)
+
+    # mock read_config function as it assumes any SubTreeFileSystem hub is an s3 bucket
+    # and creates `s3` prefixed paths to URIs.
+    local_mocked_bindings(
+      read_config = function(...) {
+        config_tasks
+      }
+    )
+
+    # TESTS ====
+    # Connect to time-series data
+    ts_con <- connect_target_timeseries(loc_fs)
+    expect_s3_class(ts_con,
+      c(
+        "target_timeseries", "FileSystemDataset", "Dataset", "ArrowObject",
+        "R6"
+      ),
+      exact = TRUE
+    )
+
+    # Check files opened correctly as ts_path captured correctly
+    expect_equal(
+      basename(attr(ts_con, "ts_path")),
+      "time-series"
+    )
+    expect_length(ts_con$files, 2L)
+    expect_equal(
+      basename(ts_con$files),
+      basename(fs::dir_ls(ts_dir, recurse = TRUE, type = "file"))
+    )
+
+    expect_equal(
+      ts_con$schema$ToString(),
+      "date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+    )
+
+    # Test the collect method
+    all <- dplyr::collect(ts_con)
+
+    expect_equal(dim(all), c(20510L, 4L))
+    expect_s3_class(all, "tbl_df", exact = FALSE)
+    expect_equal(names(all), c("date", "target", "location", "observation"))
+    expect_setequal(
+      unique(all$location),
+      c(
+        "01", "15", "18", "27", "30", "37", "48", "US", "32", "20",
+        "17", "29", "41", "04", "06", "13", "19", "21", "22", "24", "23",
+        "26", "28", "38", "31", "34", "39", "40", "42", "72", "45", "51",
+        "53", "55", "54", "56", "44", "05", "12", "16", "35", "36", "47",
+        "02", "09", "50", "08", "11", "10", "25", "33", "46", "49"
+      )
+    )
+    expect_setequal(
+      unique(all$target), c("wk flu hosp rate", "wk inc flu hosp")
+    )
+    expect_equal(
+      sapply(all, class),
+      c(
+        date = "Date", target = "character", location = "character",
+        observation = "numeric"
+      )
+    )
+    expect_equal(
+      sapply(all, typeof),
+      c(
+        date = "double", target = "character", location = "character",
+        observation = "double"
+      )
+    )
+
+    # Filter for a specific date before collecting
+    filter_obs <- dplyr::filter(ts_con, observation < 1L) |>
+      dplyr::collect()
+
+    expect_equal(dim(filter_obs), c(12229L, 4L))
+    expect_s3_class(filter_obs, "tbl_df", exact = FALSE)
+    expect_equal(names(filter_obs), c("date", "target", "location", "observation"))
+    expect_true(all(filter_obs$observation < 1L))
+    expect_equal(
+      sapply(filter_obs, class),
+      c(
+        date = "Date", target = "character", location = "character",
+        observation = "numeric"
+      )
+    )
+    expect_equal(
+      sapply(filter_obs, typeof),
+      c(
+        date = "double", target = "character", location = "character",
+        observation = "double"
+      )
+    )
+  }
+)
