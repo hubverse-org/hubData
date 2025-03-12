@@ -53,7 +53,15 @@ in a hub as an arrow dataset.</p>
 
 
 <dl><dt id="arg-hub-path">hub_path<a class="anchor" aria-label="anchor" href="#arg-hub-path"></a></dt>
-<dd><p>Path to hub directory. Defaults to current working directory.</p></dd>
+<dd><p>Either a character string path to a local Modeling Hub directory
+or an object of class <code>&lt;SubTreeFileSystem&gt;</code> created using functions <code><a href="s3_bucket.html">s3_bucket()</a></code>
+or <code><a href="gs_bucket.html">gs_bucket()</a></code> by providing a string S3 or GCS bucket name or path to a
+Modeling Hub directory stored in the cloud.
+For more details consult the
+<a href="https://arrow.apache.org/docs/r/articles/fs.html" class="external-link">Using cloud storage (S3, GCS)</a>
+in the <code>arrow</code> package.
+The hub must be fully configured with valid <code>admin.json</code> and <code>tasks.json</code>
+files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
@@ -145,6 +153,31 @@ No other types of flies are currently allowed in a <code>time-series</code> dire
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2020-03-07 wk inc flu hosp US                 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2020-03-14 wk inc flu hosp US                 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 392 more rows</span></span>
+<span class="r-in"><span><span class="co"># Access Target time-series data from a cloud hub</span></span></span>
+<span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"example-complex-forecast-hub"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s3_con</span> <span class="op">&lt;-</span> <span class="fu">connect_target_timeseries</span><span class="op">(</span><span class="va">s3_hub_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s3_con</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> target_timeseries with 1 csv file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> date: date32[day]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> observation: double</span>
+<span class="r-in"><span><span class="va">s3_con</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20,510 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    date       target          location observation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2020-01-11 wk inc flu hosp 01                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2020-01-11 wk inc flu hosp 15                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2020-01-11 wk inc flu hosp 18                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2020-01-11 wk inc flu hosp 27                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2020-01-11 wk inc flu hosp 30                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2020-01-11 wk inc flu hosp 37                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2020-01-11 wk inc flu hosp 48                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2020-01-11 wk inc flu hosp US                 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2020-01-18 wk inc flu hosp 01                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2020-01-18 wk inc flu hosp 15                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 20,500 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

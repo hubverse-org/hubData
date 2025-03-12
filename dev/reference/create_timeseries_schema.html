@@ -50,7 +50,15 @@
 
 
 <dl><dt id="arg-hub-path">hub_path<a class="anchor" aria-label="anchor" href="#arg-hub-path"></a></dt>
-<dd><p>Path to hub directory</p></dd>
+<dd><p>Either a character string path to a local Modeling Hub directory
+or an object of class <code>&lt;SubTreeFileSystem&gt;</code> created using functions <code><a href="s3_bucket.html">s3_bucket()</a></code>
+or <code><a href="gs_bucket.html">gs_bucket()</a></code> by providing a string S3 or GCS bucket name or path to a
+Modeling Hub directory stored in the cloud.
+For more details consult the
+<a href="https://arrow.apache.org/docs/r/articles/fs.html" class="external-link">Using cloud storage (S3, GCS)</a>
+in the <code>arrow</code> package.
+The hub must be fully configured with valid <code>admin.json</code> and <code>tasks.json</code>
+files within the <code>hub-config</code> directory.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
@@ -72,6 +80,14 @@ and does not have the same name as a date typed task ID variable in the config.<
 <span class="r-in"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">example_hub</span>, path <span class="op">=</span> <span class="va">tmp_hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Create target time-series schema</span></span></span>
 <span class="r-in"><span><span class="fu">create_timeseries_schema</span><span class="op">(</span><span class="va">tmp_hub_path</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Schema</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> date: date32[day]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> observation: double</span>
+<span class="r-in"><span><span class="co">#  target time-series schema from a cloud hub</span></span></span>
+<span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"example-complex-forecast-hub"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">create_timeseries_schema</span><span class="op">(</span><span class="va">s3_hub_path</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Schema</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> date: date32[day]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>

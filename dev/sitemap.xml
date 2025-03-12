@@ -17,6 +17,8 @@
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_model_out_submit_tmpl.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_timeseries_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/expand_model_out_val_grid.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/get_s3_bucket_name.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/get_target_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/gs_bucket.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/hubData-package.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/index.html</loc></url>
