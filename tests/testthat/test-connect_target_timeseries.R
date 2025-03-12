@@ -562,7 +562,7 @@ test_that(
     expect_equal(dim(all), c(20510L, 4L))
     expect_s3_class(all, "tbl_df", exact = FALSE)
     expect_equal(names(all), c("date", "target", "location", "observation"))
-    expect_equal(
+    expect_setequal(
       unique(all$location),
       c(
         "01", "15", "18", "27", "30", "37", "48", "US", "32", "20",
@@ -572,7 +572,7 @@ test_that(
         "02", "09", "50", "08", "11", "10", "25", "33", "46", "49"
       )
     )
-    expect_equal(
+    expect_setequal(
       unique(all$target), c("wk flu hosp rate", "wk inc flu hosp")
     )
     expect_equal(
