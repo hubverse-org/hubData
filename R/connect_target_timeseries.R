@@ -53,7 +53,7 @@ connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
   ts_data <- if (ts_ext == "csv") {
     arrow::open_dataset(ts_path,
       format = "csv", schema = ts_schema,
-      skip = 1L
+      skip = 1L, quoted_na = TRUE
     )
   } else {
     arrow::open_dataset(ts_path,
