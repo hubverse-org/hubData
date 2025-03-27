@@ -30,7 +30,7 @@ test_that("connect_target_oracle_output on single file works on local hub", {
 
   expect_equal(
     oo_con$schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
   )
 
   # Test the collect method
@@ -81,10 +81,19 @@ test_that("connect_target_oracle_output on single file works on local hub", {
 
   expect_equal(dim(filter_date), c(5724L, 6L))
   expect_s3_class(filter_date, "tbl_df", exact = FALSE)
-  expect_equal(names(filter_date), c("location", "target_end_date", "target", "output_type", "output_type_id", "oracle_value"))
-  expect_true(filter_date[
-    filter_date$output_type_id == "quantile",
-  ]$output_type_id |> is.na() |> all())
+  expect_equal(
+    names(filter_date),
+    c(
+      "location", "target_end_date",
+      "target", "output_type", "output_type_id",
+      "oracle_value"
+    )
+  )
+  expect_true(
+    filter_date[filter_date$output_type_id == "quantile", ]$output_type_id |>
+      is.na() |>
+      all()
+  )
   expect_equal(
     unique(filter_date$location),
     c(
@@ -125,11 +134,19 @@ test_that("connect_target_oracle_output on single file works on local hub", {
 
   expect_equal(dim(filter_location), c(3780L, 6L))
   expect_s3_class(filter_location, "tbl_df", exact = FALSE)
-  expect_equal(names(filter_location), c("location", "target_end_date", "target", "output_type", "output_type_id", "oracle_value"))
+  expect_equal(
+    names(filter_location),
+    c(
+      "location", "target_end_date", "target", "output_type",
+      "output_type_id", "oracle_value"
+    )
+  )
   expect_equal(unique(filter_location$location), "US")
-  expect_true(filter_location[
-    filter_location$output_type_id == "quantile",
-  ]$output_type_id |> is.na() |> all())
+  expect_true(
+    filter_location[filter_location$output_type_id == "quantile", ]$output_type_id |>
+      is.na() |>
+      all()
+  )
   expect_equal(length(unique(filter_location$target_end_date)), 35L)
   expect_equal(
     sapply(filter_location, class),
@@ -249,7 +266,7 @@ test_that("connect_target_oracle_output on multiple non-partitioned files works 
 
   expect_equal(
     oo_con$schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
   )
 
   # Test the collect method
@@ -297,11 +314,19 @@ test_that("connect_target_oracle_output on multiple non-partitioned files works 
 
   expect_equal(dim(filter_obs), c(19535L, 6L))
   expect_s3_class(filter_obs, "tbl_df", exact = FALSE)
-  expect_equal(names(filter_obs), c("location", "target_end_date", "target", "output_type", "output_type_id", "oracle_value"))
+  expect_equal(
+    names(filter_obs),
+    c(
+      "location", "target_end_date", "target", "output_type",
+      "output_type_id", "oracle_value"
+    )
+  )
   expect_true(all(filter_obs$oracle_value < 1L))
-  expect_true(filter_obs[
-    filter_obs$output_type_id == "quantile",
-  ]$output_type_id |> is.na() |> all())
+  expect_true(
+    filter_obs[filter_obs$output_type_id == "quantile", ]$output_type_id |>
+      is.na() |>
+      all()
+  )
   expect_equal(
     sapply(filter_obs, class),
     c(
@@ -375,7 +400,7 @@ test_that("connect_target_oracle_output works on local multi-file oracle_output 
 
   expect_equal(
     oo_con$schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
   )
 
   # Test the collect method
@@ -448,7 +473,7 @@ test_that("connect_target_oracle_output with HIVE-PARTTIONED data works on local
 
   expect_equal(
     oo_con$schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget: string"
+    "location: string\ntarget_end_date: date32[day]\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget: string" # nolint: line_length_linter
   )
   # Test the collect method
   all <- dplyr::collect(oo_con)
@@ -505,14 +530,20 @@ test_that(
 
     expect_equal(
       oo_con$schema$ToString(),
-      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
     )
     # Test the collect method
     all <- dplyr::collect(oo_con)
 
     expect_equal(dim(all), c(200340L, 6L))
     expect_s3_class(all, "tbl_df", exact = FALSE)
-    expect_equal(names(all), c("location", "target_end_date", "target", "output_type", "output_type_id", "oracle_value"))
+    expect_equal(
+      names(all),
+      c(
+        "location", "target_end_date", "target", "output_type",
+        "output_type_id", "oracle_value"
+      )
+    )
     expect_true(all[all$output_type_id == "quantile", ]$output_type_id |> is.na() |> all())
     expect_equal(
       sapply(all, class),
@@ -593,7 +624,7 @@ test_that(
 
     expect_equal(
       oo_con$schema$ToString(),
-      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
     )
 
     # Test the collect method
@@ -601,7 +632,13 @@ test_that(
 
     expect_equal(dim(all), c(200340L, 6L))
     expect_s3_class(all, "tbl_df", exact = FALSE)
-    expect_equal(names(all), c("location", "target_end_date", "target", "output_type", "output_type_id", "oracle_value"))
+    expect_equal(
+      names(all),
+      c(
+        "location", "target_end_date", "target", "output_type",
+        "output_type_id", "oracle_value"
+      )
+    )
     expect_true(all[all$output_type_id == "quantile", ]$output_type_id |> is.na() |> all())
     expect_setequal(
       unique(all$location),

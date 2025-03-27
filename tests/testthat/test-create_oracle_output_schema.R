@@ -8,7 +8,7 @@ test_that("create_oracle_output_schema works", {
 
   expect_equal(
     test_schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
   )
 
   # Create target oracle-output schema partitioned on a target_end_date column. As this is
@@ -22,7 +22,7 @@ test_that("create_oracle_output_schema works", {
 
   expect_equal(
     create_oracle_output_schema(tmp_hub_path)$ToString(),
-    "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]"
+    "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]" # nolint: line_length_linter
   )
 })
 
@@ -35,7 +35,7 @@ test_that(
 
     expect_equal(
       oo_schema$ToString(),
-      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
+      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
     )
   }
 )

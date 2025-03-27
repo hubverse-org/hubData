@@ -53,17 +53,17 @@ connect_target_oracle_output <- function(hub_path = ".") {
   }
   oo_data <- if (oo_ext == "csv") {
     arrow::open_dataset(oo_path,
-                        format = "csv", schema = oo_schema,
-                        skip = 1L, quoted_na = TRUE
+      format = "csv", schema = oo_schema,
+      skip = 1L, quoted_na = TRUE
     )
   } else {
     arrow::open_dataset(oo_path,
-                        format = "parquet", schema = oo_schema
+      format = "parquet", schema = oo_schema
     )
   }
   structure(oo_data,
-            class = c("target_oracle_output", class(oo_data)),
-            oo_path = out_path,
-            hub_path = hub_path
+    class = c("target_oracle_output", class(oo_data)),
+    oo_path = out_path,
+    hub_path = hub_path
   )
 }
