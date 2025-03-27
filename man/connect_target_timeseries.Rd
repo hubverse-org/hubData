@@ -31,7 +31,7 @@ in a hub as an arrow dataset.
 \details{
 If the target data is split across multiple files in a \code{time-series} directory,
 all files must share the same file format, either csv or parquet.
-No other types of flies are currently allowed in a \code{time-series} directory.
+No other types of files are currently allowed in a \code{time-series} directory.
 }
 \examples{
 # Clone example hub
