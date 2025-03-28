@@ -647,9 +647,11 @@ test_that(
         "output_type_id", "oracle_value"
       )
     )
-    expect_true(all[all$output_type_id == "quantile", ]$output_type_id |>
-      is.na() |>
-      all())
+    expect_true(
+      all[all$output_type_id == "quantile", ]$output_type_id |>
+        is.na() |>
+        all()
+    )
     expect_setequal(
       unique(all$location),
       c(
