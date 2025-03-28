@@ -566,6 +566,14 @@ test_that(
   "connect_target_oracle_output works with multi-file SubTreeFileSystem hub",
   {
     skip_if_offline()
+    skip_on_os("windows")
+    # Skipping the test on windows because the use of lower level
+    # SubTreeFileSystem$create() function on windows is throwing unrelated errors
+    # related to local paths on windows which are not guaranteed to work:
+    # (see https://arrow.apache.org/docs/cpp/api/filesystem.html#subtree-filesystem-wrapper)
+    # We've already shown these tests work on linux and macos and on actual s3 cloud hubs
+    # with single files.
+
     fs::dir_delete(oo_dir_hub_path)
     fs::dir_copy(oo_hub_path, oo_dir_hub_path)
     oo_path <- validate_target_data_path(oo_dir_hub_path, "oracle-output")
@@ -574,7 +582,7 @@ test_that(
     # Delete single oracle-output file in preparation for creating oracle-output directory
     fs::file_delete(oo_path)
 
-    # Create a seperate file for each target in a oracle-output directory
+    # Create a separate file for each target in a oracle-output directory
     oo_dir <- fs::path(oo_dir_hub_path, "target-data", "oracle-output")
     fs::dir_create(oo_dir)
     split(oo_dat, oo_dat$target) |> purrr::iwalk(
@@ -586,7 +594,7 @@ test_that(
     )
 
     hub_path <- withr::local_tempdir()
-    # Create a SubTreeFileSystem hub to mimick cloud hub and copy example hub contents
+    # Create a SubTreeFileSystem hub to mimic cloud hub and copy example hub contents
     # into it
     loc_fs <- arrow::SubTreeFileSystem$create(hub_path)
     arrow::copy_files(oo_dir_hub_path, loc_fs)
@@ -639,7 +647,9 @@ test_that(
         "output_type_id", "oracle_value"
       )
     )
-    expect_true(all[all$output_type_id == "quantile", ]$output_type_id |> is.na() |> all())
+    expect_true(all[all$output_type_id == "quantile", ]$output_type_id |>
+      is.na() |>
+      all())
     expect_setequal(
       unique(all$location),
       c(
