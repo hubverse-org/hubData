@@ -495,6 +495,14 @@ test_that(
   "connect_target_timeseries works with multi-file SubTreeFileSystem hub",
   {
     skip_if_offline()
+    skip_on_os("windows")
+    # Skipping the test on windows because the use of lower level
+    # SubTreeFileSystem$create() function on windows is throwing unrelated errors
+    # related to local paths on windows which are not guaranteed to work:
+    # (see https://arrow.apache.org/docs/cpp/api/filesystem.html#subtree-filesystem-wrapper)
+    # We've already shown these tests work on linux and macos and on actual s3 cloud hubs
+    # with single files.
+
     fs::dir_delete(ts_dir_hub_path)
     fs::dir_copy(ts_hub_path, ts_dir_hub_path)
     ts_path <- validate_target_data_path(ts_dir_hub_path, "time-series")
@@ -503,7 +511,7 @@ test_that(
     # Delete single time-series file in preparation for creating time-series directory
     fs::file_delete(ts_path)
 
-    # Create a seperate file for each target in a time-series directory
+    # Create a separate file for each target in a time-series directory
     ts_dir <- fs::path(ts_dir_hub_path, "target-data", "time-series")
     fs::dir_create(ts_dir)
     split(ts_dat, ts_dat$target) |> purrr::iwalk(
@@ -515,7 +523,7 @@ test_that(
     )
 
     hub_path <- withr::local_tempdir()
-    # Create a SubTreeFileSystem hub to mimick cloud hub and copy example hub contents
+    # Create a SubTreeFileSystem hub to mimic cloud hub and copy example hub contents
     # into it
     loc_fs <- arrow::SubTreeFileSystem$create(hub_path)
     arrow::copy_files(ts_dir_hub_path, loc_fs)

@@ -12,7 +12,7 @@
 #' @details
 #' If the target data is split across multiple files in a `time-series` directory,
 #' all files must share the same file format, either csv or parquet.
-#' No other types of flies are currently allowed in a `time-series` directory.
+#' No other types of files are currently allowed in a `time-series` directory.
 #'
 #' @examples
 #' # Clone example hub
@@ -53,7 +53,7 @@ connect_target_timeseries <- function(hub_path = ".", date_col = NULL) {
   ts_data <- if (ts_ext == "csv") {
     arrow::open_dataset(ts_path,
       format = "csv", schema = ts_schema,
-      skip = 1L
+      skip = 1L, quoted_na = TRUE
     )
   } else {
     arrow::open_dataset(ts_path,
