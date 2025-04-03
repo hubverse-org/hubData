@@ -11,7 +11,8 @@ connect_model_output <- function(model_output_dir,
                                  file_format = c("csv", "parquet", "arrow"),
                                  partition_names = "model_id",
                                  schema = NULL,
-                                 skip_checks = FALSE) {
+                                 skip_checks = FALSE,
+                                 na = c("NA", "")) {
   UseMethod("connect_model_output")
 }
 
@@ -20,7 +21,8 @@ connect_model_output.default <- function(model_output_dir,
                                          file_format = c("csv", "parquet", "arrow"),
                                          partition_names = "model_id",
                                          schema = NULL,
-                                         skip_checks = FALSE) {
+                                         skip_checks = FALSE,
+                                         na = c("NA", "")) {
   rlang::check_required(model_output_dir)
   if (!dir.exists(model_output_dir)) {
     cli::cli_abort(c("x" = "Directory {.path {model_output_dir}} does not exist."))
@@ -46,7 +48,8 @@ connect_model_output.default <- function(model_output_dir,
       col_types = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files),
+      na = na
     )
   } else {
     dataset <- arrow::open_dataset(
@@ -77,7 +80,8 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
                                                    file_format = c("csv", "parquet", "arrow"),
                                                    partition_names = "model_id",
                                                    schema = NULL,
-                                                   skip_checks = FALSE) {
+                                                   skip_checks = FALSE,
+                                                   na = c("NA", "")) {
   rlang::check_required(model_output_dir)
 
   file_format <- rlang::arg_match(file_format)
@@ -100,7 +104,8 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
       schema = schema,
       unify_schemas = TRUE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files),
+      na = na
     )
   } else {
     dataset <- arrow::open_dataset(

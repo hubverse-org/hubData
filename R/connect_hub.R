@@ -33,6 +33,10 @@
 #' there are **multiple file formats** in the hub's model output directory or when
 #' the hub's model output directory contains **files that are not model output
 #' data** (for example, a README).
+#' @param na A character vector of strings to interpret as missing values. Only
+#' applies to CSV files. The default is `c("NA", "")`. Useful when actual character
+#' string `"NA"` values are used in the data. In such a case, use empty cells to
+#' indicate missing values in your files and set `na = ""`.
 #' @inheritParams create_hub_schema
 #'
 #' @return
@@ -84,7 +88,7 @@ connect_hub <- function(hub_path,
                           "logical", "Date"
                         ),
                         partitions = list(model_id = arrow::utf8()),
-                        skip_checks = FALSE) {
+                        skip_checks = FALSE, na = c("NA", "")) {
   UseMethod("connect_hub")
 }
 
@@ -98,7 +102,7 @@ connect_hub.default <- function(hub_path,
                                   "logical", "Date"
                                 ),
                                 partitions = list(model_id = arrow::utf8()),
-                                skip_checks = FALSE) {
+                                skip_checks = FALSE, na = c("NA", "")) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -141,7 +145,8 @@ connect_hub.default <- function(hub_path,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files = exclude_invalid_files
+      exclude_invalid_files = exclude_invalid_files,
+      na = na
     )
   }
   if (inherits(dataset, "UnionDataset")) {
@@ -185,7 +190,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
                                             "Date"
                                           ),
                                           partitions = list(model_id = arrow::utf8()),
-                                          skip_checks = FALSE) {
+                                          skip_checks = FALSE, na = c("NA", "")) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -226,7 +231,8 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files = exclude_invalid_files
+      exclude_invalid_files = exclude_invalid_files,
+      na = na
     )
   }
 
@@ -268,7 +274,7 @@ open_hub_dataset <- function(model_output_dir,
                                "logical", "Date"
                              ),
                              partitions = list(model_id = arrow::utf8()),
-                             exclude_invalid_files) {
+                             exclude_invalid_files, na = c("NA", "")) {
   file_format <- rlang::arg_match(file_format)
   schema <- create_hub_schema(config_tasks,
     partitions = partitions,
@@ -283,7 +289,8 @@ open_hub_dataset <- function(model_output_dir,
       col_types = schema,
       unify_schemas = FALSE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files)
+      factory_options = list(exclude_invalid_files = exclude_invalid_files),
+      na = na
     ),
     parquet = arrow::open_dataset(
       model_output_dir,
@@ -315,6 +322,7 @@ open_hub_datasets <- function(model_output_dir,
                               ),
                               partitions = list(model_id = arrow::utf8()),
                               exclude_invalid_files,
+                              na = c("NA", ""),
                               call = rlang::caller_env()) {
   if (length(file_format) == 1L) {
     open_hub_dataset(
@@ -323,7 +331,8 @@ open_hub_datasets <- function(model_output_dir,
       config_tasks = config_tasks,
       output_type_id_datatype,
       partitions = partitions,
-      exclude_invalid_files
+      exclude_invalid_files,
+      na = na
     )
   } else {
     cons <- purrr::map(
@@ -334,7 +343,8 @@ open_hub_datasets <- function(model_output_dir,
         config_tasks = config_tasks,
         output_type_id_datatype = output_type_id_datatype,
         partitions = partitions,
-        exclude_invalid_files
+        exclude_invalid_files,
+        na = na
       )
     )
 
