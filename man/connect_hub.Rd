@@ -11,7 +11,8 @@ connect_hub(
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
   partitions = list(model_id = arrow::utf8()),
-  skip_checks = FALSE
+  skip_checks = FALSE,
+  na = c("NA", "")
 )
 
 connect_model_output(
@@ -19,7 +20,8 @@ connect_model_output(
   file_format = c("csv", "parquet", "arrow"),
   partition_names = "model_id",
   schema = NULL,
-  skip_checks = FALSE
+  skip_checks = FALSE,
+  na = c("NA", "")
 )
 }
 \arguments{
@@ -68,6 +70,11 @@ the model output directory includes invalid files. \strong{Cannot be \code{TRUE}
 there are \strong{multiple file formats} in the hub's model output directory or when
 the hub's model output directory contains \strong{files that are not model output
 data} (for example, a README).}
+
+\item{na}{A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
+string \code{"NA"} values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set \code{na = ""}.}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
