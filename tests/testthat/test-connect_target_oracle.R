@@ -721,8 +721,8 @@ test_that(
 
     # Introduce character "NA" value
     oo_dat$location[1] <- "NA"
-    # Write NAs out as blank strings
-    readr::write_csv(oo_dat, oo_path, na = "")
+    # Write NAs out as blank strings (default in write_csv_arrow)
+    arrow::write_csv_arrow(oo_dat, oo_path)
 
     oo_con <- connect_target_oracle_output(oo_na_hub_path, na = "")
     expect_equal(
