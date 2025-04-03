@@ -4,7 +4,7 @@
 \alias{connect_target_timeseries}
 \title{Open connection to time-series target data}
 \usage{
-connect_target_timeseries(hub_path = ".", date_col = NULL)
+connect_target_timeseries(hub_path = ".", date_col = NULL, na = c("NA", ""))
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -20,6 +20,11 @@ files within the \code{hub-config} directory.}
 \item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
 Useful when the required date column is a partitioning column in the target data
 and does not have the same name as a date typed task ID variable in the config.}
+
+\item{na}{A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
+string \code{"NA"} values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set \code{na = ""}.}
 }
 \value{
 An arrow dataset object of subclass <target_timeseries>.

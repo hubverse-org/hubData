@@ -4,7 +4,7 @@
 \alias{connect_target_oracle_output}
 \title{Open connection to oracle-output target data}
 \usage{
-connect_target_oracle_output(hub_path = ".")
+connect_target_oracle_output(hub_path = ".", na = c("NA", ""))
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -16,6 +16,11 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{na}{A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
+string \code{"NA"} values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set \code{na = ""}.}
 }
 \value{
 An arrow dataset object of subclass <target_oracle_output>.

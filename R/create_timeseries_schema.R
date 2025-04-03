@@ -19,7 +19,8 @@
 #' #  target time-series schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_timeseries_schema(s3_hub_path)
-create_timeseries_schema <- function(hub_path, date_col = NULL) {
+create_timeseries_schema <- function(hub_path, date_col = NULL,
+                                     na = c("NA", "")) {
   ts_path <- validate_target_data_path(hub_path, "time-series")
 
   config_tasks <- read_config(hub_path)
@@ -29,7 +30,12 @@ create_timeseries_schema <- function(hub_path, date_col = NULL) {
   if (inherits(hub_path, "SubTreeFileSystem")) {
     ts_path <- file_system_path(hub_path, ts_path, uri = TRUE)
   }
-  file_schema <- arrow::open_dataset(ts_path, format = ts_ext)$schema
+  if (ts_ext == "csv") {
+    file_schema <- arrow::open_dataset(ts_path, format = ts_ext,
+                                       na = na, quoted_na = TRUE)$schema
+  } else {
+    file_schema <- arrow::open_dataset(ts_path, format = ts_ext)$schema
+  }
 
   ts_schema <- hub_schema[hub_schema$names %in% file_schema$names]
   ts_schema[["as_of"]] <- arrow::date32()

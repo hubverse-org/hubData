@@ -4,7 +4,7 @@
 \alias{create_oracle_output_schema}
 \title{Create oracle-output target data file schema}
 \usage{
-create_oracle_output_schema(hub_path)
+create_oracle_output_schema(hub_path, na = c("NA", ""))
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -16,6 +16,11 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{na}{A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
+string \code{"NA"} values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set \code{na = ""}.}
 }
 \value{
 an arrow \verb{<schema>} class object

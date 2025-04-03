@@ -16,7 +16,7 @@
 #' #  target oracle-output schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_oracle_output_schema(s3_hub_path)
-create_oracle_output_schema <- function(hub_path) {
+create_oracle_output_schema <- function(hub_path, na = c("NA", "")) {
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 
   config_tasks <- read_config(hub_path)
@@ -26,7 +26,12 @@ create_oracle_output_schema <- function(hub_path) {
   if (inherits(hub_path, "SubTreeFileSystem")) {
     oo_path <- file_system_path(hub_path, oo_path, uri = TRUE)
   }
-  file_schema <- arrow::open_dataset(oo_path, format = oo_ext)$schema
+  if (oo_ext == "csv") {
+    file_schema <- arrow::open_dataset(oo_path, format = oo_ext,
+                                       na = na, quoted_na = TRUE)$schema
+  } else {
+    file_schema <- arrow::open_dataset(oo_path, format = oo_ext)$schema
+  }
 
   oo_schema <- hub_schema[hub_schema$names %in% file_schema$names]
 

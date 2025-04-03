@@ -38,7 +38,7 @@
 #' s3_con <- connect_target_oracle_output(s3_hub_path)
 #' s3_con
 #' s3_con |> dplyr::collect()
-connect_target_oracle_output <- function(hub_path = ".") {
+connect_target_oracle_output <- function(hub_path = ".", na = c("NA", "")) {
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_ext <- get_target_file_ext(hub_path, oo_path)
   oo_schema <- create_oracle_output_schema(hub_path)
@@ -54,7 +54,7 @@ connect_target_oracle_output <- function(hub_path = ".") {
   oo_data <- if (oo_ext == "csv") {
     arrow::open_dataset(oo_path,
       format = "csv", schema = oo_schema,
-      skip = 1L, quoted_na = TRUE
+      skip = 1L, quoted_na = TRUE, na = na
     )
   } else {
     arrow::open_dataset(oo_path,

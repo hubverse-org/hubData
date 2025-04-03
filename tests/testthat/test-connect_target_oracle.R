@@ -708,3 +708,33 @@ test_that(
     )
   }
 )
+
+test_that(
+  'connect_target_timeseries parses "NA" and "" correctly',
+  {
+    skip_if_offline()
+    oo_na_hub_path <- fs::path(tmp_dir, "oo_na_file")
+    fs::dir_copy(oo_hub_path, oo_na_hub_path)
+    oo_path <- validate_target_data_path(oo_na_hub_path, "oracle-output")
+    # Read oracle_output data from single file
+    oo_dat <- arrow::read_csv_arrow(oo_path)
+
+    # Introduce character "NA" value
+    oo_dat$location[1] <- "NA"
+    # Write NAs out as blank strings
+    readr::write_csv(oo_dat, oo_path, na = "")
+
+    oo_con <- connect_target_oracle_output(oo_na_hub_path, na = "")
+    expect_equal(
+      oo_con$schema$ToString(),
+      "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+    )
+    all <- dplyr::collect(oo_con)
+    expect_true(all$location[1] == "NA")
+    expect_true(
+      all[oo_dat$output_type_id == "", "output_type_id"] |>
+        is.na() |>
+        all()
+    )
+  }
+)
