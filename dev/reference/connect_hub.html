@@ -51,7 +51,8 @@ Data can be stored in a local directory or in the cloud on AWS or GCS.</p>
 <span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
 <span>    <span class="st">"logical"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
 <span>  partitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model_id <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">utf8</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">connect_model_output</span><span class="op">(</span></span>
@@ -59,7 +60,8 @@ Data can be stored in a local directory or in the cloud on AWS or GCS.</p>
 <span>  file_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span>, <span class="st">"parquet"</span>, <span class="st">"arrow"</span><span class="op">)</span>,</span>
 <span>  partition_names <span class="op">=</span> <span class="st">"model_id"</span>,</span>
 <span>  schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,6 +123,13 @@ the model output directory includes invalid files. <strong>Cannot be <code>TRUE<
 there are <strong>multiple file formats</strong> in the hub's model output directory or when
 the hub's model output directory contains <strong>files that are not model output
 data</strong> (for example, a README).</p></dd>
+
+
+<dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
+<dd><p>A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is <code>c("NA", "")</code>. Useful when actual character
+string <code>"NA"</code> values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set <code>na = ""</code>.</p></dd>
 
 
 <dt id="arg-model-output-dir">model_output_dir<a class="anchor" aria-label="anchor" href="#arg-model-output-dir"></a></dt>

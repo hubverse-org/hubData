@@ -45,7 +45,7 @@ in a hub as an arrow dataset.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">connect_target_timeseries</span><span class="op">(</span>hub_path <span class="op">=</span> <span class="st">"."</span>, date_col <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">connect_target_timeseries</span><span class="op">(</span>hub_path <span class="op">=</span> <span class="st">"."</span>, date_col <span class="op">=</span> <span class="cn">NULL</span>, na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +69,13 @@ files within the <code>hub-config</code> directory.</p></dd>
 Useful when the required date column is a partitioning column in the target data
 and does not have the same name as a date typed task ID variable in the config.</p></dd>
 
+
+<dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
+<dd><p>A character vector of strings to interpret as missing values. Only
+applies to CSV files. The default is <code>c("NA", "")</code>. Useful when actual character
+string <code>"NA"</code> values are used in the data. In such a case, use empty cells to
+indicate missing values in your files and set <code>na = ""</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -78,7 +85,7 @@ and does not have the same name as a date typed task ID variable in the config.<
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If the target data is split across multiple files in a <code>time-series</code> directory,
 all files must share the same file format, either csv or parquet.
-No other types of flies are currently allowed in a <code>time-series</code> directory.</p>
+No other types of files are currently allowed in a <code>time-series</code> directory.</p>
     </div>
 
     <div class="section level2">
