@@ -6,6 +6,7 @@
 * Added `create_oracle_output_schema()` function for creating a schema for oracle-output target data (#72).
 * Added `get_target_path()` function for retrieving the path to the appropriate target data file or directory in a hub.
 * Added `get_s3_bucket_name()` for extracting the bucket name of a cloud enabled hub from a hub's config (#75).
+* Added `na` argument to `connect_hub()`, `connect_model_output()`, `connect_target_timeseries()`, `connect_target_oracle_output()`, `create_timeseries_schema()`, and `create_oracle_output_schema()` to allow for the specification of how to handle missing values in CSV files. The default is to use `NA` or `""`, but users can restrict this to `""` (empty string) when needing to include character `"NA"` values in their CSV data (#80). Note this approach only works if `NA` values are written to the CSV file as `""` (empty string) and not as `NA` or `"NA"`.
 
 # hubData 1.3.0
 
