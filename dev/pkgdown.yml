@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/connect_hub: connect_hub.html
-last_built: 2025-04-03T13:37Z
+last_built: 2025-04-09T18:57Z
 urls:
   reference: https://hubverse-org.github.io/hubData/reference
   article: https://hubverse-org.github.io/hubData/articles
