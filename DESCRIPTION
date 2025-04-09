@@ -8,6 +8,7 @@ Authors@R:
       person("Nicholas G.", "Reich", , "nick@umass.edu", role = "ctb",
            comment = c(ORCID = "0000-0003-3503-9899")),
       person("Evan L.", "Ray", , "elray@umass.edu", role = "ctb"),
+      person("Becky", "Sweger", , "bsweger@gmail.com", role = "ctb"),
       person(family = "Consortium of Infectious Disease Modeling Hubs",
            role = c("cph")))
 Description: A set of utility functions for accessing and working with
