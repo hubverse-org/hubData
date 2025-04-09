@@ -26,6 +26,7 @@ Other contributors:
   \item Li Shandross \email{lshandross@umass.edu} [contributor]
   \item Nicholas G. Reich \email{nick@umass.edu} (\href{https://orcid.org/0000-0003-3503-9899}{ORCID}) [contributor]
   \item Evan L. Ray \email{elray@umass.edu} [contributor]
+  \item Becky Sweger \email{bsweger@gmail.com} [contributor]
   \item  Consortium of Infectious Disease Modeling Hubs [copyright holder]
 }
 
