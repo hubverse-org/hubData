@@ -77,32 +77,51 @@ validate_target_file_ext <- function(ts_path, hub_path = NULL, call = rlang::cal
   invisible(ts_ext)
 }
 
-#' @noRd
-get_target_file_ext <- function(hub_path = NULL, ts_path) {
+#' Get target data file unique file extensions.
+#'
+#' Get the unique file extension(s) of the target data file(s) in `target_path`.
+#' If `target_path` is a directory, the function will return the unique file
+#' extensions of all files in the directory. If `target_path` is a file,
+#' the function will return the file extension of that file.
+#' @param hub_path If not `NULL`, must be a `SubTreeFileSystem` class object of
+#' the root to a cloud hosted hub. Required to trigger the `SubTreeFileSystem`
+#' method.
+#' @param target_path character string. The path to the target data
+#' file or directory. Usually the output of [get_target_path()].
+#'
+#' @export
+#' @examples
+#' hub_path <- withr::local_tempdir()
+#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
+#' gert::git_clone(url = example_hub, path = hub_path)
+#' target_path <- get_target_path(hub_path, "time-series")
+#' get_target_file_ext(hub_path, target_path)
+get_target_file_ext <- function(hub_path = NULL, target_path) {
+  checkmate::assert_character(target_path, len = 1L)
   UseMethod("get_target_file_ext")
 }
 
-# Get the file extension of the target data file(s) in `ts_path`. Assumes the target data
+# Get the file extension of the target data file(s) in `target_path`. Assumes the target data
 # path has been validated first.
 #' @noRd
 #' @export
-get_target_file_ext.default <- function(hub_path = NULL, ts_path) {
-  if (fs::is_dir(ts_path)) {
-    ts_dir_paths <- fs::dir_ls(ts_path, type = "file", recurse = TRUE)
+get_target_file_ext.default <- function(hub_path = NULL, target_path) {
+  if (fs::is_dir(target_path)) {
+    ts_dir_paths <- fs::dir_ls(target_path, type = "file", recurse = TRUE)
     return(unique(fs::path_ext(ts_dir_paths)))
   }
-  fs::path_ext(ts_path)
+  fs::path_ext(target_path)
 }
 
 #' @noRd
 #' @export
-get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, ts_path) {
-  is_dir <- is_cloud_dir(hub_path, ts_path)
+get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) {
+  is_dir <- is_cloud_dir(hub_path, target_path)
   if (is_dir) {
-    ts_dir_paths <- hub_path$path(ts_path)$ls(allow_not_found = TRUE)
+    ts_dir_paths <- hub_path$path(target_path)$ls(allow_not_found = TRUE)
     return(unique(fs::path_ext(ts_dir_paths)))
   }
-  fs::path_ext(ts_path)
+  fs::path_ext(target_path)
 }
 
 #' Get the path(s) to the target data file(s) in the hub directory.
