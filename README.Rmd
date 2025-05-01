@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 The goal of hubData is to provide tools for accessing and working with hubverse Hub data.
 
-This package is part of the [hubverse](https://hubverse.io/en/latest/) ecosystem, which aims to provide a set of tools for infectious disease modeling hubs to share and collaborate on their work.
+This package is part of the [hubverse](https://hubverse.io) ecosystem, which aims to provide a set of tools for infectious disease modeling hubs to share and collaborate on their work.
 
 ## Installation
 
@@ -65,6 +65,6 @@ Please note that the hubData package is released with a [Contributor Code of Con
 ## Contributing
 
 Interested in contributing back to the open-source Hubverse project?
-Learn more about how to [get involved in the Hubverse Community](https://hubverse.io/en/latest/overview/contribute.html) or [how to contribute to the hubData package](.github/CONTRIBUTING.md).
+Learn more about how to [get involved in the Hubverse Community](https://docs.hubverse.io/en/latest/overview/contribute.html) or [how to contribute to the hubData package](.github/CONTRIBUTING.md).
 
 
