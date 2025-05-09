@@ -37,6 +37,9 @@
 #' applies to CSV files. The default is `c("NA", "")`. Useful when actual character
 #' string `"NA"` values are used in the data. In such a case, use empty cells to
 #' indicate missing values in your files and set `na = ""`.
+#' @param ignore_files A character vector of file **names** (not paths) or
+#'  file **prefixes** to ignore when discovering model output files to
+#'  include in hub connection. Parent directory names should not be included.
 #' @inheritParams create_hub_schema
 #'
 #' @return
@@ -74,6 +77,8 @@
 #'     horizon == 2
 #'   ) %>%
 #'   collect_hub()
+#' # Ignore a file
+#' connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv"))
 #' # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 #' \dontrun{
 #' hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
@@ -88,7 +93,8 @@ connect_hub <- function(hub_path,
                           "logical", "Date"
                         ),
                         partitions = list(model_id = arrow::utf8()),
-                        skip_checks = FALSE, na = c("NA", "")) {
+                        skip_checks = FALSE, na = c("NA", ""),
+                        ignore_files = c("README", ".DS_Store")) {
   UseMethod("connect_hub")
 }
 
@@ -102,7 +108,8 @@ connect_hub.default <- function(hub_path,
                                   "logical", "Date"
                                 ),
                                 partitions = list(model_id = arrow::utf8()),
-                                skip_checks = FALSE, na = c("NA", "")) {
+                                skip_checks = FALSE, na = c("NA", ""),
+                                ignore_files = c("README", ".DS_Store")) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -146,7 +153,8 @@ connect_hub.default <- function(hub_path,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
       exclude_invalid_files = exclude_invalid_files,
-      na = na
+      na = na,
+      ignore_files = ignore_files
     )
   }
   if (inherits(dataset, "UnionDataset")) {
@@ -162,7 +170,7 @@ connect_hub.default <- function(hub_path,
   file_format <- get_file_format_meta(dataset, model_output_dir, file_format)
   # warn of any discrepancies between expected files in dir and successfully opened
   # files in dataset
-  warn_unopened_files(file_format, dataset, model_output_dir)
+  warn_unopened_files(file_format, dataset, model_output_dir, ignore_files)
 
   structure(dataset,
     class = c("hub_connection", class(dataset)),
@@ -190,7 +198,8 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
                                             "Date"
                                           ),
                                           partitions = list(model_id = arrow::utf8()),
-                                          skip_checks = FALSE, na = c("NA", "")) {
+                                          skip_checks = FALSE, na = c("NA", ""),
+                                          ignore_files = c("README", ".DS_Store")) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -232,7 +241,8 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
       output_type_id_datatype = output_type_id_datatype,
       partitions = partitions,
       exclude_invalid_files = exclude_invalid_files,
-      na = na
+      na = na,
+      ignore_files = ignore_files
     )
   }
 
@@ -249,7 +259,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   file_format <- get_file_format_meta(dataset, model_output_dir, file_format)
   # warn of any discrepancies between expected files in dir and successfully opened
   # files in dataset
-  warn_unopened_files(file_format, dataset, model_output_dir)
+  warn_unopened_files(file_format, dataset, model_output_dir, ignore_files)
 
   structure(dataset,
     class = c("hub_connection", class(dataset)),
@@ -274,7 +284,8 @@ open_hub_dataset <- function(model_output_dir,
                                "logical", "Date"
                              ),
                              partitions = list(model_id = arrow::utf8()),
-                             exclude_invalid_files, na = c("NA", "")) {
+                             exclude_invalid_files, na = c("NA", ""),
+                             ignore_files = c("README", ".DS_Store")) {
   file_format <- rlang::arg_match(file_format)
   schema <- create_hub_schema(config_tasks,
     partitions = partitions,
@@ -289,7 +300,10 @@ open_hub_dataset <- function(model_output_dir,
       col_types = schema,
       unify_schemas = FALSE,
       strings_can_be_null = TRUE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files),
+      factory_options = list(
+        exclude_invalid_files = exclude_invalid_files,
+        selector_ignore_prefixes = ignore_files
+      ),
       na = na
     ),
     parquet = arrow::open_dataset(
@@ -298,7 +312,10 @@ open_hub_dataset <- function(model_output_dir,
       partitioning = "model_id",
       schema = schema,
       unify_schemas = FALSE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files)
+      factory_options = list(
+        exclude_invalid_files = exclude_invalid_files,
+        selector_ignore_prefixes = ignore_files
+      )
     ),
     arrow = arrow::open_dataset(
       model_output_dir,
@@ -306,7 +323,10 @@ open_hub_dataset <- function(model_output_dir,
       partitioning = "model_id",
       schema = schema,
       unify_schemas = FALSE,
-      factory_options = list(exclude_invalid_files = exclude_invalid_files)
+      factory_options = list(
+        exclude_invalid_files = exclude_invalid_files,
+        selector_ignore_prefixes = ignore_files
+      )
     )
   )
 }
@@ -323,6 +343,7 @@ open_hub_datasets <- function(model_output_dir,
                               partitions = list(model_id = arrow::utf8()),
                               exclude_invalid_files,
                               na = c("NA", ""),
+                              ignore_files = c("README", ".DS_Store"),
                               call = rlang::caller_env()) {
   if (length(file_format) == 1L) {
     open_hub_dataset(
@@ -332,7 +353,8 @@ open_hub_datasets <- function(model_output_dir,
       output_type_id_datatype,
       partitions = partitions,
       exclude_invalid_files,
-      na = na
+      na = na,
+      ignore_files = ignore_files
     )
   } else {
     cons <- purrr::map(
@@ -344,7 +366,8 @@ open_hub_datasets <- function(model_output_dir,
         output_type_id_datatype = output_type_id_datatype,
         partitions = partitions,
         exclude_invalid_files,
-        na = na
+        na = na,
+        ignore_files = ignore_files
       )
     )
 

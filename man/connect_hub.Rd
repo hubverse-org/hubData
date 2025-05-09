@@ -12,7 +12,8 @@ connect_hub(
     "logical", "Date"),
   partitions = list(model_id = arrow::utf8()),
   skip_checks = FALSE,
-  na = c("NA", "")
+  na = c("NA", ""),
+  ignore_files = c("README", ".DS_Store")
 )
 
 connect_model_output(
@@ -75,6 +76,10 @@ data} (for example, a README).}
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
 string \code{"NA"} values are used in the data. In such a case, use empty cells to
 indicate missing values in your files and set \code{na = ""}.}
+
+\item{ignore_files}{A character vector of file \strong{names} (not paths) or
+file \strong{prefixes} to ignore when discovering model output files to
+include in hub connection. Parent directory names should not be included.}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
@@ -141,6 +146,8 @@ mod_out_con \%>\%
     horizon == 2
   ) \%>\%
   collect_hub()
+# Ignore a file
+connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv"))
 # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 \dontrun{
 hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
