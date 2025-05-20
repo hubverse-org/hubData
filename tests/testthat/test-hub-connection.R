@@ -93,7 +93,8 @@ test_that("connect_hub returns empty list when model output folder is empty", {
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/empty/")
   suppressWarnings({
     suppressMessages({
-      expect_message(hub_con <- connect_hub(hub_path, skip_checks = TRUE),
+      expect_message(
+        hub_con <- connect_hub(hub_path, skip_checks = TRUE),
         "superseded URL"
       )
     })
@@ -401,7 +402,8 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
 
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
   suppressMessages({
-    expect_message(hub_con <- connect_hub(hub_path, file_format = "parquet"),
+    expect_message(
+      hub_con <- connect_hub(hub_path, file_format = "parquet"),
       "superseded URL"
     )
   })
@@ -459,9 +461,12 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   # S3
   hub_path <- s3_bucket("hubverse/hubutils/testhubs/parquet/")
   suppressMessages({
-    expect_message({
-      hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
-    }, "superseded URL")
+    expect_message(
+      {
+        hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
+      },
+      "superseded URL"
+    )
   })
 
   # Tests that paths are assigned to attributes correctly
@@ -507,7 +512,10 @@ test_that("connect_hub & connect_model_output fail correctly", {
   expect_snapshot(connect_model_output("random/model-output/"), error = TRUE)
 
   temp_dir <- withr::local_tempdir()
-  expect_snapshot(connect_hub(temp_dir), error = TRUE)
+  expect_error(
+    connect_hub(temp_dir),
+    regexp = ".*hub-config.* directory not found in root of Hub."
+  )
 
   dir.create(fs::path(temp_dir, "hub-config"))
   expect_error(
@@ -526,55 +534,47 @@ test_that("connect_hub & connect_model_output fail correctly", {
   )
   expect_error(
     connect_hub(temp_dir),
-    regexp = "Directory .*model-output.* does not exist at path"
+    regexp = "Directory .*model-output.* does not exist in hub at path"
   )
   # skip_checks directive should not impact this error
   expect_error(
     connect_hub(temp_dir, skip_checks = TRUE),
-    regexp = "Directory .*model-output.* does not exist at path"
+    regexp = "Directory .*model-output.* does not exist in hub at path"
   )
 })
 
 
-test_that("connect_hub fails when skip_checks is true and hub has multiple file types", {
+test_that("connect_hub works when skip_checks is true and hub has multiple file types", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   hub_con <- connect_hub(hub_path)
 
-  expect_snapshot(connect_hub(hub_path, skip_checks = TRUE), error = TRUE)
-
-  expect_error(
-    connect_hub(connect_hub(hub_path, skip_checks = TRUE)),
-    regexp = "^Skip_checks cannot be TRUE"
+  # Tests that paths are assigned to attributes correctly
+  expect_equal(
+    attr(hub_con, "file_format"),
+    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
+      c("n_open", "n_in_dir"), c("csv", "parquet")
+    ))
   )
-  # should also fail when attempting to connect with a specific file format
-  expect_error(
-    connect_hub(connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)),
-    regexp = "^Skip_checks cannot be TRUE"
+  expect_equal(
+    attr(hub_con, "file_system"),
+    "LocalFileSystem"
   )
-})
-
-
-test_that("connect_model_output fails when skip_checks is true and hub has multiple file types", {
-  mod_out_path <- system.file("testhubs/simple/model-output", package = "hubUtils")
-  mod_out_con <- connect_model_output(mod_out_path)
-
-  expect_snapshot(connect_model_output(mod_out_path, skip_checks = TRUE), error = TRUE)
-
-  expect_error(
-    connect_model_output(connect_model_output(mod_out_path, skip_checks = TRUE)),
-    regexp = "^Skip_checks cannot be TRUE"
+  expect_equal(
+    class(hub_con),
+    c(
+      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "R6"
+    )
   )
-  # should also fail when attempting to connect with a specific file format
-  expect_error(
-    connect_model_output(connect_model_output(
-      mod_out_path,
-      file_format = "parquet",
-      skip_checks = TRUE
-    )),
-    regexp = "^Skip_checks cannot be TRUE"
+
+  expect_equal(
+    purrr::map_int(
+      hub_con$children,
+      ~ length(.x$files)
+    ),
+    c(3L, 1L)
   )
 })
-
 
 test_that("connect_hub detects unopenned files correctly", {
   hub_path <- testthat::test_path("testdata/error_file")
@@ -603,4 +603,70 @@ test_that("output_type_id_datatype arg works in connect_hub on local hub", {
 test_that("connect_hub doesn't validate files when skip_checks is TRUE", {
   hub_path <- testthat::test_path("testdata/error_file")
   expect_snapshot(connect_hub(hub_path, skip_checks = TRUE))
+})
+
+test_that("connect_hub works when ignoring files", {
+  hub_path <- testthat::test_path("testdata/error_file")
+  expect_warning(
+    connect_hub(hub_path,
+      skip_checks = FALSE
+    ),
+    regexp = "The following potentially invalid model output file not opened .*2022-11-28-baseline.csv.*"
+  )
+  expect_equal(
+    suppressWarnings(connect_hub(hub_path, skip_checks = FALSE)) |> attr("file_format"),
+    structure(8:9, dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+  )
+
+  error_con <- connect_hub(hub_path, skip_checks = TRUE)
+  expect_error(
+    collect_hub(error_con),
+    regexp = "CSV conversion error to double: invalid value .*large_decrease.*"
+  )
+  expect_equal(
+    attr(error_con, "file_format"),
+    structure(c(9L, 9L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+  )
+
+  con <- connect_hub(hub_path,
+    ignore_files = "2022-11-28-baseline.csv",
+    skip_checks = TRUE
+  )
+  expect_s3_class(con, "hub_connection")
+  expect_equal(
+    attr(con, "file_format"),
+    structure(8:9, dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+  )
+  expect_s3_class(collect_hub(con), "model_out_tbl")
+
+
+  # connect_hub now ignores README files by default
+  temp_hub <- withr::local_tempdir()
+  fs::dir_copy(
+    system.file("testhubs/simple", package = "hubUtils"),
+    temp_hub
+  )
+  temp_hub_path <- fs::path(temp_hub, "simple")
+  fs::file_create(
+    fs::path(temp_hub_path, "model-output", "team1-goodmodel", "README.txt")
+  )
+  fs::file_create(fs::path(temp_hub_path, "model-output", "README"))
+
+  readme_con <- connect_hub(temp_hub_path, skip_checks = TRUE)
+  expect_s3_class(readme_con, "hub_connection")
+  expect_equal(
+    attr(readme_con, "file_format"),
+    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
+      c("n_open", "n_in_dir"), c("csv", "parquet")
+    ))
+  )
+  expect_s3_class(collect_hub(readme_con), "model_out_tbl")
+
+  # When collecting we get the same result with the original test hub we copied
+  # and added READMEs to.
+  expect_equal(
+    connect_hub(system.file("testhubs/simple", package = "hubUtils")) |>
+      collect_hub(),
+    collect_hub(readme_con)
+  )
 })

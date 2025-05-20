@@ -39,9 +39,16 @@
 #' indicate missing values in your files and set `na = ""`.
 #' @param ignore_files A character vector of file **names** (not paths) or
 #'  file **prefixes** to ignore when discovering model output files to
-#'  include in hub connection. Parent directory names should not be included.
+#'  include in hub/model output directory connections.
+#'  Parent directory names should not be included.
+#'  Common non-data files such as `"README"` and `".DS_Store"` are ignored automatically,
+#'  but additional files can be excluded by specifying them here.
 #' @inheritParams create_hub_schema
-#'
+#' @details
+#' By default, common non-data files that may be present in model output directories
+#' (e.g. `"README"`, `".DS_Store"`) are excluded automatically to prevent errors
+#' when connecting via Arrow. Additional files can be excluded using the `ignore_files`
+#' parameter.
 #' @return
 #' - `connect_hub` returns an S3 object of class `<hub_connection>`.
 #' - `connect_mod_out` returns an S3 object of class `<mod_out_connection>`.
@@ -94,7 +101,7 @@ connect_hub <- function(hub_path,
                         ),
                         partitions = list(model_id = arrow::utf8()),
                         skip_checks = FALSE, na = c("NA", ""),
-                        ignore_files = c("README", ".DS_Store")) {
+                        ignore_files = NULL) {
   UseMethod("connect_hub")
 }
 
@@ -109,9 +116,15 @@ connect_hub.default <- function(hub_path,
                                 ),
                                 partitions = list(model_id = arrow::utf8()),
                                 skip_checks = FALSE, na = c("NA", ""),
-                                ignore_files = c("README", ".DS_Store")) {
+                                ignore_files = NULL) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+
+  # Ignore common non-data files that may be present in model output directories:
+  # - "README" is typically a text/markdown file.
+  # - ".DS_Store" is a macOS system file.
+  # These are not valid Arrow data files and can cause read errors if not excluded.
+  ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
 
   if (!dir.exists(hub_path)) {
     cli::cli_abort(c("x" = "Directory {.path {hub_path}} does not exist."))
@@ -133,7 +146,10 @@ connect_hub.default <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  file_format <- check_file_format(model_output_dir, file_format, skip_checks)
+  # Only include files. Ignoring directories prevents unintentionally excluding
+  # all files within them
+  model_out_files <- list_model_out_files(model_output_dir, type = "file")
+  file_format <- check_file_format(model_out_files, file_format, skip_checks)
 
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
@@ -148,6 +164,7 @@ connect_hub.default <- function(hub_path,
   } else {
     dataset <- open_hub_datasets(
       model_output_dir = model_output_dir,
+      model_out_files = model_out_files,
       file_format = file_format,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
@@ -167,10 +184,10 @@ connect_hub.default <- function(hub_path,
     file_system <- class(dataset$filesystem)[1]
     if (file_system == "NULL") file_system <- "local"
   }
-  file_format <- get_file_format_meta(dataset, model_output_dir, file_format)
+  file_format <- get_file_format_meta(dataset, model_out_files, file_format)
   # warn of any discrepancies between expected files in dir and successfully opened
   # files in dataset
-  warn_unopened_files(file_format, dataset, model_output_dir, ignore_files)
+  warn_unopened_files(file_format, dataset, model_out_files, ignore_files)
 
   structure(dataset,
     class = c("hub_connection", class(dataset)),
@@ -199,11 +216,19 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
                                           ),
                                           partitions = list(model_id = arrow::utf8()),
                                           skip_checks = FALSE, na = c("NA", ""),
-                                          ignore_files = c("README", ".DS_Store")) {
+                                          ignore_files = NULL) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
-  if (!"hub-config" %in% hub_path$ls()) {
+  # Ignore common non-data files that may be present in model output directories:
+  # - "README" is typically a text/markdown file.
+  # - ".DS_Store" is a macOS system file.
+  # These are not valid Arrow data files and can cause read errors if not excluded.
+  ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
+
+  hub_files <- list_hub_files(hub_path)
+
+  if (!"hub-config" %in% hub_files) {
     cli::cli_abort("{.path hub-config} not a directory in bucket
                        {.path {hub_path$base_path}}")
   }
@@ -211,7 +236,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   config_admin <- hubUtils::read_config(hub_path, "admin")
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
 
-  model_output_dir <- model_output_dir_path(hub_path, config_admin)
+  model_output_dir <- model_output_dir_path(hub_path, config_admin, hub_files)
 
   if (missing(file_format)) {
     file_format <- rlang::missing_arg()
@@ -221,7 +246,10 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   }
   hub_name <- config_admin$name
 
-  file_format <- check_file_format(model_output_dir, file_format, skip_checks)
+  # Only include files. Ignoring directories prevents unintentionally excluding
+  # all files within them
+  model_out_files <- list_model_out_files(model_output_dir, hub_files,  type = "file")
+  file_format <- check_file_format(model_out_files, file_format, skip_checks)
 
   # Based on skip_checks param, set a flag that determines whether or not to
   # check for invalid files when opening model output data.
@@ -236,6 +264,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   } else {
     dataset <- open_hub_datasets(
       model_output_dir = model_output_dir,
+      model_out_files = model_out_files,
       file_format = file_format,
       config_tasks = config_tasks,
       output_type_id_datatype = output_type_id_datatype,
@@ -256,10 +285,10 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
     file_system <- class(dataset$filesystem$base_fs)[1]
     if (file_system == "NULL") file_system <- hub_path$url_scheme
   }
-  file_format <- get_file_format_meta(dataset, model_output_dir, file_format)
+  file_format <- get_file_format_meta(dataset, model_out_files, file_format)
   # warn of any discrepancies between expected files in dir and successfully opened
   # files in dataset
-  warn_unopened_files(file_format, dataset, model_output_dir, ignore_files)
+  warn_unopened_files(file_format, dataset, model_out_files, ignore_files)
 
   structure(dataset,
     class = c("hub_connection", class(dataset)),
@@ -274,7 +303,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   )
 }
 
-open_hub_dataset <- function(model_output_dir,
+open_hub_dataset <- function(model_output_dir, model_out_files,
                              file_format = c("csv", "parquet", "arrow"),
                              config_tasks,
                              output_type_id_datatype = c(
@@ -290,6 +319,15 @@ open_hub_dataset <- function(model_output_dir,
   schema <- create_hub_schema(config_tasks,
     partitions = partitions,
     output_type_id_datatype = output_type_id_datatype
+  )
+
+  # Ignoring files that do not have the right file_format extension makes
+  # opening datasets faster, even when skip_checks = FALSE.
+  ignore_files <- c(
+    ignore_files,
+    list_invalid_format_files(
+      model_out_files, file_format
+    )
   )
 
   switch(file_format,
@@ -331,7 +369,7 @@ open_hub_dataset <- function(model_output_dir,
   )
 }
 
-open_hub_datasets <- function(model_output_dir,
+open_hub_datasets <- function(model_output_dir, model_out_files,
                               file_format = c("csv", "parquet", "arrow"),
                               config_tasks,
                               output_type_id_datatype = c(
@@ -348,6 +386,7 @@ open_hub_datasets <- function(model_output_dir,
   if (length(file_format) == 1L) {
     open_hub_dataset(
       model_output_dir = model_output_dir,
+      model_out_files = model_out_files,
       file_format = file_format,
       config_tasks = config_tasks,
       output_type_id_datatype,
@@ -361,6 +400,7 @@ open_hub_datasets <- function(model_output_dir,
       file_format,
       ~ open_hub_dataset(
         model_output_dir = model_output_dir,
+        model_out_files = model_out_files,
         file_format = .x,
         config_tasks = config_tasks,
         output_type_id_datatype = output_type_id_datatype,

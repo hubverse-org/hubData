@@ -13,7 +13,7 @@ connect_hub(
   partitions = list(model_id = arrow::utf8()),
   skip_checks = FALSE,
   na = c("NA", ""),
-  ignore_files = c("README", ".DS_Store")
+  ignore_files = NULL
 )
 
 connect_model_output(
@@ -22,7 +22,8 @@ connect_model_output(
   partition_names = "model_id",
   schema = NULL,
   skip_checks = FALSE,
-  na = c("NA", "")
+  na = c("NA", ""),
+  ignore_files = NULL
 )
 }
 \arguments{
@@ -79,7 +80,10 @@ indicate missing values in your files and set \code{na = ""}.}
 
 \item{ignore_files}{A character vector of file \strong{names} (not paths) or
 file \strong{prefixes} to ignore when discovering model output files to
-include in hub connection. Parent directory names should not be included.}
+include in hub/model output directory connections.
+Parent directory names should not be included.
+Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
+but additional files can be excluded by specifying them here.}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
@@ -111,6 +115,12 @@ The connection can be used to extract data using \code{dplyr} custom queries. Th
 \description{
 Connect to data in a model output directory through a Modeling Hub or directly.
 Data can be stored in a local directory or in the cloud on AWS or GCS.
+}
+\details{
+By default, common non-data files that may be present in model output directories
+(e.g. \code{"README"}, \code{".DS_Store"}) are excluded automatically to prevent errors
+when connecting via Arrow. Additional files can be excluded using the \code{ignore_files}
+parameter.
 }
 \section{Functions}{
 \itemize{
