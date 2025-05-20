@@ -358,7 +358,7 @@ warn_unopened_files <- function(x, dataset, model_out_files,
 #' @keywords internal
 #' @noRd
 list_model_out_files <- function(model_output_dir, hub_files = NULL, file_format = NULL,
-                           type = "any") {
+                                 type = "any") {
   checkmate::assert_string(file_format, null.ok = TRUE)
   UseMethod("list_model_out_files")
 }
@@ -367,7 +367,7 @@ list_model_out_files <- function(model_output_dir, hub_files = NULL, file_format
 #' @export
 # hub_files not required but passed for consistency with SubTreeFileSystem method
 list_model_out_files.default <- function(model_output_dir, hub_files = NULL, file_format = NULL,
-                                   type = c("any", "file", "directory")) {
+                                         type = c("any", "file", "directory")) {
   type <- rlang::arg_match(type)
 
   if (is.null(file_format)) {
@@ -383,11 +383,13 @@ list_model_out_files.default <- function(model_output_dir, hub_files = NULL, fil
 
 #' @export
 list_model_out_files.SubTreeFileSystem <- function(model_output_dir, hub_files, file_format = NULL,
-                                             type = c("any", "file", "directory")) {
+                                                   type = c("any", "file", "directory")) {
   type <- rlang::arg_match(type)
 
-  model_out_files <- hub_files[startsWith(hub_files,
-                                model_output_dir$base_path)]
+  model_out_files <- hub_files[startsWith(
+    hub_files,
+    model_output_dir$base_path
+  )]
 
   is_dir <- fs::path_ext(model_out_files) == ""
   out_files <- switch(type,
@@ -491,4 +493,3 @@ list_invalid_format_files <- function(model_out_files,
   files <- fs::path_file(model_out_files)
   files[fs::path_ext(files) != file_format]
 }
-
