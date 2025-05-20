@@ -80,7 +80,7 @@ indicate missing values in your files and set \code{na = ""}.}
 
 \item{ignore_files}{A character vector of file \strong{names} (not paths) or
 file \strong{prefixes} to ignore when discovering model output files to
-include in hub/model output directory connections.
+include in dataset connections.
 Parent directory names should not be included.
 Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
 but additional files can be excluded by specifying them here.}

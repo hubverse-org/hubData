@@ -39,7 +39,7 @@
 #' indicate missing values in your files and set `na = ""`.
 #' @param ignore_files A character vector of file **names** (not paths) or
 #'  file **prefixes** to ignore when discovering model output files to
-#'  include in hub/model output directory connections.
+#'  include in dataset connections.
 #'  Parent directory names should not be included.
 #'  Common non-data files such as `"README"` and `".DS_Store"` are ignored automatically,
 #'  but additional files can be excluded by specifying them here.
