@@ -187,8 +187,9 @@ get_target_path.SubTreeFileSystem <- function(hub_path,
 #' 2. Inferred types for any remaining columns found in the dataset but not covered by the config
 #'
 #' This ensures consistent typing for required fields, while still capturing any
-#' extra columns  present in the data. Unlike [open_target_dataset()], this function **does not accept an override** schema, it always derives its output from the config
-#'  and actual data on disk.
+#' extra columns  present in the data. Unlike [open_target_dataset()], this
+#'  function **does not accept an override** schema, it always derives its output
+#'  from the config and actual data on disk.
 #' This function is used internally by [create_timeseries_schema()] and
 #' [create_oracle_output_schema()] to infer canonical dataset structure before validation.
 #'
