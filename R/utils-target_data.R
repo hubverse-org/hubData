@@ -177,3 +177,114 @@ get_target_path.SubTreeFileSystem <- function(hub_path,
   ts_files <- td_files[fs::path_ext_remove(td_files) == target_type]
   fs::path(target_data_path$base_path, ts_files)
 }
+
+#' Retrieve the full schema for a target dataset
+#'
+#' Opens a target dataset at the specified path and returns its full Arrow schema.
+#' The schema is constructed using both:
+#'
+#' 1. Column  definitions explicitly specified in the hub's configuration.
+#' 2. Inferred types for any remaining columns found in the dataset but not covered by the config
+#'
+#' This ensures consistent typing for required fields, while still capturing any
+#' extra columns  present in the data. Unlike [open_target_dataset()], this function **does not accept an override** schema, it always derives its output from the config
+#'  and actual data on disk.
+#' This function is used internally by [create_timeseries_schema()] and
+#' [create_oracle_output_schema()] to infer canonical dataset structure before validation.
+#'
+#' @param path Path to a target dataset or directory.
+#' @param ext File extension (`"csv"` or `"parquet"`).
+#' @param na Character vector of values to interpret as missing (applies to CSV only).
+#' @param ignore_files Character vector of file name prefixes to ignore when reading directories.
+#'
+#' @return An Arrow [schema][arrow::schema] object representing the dataset structure.
+#'
+#' @keywords internal
+#' @noRd
+get_target_schema <- function(path, ext, na, ignore_files) {
+  is_dir <- fs::path_ext(path) == ""
+  if (ext == "csv" && is_dir) {
+    file_schema <- arrow::open_dataset(path,
+      format = ext,
+      na = na, quoted_na = TRUE,
+      factory_options = list(
+        selector_ignore_prefixes = ignore_files
+      )
+    )
+  } else if (ext == "parquet" && is_dir) {
+    file_schema <- arrow::open_dataset(path,
+      format = ext,
+      factory_options = list(
+        selector_ignore_prefixes = ignore_files
+      )
+    )
+  } else if (ext == "csv") {
+    file_schema <- arrow::open_dataset(path,
+      format = ext,
+      na = na, quoted_na = TRUE
+    )
+  } else {
+    file_schema <- arrow::open_dataset(path, format = ext)
+  }
+  file_schema$schema
+}
+
+#' Open a target dataset with format-specific options
+#'
+#' Opens a dataset using [arrow::open_dataset()] with arguments adapted based on
+#' file format (`csv` or `parquet`) and whether the path is a directory or a single file.
+#' For directories, `factory_options` are used to exclude ignored files via the
+#' `selector_ignore_prefixes` option. CSVs are opened with common parsing options
+#' such as skipping the header row and handling quoted `NA` values.
+#' The schema passed here typically originates from the hub configuration and reflects the
+#' expected column structure for target datasets. This function supports both file-based and
+#' directory-based datasets in either `"csv"` or `"parquet"` format.
+#' This function is used internally by the `connect_target_*()` family of functions to establish
+#' structured access to validated target data using Arrow.
+#'
+#' @param path Path to a dataset or directory containing model output files.
+#'   Can be a single file or a directory of files in a supported Arrow format.
+#' @param ext File extension (`"csv"` or `"parquet"`).
+#' @param schema An Arrow [schema][arrow::schema] describing the expected structure
+#'   of the dataset.
+#' @param na Character vector of values to treat as missing (`NA`) when reading CSVs.
+#'   Ignored for non-CSV formats.
+#' @param ignore_files Character vector of file name prefixes to ignore when reading
+#'   directories (only applied if `path` is a directory).
+#'
+#' @return An Arrow [Dataset][arrow::Dataset] object.
+#'
+#' @keywords internal
+#' @noRd
+open_target_dataset <- function(path, ext, schema, na, ignore_files) {
+  is_dir <- fs::path_ext(path) == ""
+  if (ext == "csv" && is_dir) {
+    arrow::open_dataset(path,
+      format = ext,
+      schema = schema,
+      skip = 1L, quoted_na = TRUE, na = na,
+      factory_options = list(
+        selector_ignore_prefixes = ignore_files
+      )
+    )
+  } else if (ext == "parquet" && is_dir) {
+    arrow::open_dataset(path,
+      format = ext,
+      schema = schema,
+      factory_options = list(
+        selector_ignore_prefixes = ignore_files
+      )
+    )
+  } else if (ext == "csv") {
+    arrow::open_dataset(path,
+      format = ext,
+      schema = schema,
+      skip = 1L, quoted_na = TRUE, na = na
+    )
+  } else {
+    arrow::open_dataset(path,
+      format = ext,
+      schema = schema
+    )
+  }
+}

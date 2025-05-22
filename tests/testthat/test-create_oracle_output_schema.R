@@ -24,6 +24,12 @@ test_that("create_oracle_output_schema works", {
     create_oracle_output_schema(tmp_hub_path)$ToString(),
     "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]" # nolint: line_length_linter
   )
+
+  # Check that ignoring a partition folder returns the same schema
+  expect_equal(
+    create_oracle_output_schema(tmp_hub_path, ignore_files = "target_end_date=2023-06-17")$ToString(),
+    "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]" # nolint: line_length_linter
+  )
 })
 
 test_that(

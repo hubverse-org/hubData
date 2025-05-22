@@ -38,11 +38,15 @@
 #' s3_con
 #' s3_con |> dplyr::collect()
 connect_target_timeseries <- function(hub_path = ".", date_col = NULL,
-                                      na = c("NA", "")) {
+                                      na = c("NA", ""),
+                                      ignore_files = NULL) {
+  ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   ts_path <- validate_target_data_path(hub_path, "time-series")
   ts_ext <- get_target_file_ext(hub_path, ts_path)
   ts_schema <- create_timeseries_schema(hub_path, date_col,
-                                        na = na)
+    na = na,
+    ignore_files = ignore_files
+  )
   if (inherits(hub_path, "SubTreeFileSystem")) {
     # We create URI paths for cloud storage to ensure we can open single file
     # data correctly.
@@ -52,16 +56,12 @@ connect_target_timeseries <- function(hub_path = ".", date_col = NULL,
   } else {
     out_path <- as.character(fs::path_rel(ts_path, hub_path))
   }
-  ts_data <- if (ts_ext == "csv") {
-    arrow::open_dataset(ts_path,
-      format = "csv", schema = ts_schema,
-      skip = 1L, quoted_na = TRUE, na = na
-    )
-  } else {
-    arrow::open_dataset(ts_path,
-      format = "parquet", schema = ts_schema
-    )
-  }
+  ts_data <- open_target_dataset(
+    ts_path,
+    ext = ts_ext, schema = ts_schema,
+    na = na, ignore_files = ignore_files
+  )
+
   structure(ts_data,
     class = c("target_timeseries", class(ts_data)),
     ts_path = out_path,
