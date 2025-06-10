@@ -182,7 +182,7 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
     class = c("mod_out_connection", class(dataset)),
     file_format = file_format,
     checks = exclude_invalid_files,
-    file_system = class(dataset$filesystem$base_fs)[1],
+    file_system = class(dataset$filesystem)[1],
     model_output_dir = model_output_dir$base_path
   )
 }
