@@ -49,15 +49,14 @@ connect_model_output.default <- function(model_output_dir,
   } else {
     exclude_invalid_files <- TRUE
   }
-
-  if (!exclude_invalid_files) {
-    ignore_files <- c(
-      ignore_files,
-      list_invalid_format_files(
-        model_out_files, file_format
-      )
+  # Ignoring files that do not have the right file_format extension makes
+  # opening datasets faster, even when skip_checks = FALSE.
+  ignore_files <- c(
+    ignore_files,
+    list_invalid_format_files(
+      model_out_files, file_format
     )
-  }
+  )
 
   if (file_format == "csv") {
     dataset <- arrow::open_dataset(
@@ -136,14 +135,14 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
   } else {
     exclude_invalid_files <- TRUE
   }
-  if (!exclude_invalid_files) {
-    ignore_files <- c(
-      ignore_files,
-      list_invalid_format_files(
-        model_out_files, file_format
-      )
+  # Ignoring files that do not have the right file_format extension makes
+  # opening datasets faster, even when skip_checks = FALSE.
+  ignore_files <- c(
+    ignore_files,
+    list_invalid_format_files(
+      model_out_files, file_format
     )
-  }
+  )
 
   if (file_format == "csv") {
     dataset <- arrow::open_dataset(
