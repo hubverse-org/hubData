@@ -120,7 +120,8 @@ get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) 
   if (is_dir) {
     ts_dir_paths <- hub_path$path(target_path)$ls(
       recursive = TRUE,
-      allow_not_found = TRUE)
+      allow_not_found = TRUE
+    )
 
     return(setdiff(unique(fs::path_ext(ts_dir_paths)), ""))
   }
