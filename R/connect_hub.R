@@ -29,11 +29,10 @@
 #' @param skip_checks Logical. If `FALSE` (default), check `file_format` parameter
 #' against the hub's model output files. Also excludes invalid model output files
 #'  when opening hub datasets.
-#' Setting to `TRUE` will improve performance but will result in an error if
-#' the model output directory includes invalid files. **Cannot be `TRUE`** when
-#' there are **multiple file formats** in the hub's model output directory or when
-#' the hub's model output directory contains **files that are not model output
-#' data** (for example, a README).
+#' Setting to `TRUE` will improve performance, most noticeable on large cloud hubs,
+#' but will result in an error if the model output directory includes invalid files.
+#' If invalid (non-model output date files) are contained in the model output
+#' directory, use `ignore_files` argument to ignore them.
 #' @param na A character vector of strings to interpret as missing values. Only
 #' applies to CSV files. The default is `c("NA", "")`. Useful when actual character
 #' string `"NA"` values are used in the data. In such a case, use empty cells to

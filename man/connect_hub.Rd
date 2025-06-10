@@ -68,11 +68,10 @@ partitioning column.}
 \item{skip_checks}{Logical. If \code{FALSE} (default), check \code{file_format} parameter
 against the hub's model output files. Also excludes invalid model output files
 when opening hub datasets.
-Setting to \code{TRUE} will improve performance but will result in an error if
-the model output directory includes invalid files. \strong{Cannot be \code{TRUE}} when
-there are \strong{multiple file formats} in the hub's model output directory or when
-the hub's model output directory contains \strong{files that are not model output
-data} (for example, a README).}
+Setting to \code{TRUE} will improve performance, most noticeable on large cloud hubs,
+but will result in an error if the model output directory includes invalid files.
+If invalid (non-model output date files) are contained in the model output
+directory, use \code{ignore_files} argument to ignore them.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
