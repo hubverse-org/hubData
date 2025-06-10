@@ -24,7 +24,8 @@
 #' `file_format` is inferred from the hub's `file_format` configuration in
 #' `admin.json` and is ignored by default.
 #' If supplied, it will override hub configuration setting. Multiple formats can
-#' be supplied to `connect_hub` but only a single file format can be supplied to `connect_mod_out`.
+#' be supplied to `connect_hub` but only a single file format can be supplied to
+#' `connect_model_output`.
 #' @param skip_checks Logical. If `FALSE` (default), check `file_format` parameter
 #' against the hub's model output files. Also excludes invalid model output files
 #'  when opening hub datasets.
@@ -51,7 +52,7 @@
 #' parameter.
 #' @return
 #' - `connect_hub` returns an S3 object of class `<hub_connection>`.
-#' - `connect_mod_out` returns an S3 object of class `<mod_out_connection>`.
+#' - `connect_model_output` returns an S3 object of class `<mod_out_connection>`.
 #'
 #' Both objects are connected to the data in the model-output directory via an
 #' Apache arrow `FileSystemDataset` connection.

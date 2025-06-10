@@ -42,7 +42,8 @@ For connection to a fully configured hub, accessed through \code{hub_path},
 \code{file_format} is inferred from the hub's \code{file_format} configuration in
 \code{admin.json} and is ignored by default.
 If supplied, it will override hub configuration setting. Multiple formats can
-be supplied to \code{connect_hub} but only a single file format can be supplied to \code{connect_mod_out}.}
+be supplied to \code{connect_hub} but only a single file format can be supplied to
+\code{connect_model_output}.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
 \code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
@@ -104,7 +105,7 @@ If NULL (the default), the schema will be inferred from the data sources.}
 \value{
 \itemize{
 \item \code{connect_hub} returns an S3 object of class \verb{<hub_connection>}.
-\item \code{connect_mod_out} returns an S3 object of class \verb{<mod_out_connection>}.
+\item \code{connect_model_output} returns an S3 object of class \verb{<mod_out_connection>}.
 }
 
 Both objects are connected to the data in the model-output directory via an
