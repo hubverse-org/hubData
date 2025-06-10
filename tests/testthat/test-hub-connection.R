@@ -567,6 +567,7 @@ test_that("connect_hub works when skip_checks is true and hub has multiple file 
     )
   )
 
+  # expect three CSV files and one parquet file
   expect_equal(
     purrr::map_int(
       hub_con$children,
