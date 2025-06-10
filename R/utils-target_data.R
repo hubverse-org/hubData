@@ -118,8 +118,11 @@ get_target_file_ext.default <- function(hub_path = NULL, target_path) {
 get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) {
   is_dir <- is_cloud_dir(hub_path, target_path)
   if (is_dir) {
-    ts_dir_paths <- hub_path$path(target_path)$ls(allow_not_found = TRUE)
-    return(unique(fs::path_ext(ts_dir_paths)))
+    ts_dir_paths <- hub_path$path(target_path)$ls(
+      recursive = TRUE,
+      allow_not_found = TRUE)
+
+    return(setdiff(unique(fs::path_ext(ts_dir_paths)), ""))
   }
   fs::path_ext(target_path)
 }
