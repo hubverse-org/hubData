@@ -8,6 +8,9 @@
 * Added `get_target_file_ext()` function for retrieving the file extensions of target data file(s) in a hub.
 * Added `get_s3_bucket_name()` for extracting the bucket name of a cloud enabled hub from a hub's config (#75).
 * Added `na` argument to `connect_hub()`, `connect_model_output()`, `connect_target_timeseries()`, `connect_target_oracle_output()`, `create_timeseries_schema()`, and `create_oracle_output_schema()` to allow for the specification of how to handle missing values in CSV files. The default is to use `NA` or `""`, but users can restrict this to `""` (empty string) when needing to include character `"NA"` values in their CSV data (#80). Note this approach only works if `NA` values are written to the CSV file as `""` (empty string) and not as `NA` or `"NA"`.
+* Added `ignore_files` argument to `connect_hub()` and `connect_model_output()` to allow users to specify a vector of file name prefixes to ignore when scanning the hub's model output directory for files. This is useful for excluding files that are not relevant to the hub's model output, such as README files or other documentation as well as potentially invalid files (#87). The feature is also used internally in `connect_hub()` to enable skipping expensive file validity checks when connecting to cloud-based hubs with multiple file formats using `skip_checks = TRUE`.
+* Refactored `connect_hub()` and `connect_model_output()` internally to reduce the number of calls to cloud hubs, improving performance when connecting to cloud-based hubs.
+* Added `ignore_files` argument to `connect_target_oracle_output()`, `connect_target_timeseries()`, `create_timeseries_schema()`, and `create_oracle_output_schema()` to allow users to specify a vector of file name prefixes to ignore when scanning the hub's target data directory for files (#87).
 
 # hubData 1.3.0
 
