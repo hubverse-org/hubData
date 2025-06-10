@@ -516,12 +516,27 @@ test_that("connect_target_oracle_output with HIVE-PARTTIONED data works on local
     )
   )
 
-  # Check that files are successfully ignored when specified
+  # IGNORING INDIVIDUAL FILES IN HIVE_PARTITIONED DATA DOES NOT WORK ============
+  # - For more details
+  # see https://github.com/hubverse-org/hubData/issues/87#issuecomment-2901055075 -
+  # Because standard hive-partitioned datasets do not result in unique file names
+  # the only option is to try and use the directory name as the prefix pattern to
+  # ignore. However this doesn't work when the directory name is also the prefix
+  # to other directories, e.g. "target=wk%20flu%20hosp%20rate" is also a prefix
+  # to "target=wk%20flu%20hosp%20rate%20category".
   oo_con <- connect_target_oracle_output(
     oo_dir_hub_path,
     ignore_files = "target=wk%20flu%20hosp%20rate"
   )
-  expect_length(oo_con$files, 2L)
+  expect_length(oo_con$files, 1L)
+
+  # Including multiple path segments in the ignore_files argument does not work
+  # at all. No file matched.
+  oo_con <- connect_target_oracle_output(
+    oo_dir_hub_path,
+    ignore_files = "target=wk%20flu%20hosp%20rate/part-0.parquet"
+  )
+  expect_length(oo_con$files, 3L)
 })
 
 
