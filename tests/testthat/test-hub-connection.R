@@ -275,6 +275,69 @@ test_that("connect_model_output works on local model_output_dir", {
   expect_equal(length(mod_out_con$files), 3L)
 })
 
+test_that("connect_model_output works on s3 model_output_dir", {
+  # Simple forecasting Hub example ----
+  mod_out_dir_cloud <- hubData::s3_bucket(
+    "hubverse/hubutils/testhubs/simple/model-output/"
+  )
+  mod_out_con_cloud <- hubData::connect_model_output(
+    mod_out_dir_cloud,
+    file_format = "csv"
+  )
+
+  # Tests that paths are assigned to attributes correctly
+  expect_equal(
+    attr(mod_out_con_cloud, "file_format"),
+    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+  )
+  expect_true(attr(mod_out_con_cloud, "checks"))
+
+  expect_equal(
+    attr(mod_out_con_cloud, "file_system"),
+    "S3FileSystem"
+  )
+  expect_equal(
+    class(mod_out_con_cloud),
+    c(
+      "mod_out_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "R6"
+    )
+  )
+  expect_equal(length(mod_out_con_cloud$files), 3L)
+  expect_equal(
+    mod_out_con_cloud$schema$ToString(),
+    "origin_date: date32[day]\ntarget: string\nhorizon: int64\nlocation: string\noutput_type: string\noutput_type_id: double\nvalue: int64\nmodel_id: string" # nolint: line_length_linter
+  )
+
+  mod_out_con_cloud_skip <- hubData::connect_model_output(
+    mod_out_dir_cloud,
+    file_format = "csv",
+    skip_checks = TRUE
+  )
+  expect_equal(
+    attr(mod_out_con_cloud_skip, "file_format"),
+    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+  )
+  expect_false(attr(mod_out_con_cloud_skip, "checks"))
+
+  expect_equal(
+    attr(mod_out_con_cloud_skip, "file_system"),
+    "S3FileSystem"
+  )
+  expect_equal(
+    class(mod_out_con_cloud_skip),
+    c(
+      "mod_out_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "R6"
+    )
+  )
+  expect_equal(length(mod_out_con_cloud_skip$files), 3L)
+  expect_equal(
+    mod_out_con_cloud_skip$schema$ToString(),
+    mod_out_con_cloud$schema$ToString()
+  )
+})
+
 test_that("connect_model_output fails on empty model_output_dir", {
   # Simple forecasting Hub example ----
 

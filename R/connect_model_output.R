@@ -120,7 +120,11 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
 
   # Only include files. Ignoring directories prevents unintentionally excluding
   # all files within them
-  model_out_files <- list_model_out_files(model_output_dir, hub_files,  type = "file")
+  model_out_files <- list_model_out_files(
+    model_output_dir,
+    fs::path(model_output_dir$base_path, hub_files),
+    type = "file"
+  )
   file_format <- rlang::arg_match(file_format)
   # Only keep file formats of which files actually exist in model_output_dir.
   file_format <- check_file_format(model_out_files, file_format, skip_checks, error = TRUE)
