@@ -173,10 +173,10 @@ connect_model_output.SubTreeFileSystem <- function(model_output_dir,
     )
   }
 
-  file_format <- get_file_format_meta(dataset, model_output_dir, file_format)
+  file_format <- get_file_format_meta(dataset, model_out_files, file_format)
   # warn of any discrepancies between expected files in dir and successfully opened
   # files in dataset
-  warn_unopened_files(file_format, dataset, model_output_dir)
+  warn_unopened_files(file_format, dataset, model_out_files)
 
   structure(dataset,
     class = c("mod_out_connection", class(dataset)),
