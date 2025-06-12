@@ -78,11 +78,11 @@ files within the <code>hub-config</code> directory.</p></dd>
 <span class="r-in"><span><span class="va">example_hub</span> <span class="op">&lt;-</span> <span class="st">"https://github.com/hubverse-org/example-complex-forecast-hub.git"</span></span></span>
 <span class="r-in"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">example_hub</span>, path <span class="op">=</span> <span class="va">hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmpLd7lLV/file1e0453c1c714/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpq1iu4c/file1df718872f17/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"time-series"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmpLd7lLV/file1e0453c1c714/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpq1iu4c/file1df718872f17/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"oracle-output"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmpLd7lLV/file1e0453c1c714/target-data/oracle-output.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpq1iu4c/file1df718872f17/target-data/oracle-output.csv</span>
 <span class="r-in"><span><span class="co"># Access cloud data</span></span></span>
 <span class="r-in"><span><span class="va">s3_bucket_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_s3_bucket_name.html">get_s3_bucket_name</a></span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="va">s3_bucket_name</span><span class="op">)</span></span></span>
@@ -101,7 +101,7 @@ files within the <code>hub-config</code> directory.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>

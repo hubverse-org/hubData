@@ -52,7 +52,8 @@ Data can be stored in a local directory or in the cloud on AWS or GCS.</p>
 <span>    <span class="st">"logical"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
 <span>  partitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model_id <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">utf8</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span></span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">connect_model_output</span><span class="op">(</span></span>
@@ -61,7 +62,8 @@ Data can be stored in a local directory or in the cloud on AWS or GCS.</p>
 <span>  partition_names <span class="op">=</span> <span class="st">"model_id"</span>,</span>
 <span>  schema <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span></span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,7 +89,8 @@ For connection to a fully configured hub, accessed through <code>hub_path</code>
 <code>file_format</code> is inferred from the hub's <code>file_format</code> configuration in
 <code>admin.json</code> and is ignored by default.
 If supplied, it will override hub configuration setting. Multiple formats can
-be supplied to <code>connect_hub</code> but only a single file format can be supplied to <code>connect_mod_out</code>.</p></dd>
+be supplied to <code>connect_hub</code> but only a single file format can be supplied to
+<code>connect_model_output</code>.</p></dd>
 
 
 <dt id="arg-output-type-id-datatype">output_type_id_datatype<a class="anchor" aria-label="anchor" href="#arg-output-type-id-datatype"></a></dt>
@@ -118,11 +121,10 @@ partitioning column.</p></dd>
 <dd><p>Logical. If <code>FALSE</code> (default), check <code>file_format</code> parameter
 against the hub's model output files. Also excludes invalid model output files
 when opening hub datasets.
-Setting to <code>TRUE</code> will improve performance but will result in an error if
-the model output directory includes invalid files. <strong>Cannot be <code>TRUE</code></strong> when
-there are <strong>multiple file formats</strong> in the hub's model output directory or when
-the hub's model output directory contains <strong>files that are not model output
-data</strong> (for example, a README).</p></dd>
+Setting to <code>TRUE</code> will improve performance, most noticeable on large cloud hubs,
+but will result in an error if the model output directory includes invalid files.
+If invalid (non-model output date files) are contained in the model output
+directory, use <code>ignore_files</code> argument to ignore them.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -130,6 +132,15 @@ data</strong> (for example, a README).</p></dd>
 applies to CSV files. The default is <code>c("NA", "")</code>. Useful when actual character
 string <code>"NA"</code> values are used in the data. In such a case, use empty cells to
 indicate missing values in your files and set <code>na = ""</code>.</p></dd>
+
+
+<dt id="arg-ignore-files">ignore_files<a class="anchor" aria-label="anchor" href="#arg-ignore-files"></a></dt>
+<dd><p>A character vector of file <strong>names</strong> (not paths) or
+file <strong>prefixes</strong> to ignore when discovering model output files to
+include in dataset connections.
+Parent directory names should not be included.
+Common non-data files such as <code>"README"</code> and <code>".DS_Store"</code> are ignored automatically,
+but additional files can be excluded by specifying them here.</p></dd>
 
 
 <dt id="arg-model-output-dir">model_output_dir<a class="anchor" aria-label="anchor" href="#arg-model-output-dir"></a></dt>
@@ -158,11 +169,18 @@ If NULL (the default), the schema will be inferred from the data sources.</p></d
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
 
 <ul><li><p><code>connect_hub</code> returns an S3 object of class <code>&lt;hub_connection&gt;</code>.</p></li>
-<li><p><code>connect_mod_out</code> returns an S3 object of class <code>&lt;mod_out_connection&gt;</code>.</p></li>
+<li><p><code>connect_model_output</code> returns an S3 object of class <code>&lt;mod_out_connection&gt;</code>.</p></li>
 </ul><p>Both objects are connected to the data in the model-output directory via an
 Apache arrow <code>FileSystemDataset</code> connection.
 The connection can be used to extract data using <code>dplyr</code> custom queries. The
 <code>&lt;hub_connection&gt;</code> class also contains modeling hub metadata.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>By default, common non-data files that may be present in model output directories
+(e.g. <code>"README"</code>, <code>".DS_Store"</code>) are excluded automatically to prevent errors
+when connecting via Arrow. Additional files can be excluded using the <code>ignore_files</code>
+parameter.</p>
     </div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
@@ -306,6 +324,33 @@ model output directory which is not part of a fully configured hub.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> hub-bas… 2022-10-08  wk in…       2 US       quantile             0.35    144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> hub-bas… 2022-10-08  wk in…       2 US       quantile             0.4     145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 59 more rows</span></span>
+<span class="r-in"><span><span class="co"># Ignore a file</span></span></span>
+<span class="r-in"><span><span class="fu">connect_hub</span><span class="op">(</span><span class="va">hub_path</span>, ignore_files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"README"</span>, <span class="st">"2022-10-08-team1-goodmodel.csv"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB; font-weight: bold;">&lt;hub_connection/UnionDataset&gt;</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">/home/runner/work/_temp/Library/hubUtils/testhubs/simple</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(2/3)"</span> and <span style="color: #0000BB;">"parquet(1/1)"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> model_output_dir:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> config_admin: <span style="color: #0000BB;">hub-config/admin.json</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> config_tasks: <span style="color: #0000BB;">hub-config/tasks.json</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Connection schema </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> hub_connection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> origin_date: date32[day]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> horizon: int32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> output_type: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> output_type_id: double</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> value: int32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model_id: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_group: string</span>
 <span class="r-in"><span><span class="co"># Connect to a simple forecasting Hub stored in an AWS S3 bucket.</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"hubverse/hubutils/testhubs/simple/"</span><span class="op">)</span></span></span>
@@ -323,7 +368,7 @@ model output directory which is not part of a fully configured hub.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>
