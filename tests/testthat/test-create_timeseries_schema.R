@@ -57,6 +57,12 @@ test_that("create_timeseries_schema works", {
     create_timeseries_schema(tmp_hub_path)$ToString(),
     "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ntarget_end_date: date32[day]"
   )
+
+  # Check that ignoring a partition folder returns the same schema
+  expect_equal(
+    create_timeseries_schema(tmp_hub_path, ignore_files = "target_end_date=2023-11-04")$ToString(),
+    "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ntarget_end_date: date32[day]"
+  )
 })
 
 test_that(

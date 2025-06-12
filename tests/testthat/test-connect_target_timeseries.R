@@ -284,6 +284,14 @@ test_that("connect_target_timeseries on multiple non-partitioned files works on 
       observation = "double"
     )
   )
+
+  # Check that files are successfully ignored when specified
+  ts_con <- connect_target_timeseries(
+    ts_dir_hub_path,
+    ignore_files = "target-wk_inc_flu_hosp.csv"
+  )
+  expect_length(ts_con$files, 1L)
+  expect_false("target-wk_inc_flu_hosp.csv" %in% basename(ts_con$files))
 })
 
 test_that("connect_target_timeseries works on local multi-file timeseries data with sub directory structure", {
@@ -365,6 +373,14 @@ test_that("connect_target_timeseries works on local multi-file timeseries data w
       observation = "numeric"
     )
   )
+
+  # Check that files are successfully ignored when specified
+  ts_con <- connect_target_timeseries(
+    ts_dir_hub_path,
+    ignore_files = "target-wk_inc_flu_hosp.csv"
+  )
+  expect_length(ts_con$files, 1L)
+  expect_false("target-wk_inc_flu_hosp.csv" %in% basename(ts_con$files))
 })
 
 test_that("connect_target_timeseries with HIVE-PARTTIONED data works on local hub", {

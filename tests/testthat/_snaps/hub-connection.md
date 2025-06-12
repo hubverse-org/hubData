@@ -1632,30 +1632,6 @@
       Error in `connect_model_output()`:
       x Directory 'random/model-output/' does not exist.
 
----
-
-    Code
-      connect_hub(temp_dir)
-    Condition
-      Error in `connect_hub()`:
-      x 'hub-config' directory not found in root of Hub.
-
-# connect_hub fails when skip_checks is true and hub has multiple file types
-
-    Code
-      connect_hub(hub_path, skip_checks = TRUE)
-    Condition
-      Error in `connect_hub()`:
-      ! Skip_checks cannot be TRUE when there are multiple file formats in the model output directory ("csv" and "parquet").
-
-# connect_model_output fails when skip_checks is true and hub has multiple file types
-
-    Code
-      connect_model_output(mod_out_path, skip_checks = TRUE)
-    Condition
-      Error in `connect_model_output()`:
-      ! Skip_checks cannot be TRUE when there are multiple file formats in the model output directory ("csv" and "parquet").
-
 # connect_hub detects unopenned files correctly
 
     Code

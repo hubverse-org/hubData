@@ -4,7 +4,12 @@
 \alias{create_timeseries_schema}
 \title{Create time-series target data file schema}
 \usage{
-create_timeseries_schema(hub_path, date_col = NULL, na = c("NA", ""))
+create_timeseries_schema(
+  hub_path,
+  date_col = NULL,
+  na = c("NA", ""),
+  ignore_files = NULL
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -25,6 +30,13 @@ and does not have the same name as a date typed task ID variable in the config.}
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
 string \code{"NA"} values are used in the data. In such a case, use empty cells to
 indicate missing values in your files and set \code{na = ""}.}
+
+\item{ignore_files}{A character vector of file \strong{names} (not paths) or
+file \strong{prefixes} to ignore when discovering model output files to
+include in dataset connections.
+Parent directory names should not be included.
+Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
+but additional files can be excluded by specifying them here.}
 }
 \value{
 an arrow \verb{<schema>} class object

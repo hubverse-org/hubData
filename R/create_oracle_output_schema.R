@@ -16,7 +16,9 @@
 #' #  target oracle-output schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_oracle_output_schema(s3_hub_path)
-create_oracle_output_schema <- function(hub_path, na = c("NA", "")) {
+create_oracle_output_schema <- function(hub_path, na = c("NA", ""),
+                                        ignore_files = NULL) {
+  ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 
   config_tasks <- read_config(hub_path)
@@ -26,15 +28,25 @@ create_oracle_output_schema <- function(hub_path, na = c("NA", "")) {
   if (inherits(hub_path, "SubTreeFileSystem")) {
     oo_path <- file_system_path(hub_path, oo_path, uri = TRUE)
   }
-  if (oo_ext == "csv") {
-    file_schema <- arrow::open_dataset(oo_path, format = oo_ext,
-                                       na = na, quoted_na = TRUE)$schema
-  } else {
-    file_schema <- arrow::open_dataset(oo_path, format = oo_ext)$schema
-  }
+
+  # Although technically this is not required for validating
+  # oracle output schema as all column data-types can be determined
+  # from the config, we include the step of accessing the schema
+  #  of the dataset itself for two reasons:
+  #  1. although the config is the source of truth, this ensures
+  #   opening data that for some reason has an added column doesn't
+  #   fail. Catching this is the job of validation not schema
+  #    creation.
+  # 2. It allows us to subset for and order the schema to match the
+  # columns and order of the columns in the dataset itself.
+  file_schema <- get_target_schema(
+    oo_path,
+    ext = oo_ext,
+    na = na,
+    ignore_files = ignore_files
+  )
 
   oo_schema <- hub_schema[hub_schema$names %in% file_schema$names]
-
   oo_schema[["oracle_value"]] <- hub_schema[["value"]]$type
 
   missing <- setdiff(file_schema$names, oo_schema$names)

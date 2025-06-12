@@ -12,7 +12,8 @@ connect_hub(
     "logical", "Date"),
   partitions = list(model_id = arrow::utf8()),
   skip_checks = FALSE,
-  na = c("NA", "")
+  na = c("NA", ""),
+  ignore_files = NULL
 )
 
 connect_model_output(
@@ -21,7 +22,8 @@ connect_model_output(
   partition_names = "model_id",
   schema = NULL,
   skip_checks = FALSE,
-  na = c("NA", "")
+  na = c("NA", ""),
+  ignore_files = NULL
 )
 }
 \arguments{
@@ -40,7 +42,8 @@ For connection to a fully configured hub, accessed through \code{hub_path},
 \code{file_format} is inferred from the hub's \code{file_format} configuration in
 \code{admin.json} and is ignored by default.
 If supplied, it will override hub configuration setting. Multiple formats can
-be supplied to \code{connect_hub} but only a single file format can be supplied to \code{connect_mod_out}.}
+be supplied to \code{connect_hub} but only a single file format can be supplied to
+\code{connect_model_output}.}
 
 \item{output_type_id_datatype}{character string. One of \code{"from_config"}, \code{"auto"},
 \code{"character"}, \code{"double"}, \code{"integer"}, \code{"logical"}, \code{"Date"}.
@@ -65,16 +68,22 @@ partitioning column.}
 \item{skip_checks}{Logical. If \code{FALSE} (default), check \code{file_format} parameter
 against the hub's model output files. Also excludes invalid model output files
 when opening hub datasets.
-Setting to \code{TRUE} will improve performance but will result in an error if
-the model output directory includes invalid files. \strong{Cannot be \code{TRUE}} when
-there are \strong{multiple file formats} in the hub's model output directory or when
-the hub's model output directory contains \strong{files that are not model output
-data} (for example, a README).}
+Setting to \code{TRUE} will improve performance, most noticeable on large cloud hubs,
+but will result in an error if the model output directory includes invalid files.
+If invalid (non-model output date files) are contained in the model output
+directory, use \code{ignore_files} argument to ignore them.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
 string \code{"NA"} values are used in the data. In such a case, use empty cells to
 indicate missing values in your files and set \code{na = ""}.}
+
+\item{ignore_files}{A character vector of file \strong{names} (not paths) or
+file \strong{prefixes} to ignore when discovering model output files to
+include in dataset connections.
+Parent directory names should not be included.
+Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
+but additional files can be excluded by specifying them here.}
 
 \item{model_output_dir}{Either a character string path to a local directory
 containing model output data
@@ -95,7 +104,7 @@ If NULL (the default), the schema will be inferred from the data sources.}
 \value{
 \itemize{
 \item \code{connect_hub} returns an S3 object of class \verb{<hub_connection>}.
-\item \code{connect_mod_out} returns an S3 object of class \verb{<mod_out_connection>}.
+\item \code{connect_model_output} returns an S3 object of class \verb{<mod_out_connection>}.
 }
 
 Both objects are connected to the data in the model-output directory via an
@@ -106,6 +115,12 @@ The connection can be used to extract data using \code{dplyr} custom queries. Th
 \description{
 Connect to data in a model output directory through a Modeling Hub or directly.
 Data can be stored in a local directory or in the cloud on AWS or GCS.
+}
+\details{
+By default, common non-data files that may be present in model output directories
+(e.g. \code{"README"}, \code{".DS_Store"}) are excluded automatically to prevent errors
+when connecting via Arrow. Additional files can be excluded using the \code{ignore_files}
+parameter.
 }
 \section{Functions}{
 \itemize{
@@ -141,6 +156,8 @@ mod_out_con \%>\%
     horizon == 2
   ) \%>\%
   collect_hub()
+# Ignore a file
+connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv"))
 # Connect to a simple forecasting Hub stored in an AWS S3 bucket.
 \dontrun{
 hub_path <- s3_bucket("hubverse/hubutils/testhubs/simple/")
