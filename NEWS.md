@@ -1,3 +1,5 @@
+# hubData (development version)
+
 # hubData 1.4.0
 
 * Added `connect_target_timeseries()` function (experimental) for accessing time-series target data from a hub (#71). This includes accessing target data from cloud hubs (#75).
