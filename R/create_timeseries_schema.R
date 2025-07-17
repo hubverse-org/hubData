@@ -19,9 +19,12 @@
 #' #  target time-series schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_timeseries_schema(s3_hub_path)
-create_timeseries_schema <- function(hub_path, date_col = NULL,
-                                     na = c("NA", ""),
-                                     ignore_files = NULL) {
+create_timeseries_schema <- function(
+  hub_path,
+  date_col = NULL,
+  na = c("NA", ""),
+  ignore_files = NULL
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   ts_path <- validate_target_data_path(hub_path, "time-series")
 
@@ -45,7 +48,9 @@ create_timeseries_schema <- function(hub_path, date_col = NULL,
   ts_schema[["observation"]] <- hub_schema[["value"]]$type
 
   missing <- setdiff(file_schema$names, ts_schema$names)
-  ts_schema <- arrow::schema(!!!c(ts_schema$fields, file_schema[missing]$fields))
+  ts_schema <- arrow::schema(
+    !!!c(ts_schema$fields, file_schema[missing]$fields)
+  )
 
   if (!is.null(date_col)) {
     checkmate::assert_character(date_col, len = 1L)
