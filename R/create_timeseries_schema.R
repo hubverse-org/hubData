@@ -105,6 +105,6 @@ as_r_schema <- function(arrow_schema) {
       arrow_schema$fields,
       names(arrow_schema)
     ),
-    ~ r_datatypes[[.x$type$ToString()]]
+    \(.x) r_datatypes[[.x$type$ToString()]]
   )
 }
