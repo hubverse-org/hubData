@@ -1,5 +1,8 @@
 # hubData (development version)
 
+* Added `r_schema` argument to `create_timeseries_schema()` and `create_oracle_output_schema()` functions to enable returning the schema as a vector of R data types instead of an `arrow::Schema` object (#95)
+* Added `output_type_id_datatype` argument to `create_oracle_output_schema()` and `connect_target_oracle_output()` functions to allow users to explicitly specify the data type of the `output_type_id` column in the schema. This ensuring compatibility with `create_hub_schema()` and `connect_hub()` (#95).
+
 # hubData 1.4.0
 
 * Added `connect_target_timeseries()` function (experimental) for accessing time-series target data from a hub (#71). This includes accessing target data from cloud hubs (#75).
