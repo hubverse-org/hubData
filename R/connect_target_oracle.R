@@ -38,12 +38,18 @@
 #' s3_con <- connect_target_oracle_output(s3_hub_path)
 #' s3_con
 #' s3_con |> dplyr::collect()
-connect_target_oracle_output <- function(hub_path = ".", na = c("NA", ""),
-                                         ignore_files = NULL) {
+connect_target_oracle_output <- function(
+  hub_path = ".",
+  na = c("NA", ""),
+  ignore_files = NULL,
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_ext <- get_target_file_ext(hub_path, oo_path)
-  oo_schema <- create_oracle_output_schema(hub_path, ignore_files = ignore_files)
+  oo_schema <- create_oracle_output_schema(
+    hub_path,
+    ignore_files = ignore_files,
+  )
   if (inherits(hub_path, "SubTreeFileSystem")) {
     # We create URI paths for cloud storage to ensure we can open single file
     # data correctly.
@@ -56,11 +62,14 @@ connect_target_oracle_output <- function(hub_path = ".", na = c("NA", ""),
 
   oo_data <- open_target_dataset(
     oo_path,
-    ext = oo_ext, schema = oo_schema,
-    na = na, ignore_files = ignore_files
+    ext = oo_ext,
+    schema = oo_schema,
+    na = na,
+    ignore_files = ignore_files
   )
 
-  structure(oo_data,
+  structure(
+    oo_data,
     class = c("target_oracle_output", class(oo_data)),
     oo_path = out_path,
     hub_path = hub_path
