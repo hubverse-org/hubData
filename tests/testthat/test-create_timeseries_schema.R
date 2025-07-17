@@ -33,7 +33,12 @@ test_that("create_timeseries_schema works", {
   ts_dir <- fs::path(tmp_hub_path, "target-data", "time-series")
   fs::dir_create(ts_dir)
   ts_dat <- arrow::read_csv_arrow(ts_path)
-  arrow::write_dataset(ts_dat, ts_dir, partitioning = "date", format = "parquet")
+  arrow::write_dataset(
+    ts_dat,
+    ts_dir,
+    partitioning = "date",
+    format = "parquet"
+  )
   fs::file_delete(ts_path)
 
   expect_error(
@@ -51,7 +56,11 @@ test_that("create_timeseries_schema works", {
   fs::dir_create(ts_dir)
   ts_dat |>
     dplyr::rename(target_end_date = date) |>
-    arrow::write_dataset(ts_dir, partitioning = "target_end_date", format = "parquet")
+    arrow::write_dataset(
+      ts_dir,
+      partitioning = "target_end_date",
+      format = "parquet"
+    )
 
   expect_equal(
     create_timeseries_schema(tmp_hub_path)$ToString(),
@@ -60,21 +69,37 @@ test_that("create_timeseries_schema works", {
 
   # Check that ignoring a partition folder returns the same schema
   expect_equal(
-    create_timeseries_schema(tmp_hub_path, ignore_files = "target_end_date=2023-11-04")$ToString(),
+    create_timeseries_schema(
+      tmp_hub_path,
+      ignore_files = "target_end_date=2023-11-04"
+    )$ToString(),
     "target: string\nlocation: string\nobservation: double\nas_of: date32[day]\ntarget_end_date: date32[day]"
   )
 })
 
-test_that(
-  "create_timeseries_schema works on single-file S3 SubTreeFileSystem hub",
-  {
-    skip_if_offline()
-    hub_path <- s3_bucket("example-complex-forecast-hub")
-    ts_schema <- create_timeseries_schema(hub_path)
+test_that("create_timeseries_schema works on single-file S3 SubTreeFileSystem hub", {
+  skip_if_offline()
+  hub_path <- s3_bucket("example-complex-forecast-hub")
+  ts_schema <- create_timeseries_schema(hub_path)
 
-    expect_equal(
-      ts_schema$ToString(),
-      "date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+  expect_equal(
+    ts_schema$ToString(),
+    "date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+  )
+})
+
+test_that("create_timeseries_schema returns r datatypes", {
+  skip_if_offline()
+  hub_path <- s3_bucket("example-complex-forecast-hub")
+  ts_schema <- create_timeseries_schema(hub_path, r_schema = TRUE)
+
+  expect_equal(
+    ts_schema,
+    c(
+      date = "Date",
+      target = "character",
+      location = "character",
+      observation = "double"
     )
-  }
-)
+  )
+})

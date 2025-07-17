@@ -4,7 +4,12 @@
 \alias{create_oracle_output_schema}
 \title{Create oracle-output target data file schema}
 \usage{
-create_oracle_output_schema(hub_path, na = c("NA", ""), ignore_files = NULL)
+create_oracle_output_schema(
+  hub_path,
+  na = c("NA", ""),
+  ignore_files = NULL,
+  r_schema = FALSE
+)
 }
 \arguments{
 \item{hub_path}{Either a character string path to a local Modeling Hub directory
@@ -28,6 +33,9 @@ include in dataset connections.
 Parent directory names should not be included.
 Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
 but additional files can be excluded by specifying them here.}
+
+\item{r_schema}{Logical. If \code{FALSE} (default), return an \code{\link[arrow:schema]{arrow::schema()}} object.
+If \code{TRUE}, return a character vector of R data types.}
 }
 \value{
 an arrow \verb{<schema>} class object

@@ -1,6 +1,7 @@
 #' Create oracle-output target data file schema
 #'
 #' @inheritParams connect_hub
+#' @inheritParams create_hub_schema
 #'
 #' @return an arrow `<schema>` class object
 #' @export
@@ -16,8 +17,12 @@
 #' #  target oracle-output schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_oracle_output_schema(s3_hub_path)
-create_oracle_output_schema <- function(hub_path, na = c("NA", ""),
-                                        ignore_files = NULL) {
+create_oracle_output_schema <- function(
+  hub_path,
+  na = c("NA", ""),
+  ignore_files = NULL,
+  r_schema = FALSE
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 
@@ -50,7 +55,9 @@ create_oracle_output_schema <- function(hub_path, na = c("NA", ""),
   oo_schema[["oracle_value"]] <- hub_schema[["value"]]$type
 
   missing <- setdiff(file_schema$names, oo_schema$names)
-  oo_schema <- arrow::schema(!!!c(oo_schema$fields, file_schema[missing]$fields))
+  oo_schema <- arrow::schema(
+    !!!c(oo_schema$fields, file_schema[missing]$fields)
+  )
 
   has_date_col <- any(
     purrr::map_lgl(
@@ -66,5 +73,10 @@ create_oracle_output_schema <- function(hub_path, na = c("NA", ""),
       )
     )
   }
-  oo_schema[file_schema$names]
+  oo_schema <- oo_schema[file_schema$names]
+
+  if (r_schema) {
+    oo_schema <- as_r_schema(oo_schema)
+  }
+  oo_schema
 }

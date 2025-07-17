@@ -1,6 +1,7 @@
 #' Create time-series target data file schema
 #'
 #' @inheritParams connect_hub
+#' @inheritParams create_hub_schema
 #' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
 #' Useful when the required date column is a partitioning column in the target data
 #' and does not have the same name as a date typed task ID variable in the config.
@@ -23,7 +24,8 @@ create_timeseries_schema <- function(
   hub_path,
   date_col = NULL,
   na = c("NA", ""),
-  ignore_files = NULL
+  ignore_files = NULL,
+  r_schema = FALSE
 ) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   ts_path <- validate_target_data_path(hub_path, "time-series")
@@ -80,5 +82,29 @@ create_timeseries_schema <- function(
       )
     )
   }
-  ts_schema[file_schema$names]
+  ts_schema <- ts_schema[file_schema$names]
+
+  if (r_schema) {
+    ts_schema <- as_r_schema(ts_schema)
+  }
+  ts_schema
+}
+
+as_r_schema <- function(arrow_schema) {
+  r_datatypes <- list(
+    string = "character",
+    double = "double",
+    int32 = "integer",
+    int64 = "integer",
+    bool = "logical",
+    `date32[day]` = "Date"
+  )
+
+  purrr::map_chr(
+    purrr::set_names(
+      arrow_schema$fields,
+      names(arrow_schema)
+    ),
+    ~ r_datatypes[[.x$type$ToString()]]
+  )
 }
