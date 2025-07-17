@@ -1150,3 +1150,15 @@ test_that('connect_target_timeseries parses "NA" and "" correctly', {
       all()
   )
 })
+
+test_that("connect_target_oracle_output output_type_id_datatype arg works", {
+  skip_if_offline()
+  oo_con <- connect_target_oracle_output(
+    oo_hub_path,
+    output_type_id_datatype = "double"
+  )
+  expect_equal(
+    oo_con$schema$ToString(),
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: double\noracle_value: double" # nolint: line_length_linter
+  )
+})

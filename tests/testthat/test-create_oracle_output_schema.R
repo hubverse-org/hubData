@@ -68,3 +68,17 @@ test_that("create_oracle_output_schema returns r datatypes", {
     )
   )
 })
+
+test_that("create_oracle_output_schema output_type_id override works", {
+  skip_if_offline()
+  hub_path <- s3_bucket("example-complex-forecast-hub")
+  oo_schema <- create_oracle_output_schema(
+    hub_path,
+    r_schema = TRUE,
+    output_type_id_datatype = "double"
+  )
+  expect_equal(
+    oo_schema[["output_type_id"]],
+    "double"
+  )
+})

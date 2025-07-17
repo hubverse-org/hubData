@@ -21,13 +21,26 @@ create_oracle_output_schema <- function(
   hub_path,
   na = c("NA", ""),
   ignore_files = NULL,
-  r_schema = FALSE
+  r_schema = FALSE,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
 ) {
+  output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 
   config_tasks <- read_config(hub_path)
-  hub_schema <- create_hub_schema(config_tasks)
+  hub_schema <- create_hub_schema(
+    config_tasks,
+    output_type_id_datatype = output_type_id_datatype
+  )
 
   oo_ext <- validate_target_file_ext(oo_path, hub_path)
   if (inherits(hub_path, "SubTreeFileSystem")) {
