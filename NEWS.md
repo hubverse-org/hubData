@@ -1,5 +1,11 @@
 # hubData (development version)
 
+* Added Arrow schema utilities for safely converting and validating column types from `arrow::Schema` objects:
+  * `as_r_schema()`: Converts an Arrow schema to a named character vector of equivalent R types (e.g., `"int32"` → `"integer"`). Errors on unsupported types.
+  * `arrow_schema_to_string()`: Extracts the raw Arrow type strings for field in a schema.
+  * `is_supported_arrow_type()`: Returns a named logical vector indicating which schema fields have supported types.
+  * `validate_arrow_schema()`: Validates that all field types in an Arrow schema are supported. Throws a helpful error otherwise.
+* Added `arrow_to_r_datatypes`, a named character vector defining the mapping of safe and portable Arrow types to their R equivalents.
 * Added `r_schema` argument to `create_timeseries_schema()` and `create_oracle_output_schema()` functions to enable returning the schema as a vector of R data types instead of an `arrow::Schema` object (#95)
 * Added `output_type_id_datatype` argument to `create_oracle_output_schema()` and `connect_target_oracle_output()` functions to allow users to explicitly specify the data type of the `output_type_id` column in the schema. This ensuring compatibility with `create_hub_schema()` and `connect_hub()` (#95).
 
