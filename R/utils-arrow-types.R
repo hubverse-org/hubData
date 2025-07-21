@@ -25,7 +25,8 @@
 #'   (e.g., `"integer"`, `"double"`, `"logical"`).
 #' - `arrow_schema_to_string()`: A named character vector mapping column names to Arrow type strings.
 #' - `is_supported_arrow_type()`: A named logical vector indicating whether each column is supported.
-#' - `validate_arrow_schema()`: Returns the original schema (invisibly) if all column types are supported; otherwise throws an error.
+#' - `validate_arrow_schema()`: Returns the original schema (invisibly) if all
+#' column types are supported; otherwise throws an error.
 #'
 #' @export
 #'

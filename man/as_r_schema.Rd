@@ -28,7 +28,8 @@ and \code{as_r_schema()} (default: caller's environment).}
 (e.g., \code{"integer"}, \code{"double"}, \code{"logical"}).
 \item \code{arrow_schema_to_string()}: A named character vector mapping column names to Arrow type strings.
 \item \code{is_supported_arrow_type()}: A named logical vector indicating whether each column is supported.
-\item \code{validate_arrow_schema()}: Returns the original schema (invisibly) if all column types are supported; otherwise throws an error.
+\item \code{validate_arrow_schema()}: Returns the original schema (invisibly) if all
+column types are supported; otherwise throws an error.
 }
 }
 \description{
