@@ -78,11 +78,11 @@ files within the <code>hub-config</code> directory.</p></dd>
 <span class="r-in"><span><span class="va">example_hub</span> <span class="op">&lt;-</span> <span class="st">"https://github.com/hubverse-org/example-complex-forecast-hub.git"</span></span></span>
 <span class="r-in"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">example_hub</span>, path <span class="op">=</span> <span class="va">hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpb2xear/file206943f87385/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmp8GsvnF/file1e0e61c4ed78/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"time-series"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpb2xear/file206943f87385/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmp8GsvnF/file1e0e61c4ed78/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"oracle-output"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmpb2xear/file206943f87385/target-data/oracle-output.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/Rtmp8GsvnF/file1e0e61c4ed78/target-data/oracle-output.csv</span>
 <span class="r-in"><span><span class="co"># Access cloud data</span></span></span>
 <span class="r-in"><span><span class="va">s3_bucket_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_s3_bucket_name.html">get_s3_bucket_name</a></span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="va">s3_bucket_name</span><span class="op">)</span></span></span>

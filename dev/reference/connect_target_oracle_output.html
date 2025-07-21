@@ -48,7 +48,9 @@ in a hub as an arrow dataset.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">connect_target_oracle_output</span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
-<span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
+<span>    <span class="st">"logical"</span>, <span class="st">"Date"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -82,6 +84,25 @@ include in dataset connections.
 Parent directory names should not be included.
 Common non-data files such as <code>"README"</code> and <code>".DS_Store"</code> are ignored automatically,
 but additional files can be excluded by specifying them here.</p></dd>
+
+
+<dt id="arg-output-type-id-datatype">output_type_id_datatype<a class="anchor" aria-label="anchor" href="#arg-output-type-id-datatype"></a></dt>
+<dd><p>character string. One of <code>"from_config"</code>, <code>"auto"</code>,
+<code>"character"</code>, <code>"double"</code>, <code>"integer"</code>, <code>"logical"</code>, <code>"Date"</code>.
+Defaults to <code>"from_config"</code> which uses the setting in the <code>output_type_id_datatype</code>
+property in the <code>tasks.json</code> config file if available. If the property is
+not set in the config, the argument falls back to <code>"auto"</code> which determines
+the  <code>output_type_id</code> data type automatically from the <code>tasks.json</code>
+config file as the simplest data type required to represent all output
+type ID values across all output types in the hub.
+When only point estimate output types (where <code>output_type_id</code>s are <code>NA</code>,) are
+being collected by a hub, the <code>output_type_id</code> column is assigned a <code>character</code>
+data type when auto-determined.
+Other data type values can be used to override automatic determination.
+Note that attempting to coerce <code>output_type_id</code> to a data type that is
+not valid for the data (e.g. trying to coerce<code>"character"</code> values to
+<code>"double"</code>) will likely result in an error or potentially unexpected
+behaviour so use with care.</p></dd>
 
 </dl></div>
     <div class="section level2">
