@@ -11,3 +11,9 @@ arrow_to_r_datatypes <- c(
 )
 
 usethis::use_data(arrow_to_r_datatypes, overwrite = TRUE)
+
+usethis::use_data(
+  arrow_to_r_datatypes,
+  internal = TRUE,
+  overwrite = TRUE
+)
