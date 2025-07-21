@@ -89,22 +89,3 @@ create_timeseries_schema <- function(
   }
   ts_schema
 }
-
-as_r_schema <- function(arrow_schema) {
-  r_datatypes <- list(
-    string = "character",
-    double = "double",
-    int32 = "integer",
-    int64 = "integer",
-    bool = "logical",
-    `date32[day]` = "Date"
-  )
-
-  purrr::map_chr(
-    purrr::set_names(
-      arrow_schema$fields,
-      names(arrow_schema)
-    ),
-    \(.x) r_datatypes[[.x$type$ToString()]]
-  )
-}
