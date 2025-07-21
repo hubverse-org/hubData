@@ -1,6 +1,7 @@
 #' Create time-series target data file schema
 #'
 #' @inheritParams connect_hub
+#' @inheritParams create_hub_schema
 #' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
 #' Useful when the required date column is a partitioning column in the target data
 #' and does not have the same name as a date typed task ID variable in the config.
@@ -19,9 +20,13 @@
 #' #  target time-series schema from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_timeseries_schema(s3_hub_path)
-create_timeseries_schema <- function(hub_path, date_col = NULL,
-                                     na = c("NA", ""),
-                                     ignore_files = NULL) {
+create_timeseries_schema <- function(
+  hub_path,
+  date_col = NULL,
+  na = c("NA", ""),
+  ignore_files = NULL,
+  r_schema = FALSE
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   ts_path <- validate_target_data_path(hub_path, "time-series")
 
@@ -45,7 +50,9 @@ create_timeseries_schema <- function(hub_path, date_col = NULL,
   ts_schema[["observation"]] <- hub_schema[["value"]]$type
 
   missing <- setdiff(file_schema$names, ts_schema$names)
-  ts_schema <- arrow::schema(!!!c(ts_schema$fields, file_schema[missing]$fields))
+  ts_schema <- arrow::schema(
+    !!!c(ts_schema$fields, file_schema[missing]$fields)
+  )
 
   if (!is.null(date_col)) {
     checkmate::assert_character(date_col, len = 1L)
@@ -75,5 +82,10 @@ create_timeseries_schema <- function(hub_path, date_col = NULL,
       )
     )
   }
-  ts_schema[file_schema$names]
+  ts_schema <- ts_schema[file_schema$names]
+
+  if (r_schema) {
+    ts_schema <- as_r_schema(ts_schema)
+  }
+  ts_schema
 }

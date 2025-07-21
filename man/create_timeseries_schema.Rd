@@ -8,7 +8,8 @@ create_timeseries_schema(
   hub_path,
   date_col = NULL,
   na = c("NA", ""),
-  ignore_files = NULL
+  ignore_files = NULL,
+  r_schema = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ include in dataset connections.
 Parent directory names should not be included.
 Common non-data files such as \code{"README"} and \code{".DS_Store"} are ignored automatically,
 but additional files can be excluded by specifying them here.}
+
+\item{r_schema}{Logical. If \code{FALSE} (default), return an \code{\link[arrow:schema]{arrow::schema()}} object.
+If \code{TRUE}, return a character vector of R data types.}
 }
 \value{
 an arrow \verb{<schema>} class object
