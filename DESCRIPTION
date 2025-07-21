@@ -56,3 +56,4 @@ Config/Needs/website: hubverse-org/hubStyle
 Depends: 
     R (>= 4.1)
 VignetteBuilder: knitr
+LazyData: true
