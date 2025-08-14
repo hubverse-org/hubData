@@ -18,16 +18,12 @@ test_that("connect_target_timeseries on single file works on embedded hub", {
     exact = TRUE
   )
   expect_equal(basename(attr(ts_con, "ts_path")), "time-series.csv")
-  expect_equal(
-    ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "csv")
-  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
 
   all <- dplyr::collect(ts_con)
   expect_s3_class(all, "tbl_df", exact = FALSE)
   expect_equal(ncol(all), 4L)
   expect_gt(nrow(all), 0L)
-
   expect_equal(
     sort(names(all)),
     sort(c("target_end_date", "target", "location", "observation"))
@@ -45,6 +41,11 @@ test_that("connect_target_timeseries on single file works on embedded hub", {
   expect_s3_class(us, "tbl_df", exact = FALSE)
   expect_gt(nrow(us), 0L)
   expect_setequal(unique(us$location), "US")
+
+  # values filter check
+  lt1 <- dplyr::filter(ts_con, observation < 1) |> dplyr::collect()
+  expect_gt(nrow(lt1), 0L)
+  expect_true(all(lt1$observation < 1))
 })
 
 test_that("connect_target_timeseries fails correctly", {
@@ -120,10 +121,7 @@ test_that("connect_target_timeseries on multiple non-partitioned CSV files works
     exact = TRUE
   )
   expect_equal(basename(attr(ts_con, "ts_path")), "time-series")
-  expect_equal(
-    ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "csv")
-  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
 
   all <- dplyr::collect(ts_con)
   expect_equal(ncol(all), 4L)
@@ -136,6 +134,7 @@ test_that("connect_target_timeseries on multiple non-partitioned CSV files works
   # simple filter
   lt1 <- dplyr::filter(ts_con, observation < 1) |> dplyr::collect()
   expect_gt(nrow(lt1), 0L)
+  expect_true(all(lt1$observation < 1))
 
   # ignore_files behavior (content-only assertion)
   ts_con2 <- connect_target_timeseries(
@@ -172,10 +171,7 @@ test_that("connect_target_timeseries works with non-partitioned CSVs in subdirec
     })
 
   ts_con <- connect_target_timeseries(hub_path)
-  expect_equal(
-    ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "csv")
-  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
 
   res <- dplyr::collect(ts_con)
   expect_equal(ncol(res), 4L)
@@ -201,7 +197,7 @@ test_that("connect_target_timeseries with HIVE-PARTITIONED parquet works", {
   ts_con <- connect_target_timeseries(hub_path)
   expect_equal(
     ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "hive")
+    timeseries_schema_fixture(partition_col = "target")
   )
 
   all <- dplyr::collect(ts_con)
@@ -231,10 +227,7 @@ test_that("connect_target_timeseries works on single-file SubTreeFileSystem (loc
     exact = TRUE
   )
   expect_equal(basename(attr(ts_con, "ts_path")), "time-series.csv")
-  expect_equal(
-    ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "csv")
-  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
 
   res <- dplyr::collect(ts_con)
   expect_equal(ncol(res), 4L)
@@ -269,10 +262,7 @@ test_that("connect_target_timeseries works with multi-file SubTreeFileSystem hub
     exact = TRUE
   )
   expect_equal(basename(attr(ts_con, "ts_path")), "time-series")
-  expect_equal(
-    ts_con$schema$ToString(),
-    timeseries_schema_fixture(kind = "csv")
-  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
 
   all <- dplyr::collect(ts_con)
   expect_equal(ncol(all), 4L)
@@ -285,4 +275,5 @@ test_that("connect_target_timeseries works with multi-file SubTreeFileSystem hub
   # simple filter smoke test
   few <- dplyr::filter(ts_con, observation < 1) |> dplyr::collect()
   expect_gt(nrow(few), 0L)
+  expect_true(all(few$observation < 1))
 })

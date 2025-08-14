@@ -5,7 +5,6 @@
 # - .local_safe_overwrite()
 # - split_csv_by_target()
 # - write_hive_parquet_by_target()
-# - oracle_output_schema_fixture()
 # And helper-fixtures.R with:
 # - oracle_output_schema_fixture()
 
@@ -27,7 +26,10 @@ test_that("connect_target_oracle_output on single file works on embedded hub", {
   expect_equal(basename(attr(con, "oo_path")), "oracle-output.csv")
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
 
   all <- dplyr::collect(con)
@@ -102,18 +104,22 @@ test_that("connect_target_oracle_output fails correctly", {
   }
   fs::dir_create(out_dir)
   fs::file_delete(ts_path)
+
   split(dat, dat$target) |>
     purrr::iwalk(function(df, tgt) {
       tgt <- gsub(" ", "_", tgt, fixed = TRUE)
       if (identical(tgt, "wk_flu_hosp_rate")) {
         out_path <- fs::path(out_dir, paste0("target-", tgt), ext = "csv")
         .local_safe_overwrite(
-          function(x) arrow::write_csv_arrow(df, file = x),
+          function(out_path) arrow::write_csv_arrow(df, file = out_path),
           out_path
         )
       } else {
         out_path <- fs::path(out_dir, paste0("target-", tgt), ext = "parquet")
-        .local_safe_overwrite(function(x) arrow::write_parquet(df, x), out_path)
+        .local_safe_overwrite(
+          function(out_path) arrow::write_parquet(df, out_path),
+          out_path
+        )
       }
     })
   expect_error(
@@ -152,7 +158,10 @@ test_that("connect_target_oracle_output on multiple non-partitioned CSV files wo
   expect_equal(basename(attr(con, "oo_path")), "oracle-output")
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
 
   all <- dplyr::collect(con)
@@ -173,6 +182,7 @@ test_that("connect_target_oracle_output on multiple non-partitioned CSV files wo
   # Filter property
   lt1 <- dplyr::filter(con, oracle_value < 1) |> dplyr::collect()
   expect_gt(nrow(lt1), 0L)
+  expect_true(all(lt1$oracle_value < 1))
 
   # ignore_files behavior (content-only assertion)
   con2 <- connect_target_oracle_output(
@@ -195,6 +205,7 @@ test_that("connect_target_oracle_output works on non-partitioned CSVs in subdire
     fs::dir_delete(out_dir)
   }
   fs::dir_create(out_dir)
+
   split(dat, dat$target) |>
     purrr::iwalk(function(df, tgt) {
       tgt <- gsub(" ", "_", tgt, fixed = TRUE)
@@ -202,7 +213,7 @@ test_that("connect_target_oracle_output works on non-partitioned CSVs in subdire
       fs::dir_create(subd)
       out_path <- fs::path(subd, paste0("target-", tgt), ext = "csv")
       .local_safe_overwrite(
-        function(x) arrow::write_csv_arrow(df, file = x),
+        function(out_path) arrow::write_csv_arrow(df, file = out_path),
         out_path
       )
     })
@@ -210,7 +221,10 @@ test_that("connect_target_oracle_output works on non-partitioned CSVs in subdire
   con <- connect_target_oracle_output(hub_path)
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
   res <- dplyr::collect(con)
   expect_equal(ncol(res), 6L)
@@ -231,12 +245,16 @@ test_that("connect_target_oracle_output with HIVE-PARTITIONED parquet works", {
   dat <- arrow::read_csv_arrow(ts_path)
   fs::file_delete(ts_path)
 
+  # partitions by 'target'
   write_hive_parquet_by_target(hub_path, dat, target_type = "oracle-output")
 
   con <- connect_target_oracle_output(hub_path)
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "hive", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = "target",
+      output_type_id = "string"
+    )
   )
 
   all <- dplyr::collect(con)
@@ -296,7 +314,10 @@ test_that("connect_target_oracle_output works on single-file SubTreeFileSystem (
   expect_equal(basename(attr(con, "oo_path")), "oracle-output.csv")
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
 
   res <- dplyr::collect(con)
@@ -308,7 +329,7 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
   skip_on_os("windows")
 
   # Start from temp copy to fan out multi-file
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  src <- use_example_hub_readonly("file")
   oo_dir_hub_path <- withr::local_tempdir("subtree-hub-mf-")
   fs::dir_copy(src, oo_dir_hub_path, overwrite = TRUE)
 
@@ -340,7 +361,10 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
   expect_equal(basename(attr(con, "oo_path")), "oracle-output")
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
 
   all <- dplyr::collect(con)
@@ -361,6 +385,7 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
   # simple filter smoke test
   lt1 <- dplyr::filter(con, oracle_value < 1) |> dplyr::collect()
   expect_gt(nrow(lt1), 0L)
+  expect_true(all(lt1$oracle_value < 1))
 })
 
 test_that('connect_target_oracle_output parses "NA" and "" correctly (editable copy)', {
@@ -378,7 +403,10 @@ test_that('connect_target_oracle_output parses "NA" and "" correctly (editable c
   con <- connect_target_oracle_output(hub_path, na = "")
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "string")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
   all <- dplyr::collect(con)
   expect_true(all$location[1] == "NA")
@@ -395,6 +423,9 @@ test_that("connect_target_oracle_output output_type_id_datatype arg works", {
   )
   expect_equal(
     con$schema$ToString(),
-    oracle_output_schema_fixture(kind = "csv", output_type_id = "double")
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "double"
+    )
   )
 })
