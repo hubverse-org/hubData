@@ -12,18 +12,15 @@
 #' No other types of files are currently allowed in a `oracle-output` directory.
 #'
 #' @examples
-#' # Clone example hub
-#' tmp_hub_path <- withr::local_tempdir()
-#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' gert::git_clone(url = example_hub, path = tmp_hub_path)
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' # Connect to oracle-output data
-#' oo_con <- connect_target_oracle_output(tmp_hub_path)
+#' oo_con <- connect_target_oracle_output(hub_path)
 #' oo_con
 #' # Collect all oracle-output data
 #' oo_con |> dplyr::collect()
 #' # Filter for a specific date before collecting
 #' oo_con |>
-#'   dplyr::filter(target_end_date == "2022-11-12") |>
+#'   dplyr::filter(target_end_date ==  "2022-12-31") |>
 #'   dplyr::collect()
 #' # Filter for a specific location before collecting
 #' oo_con |>

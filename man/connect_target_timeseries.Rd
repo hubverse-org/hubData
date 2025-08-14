@@ -51,18 +51,15 @@ all files must share the same file format, either csv or parquet.
 No other types of files are currently allowed in a \code{time-series} directory.
 }
 \examples{
-# Clone example hub
-tmp_hub_path <- withr::local_tempdir()
-example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-gert::git_clone(url = example_hub, path = tmp_hub_path)
+hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 # Connect to time-series data
-ts_con <- connect_target_timeseries(tmp_hub_path)
+ts_con <- connect_target_timeseries(hub_path)
 ts_con
 # Collect all time-series data
 ts_con |> dplyr::collect()
 # Filter for a specific date before collecting
 ts_con |>
-  dplyr::filter(date == "2020-01-11") |>
+  dplyr::filter(target_end_date ==  "2022-12-31") |>
   dplyr::collect()
 # Filter for a specific location before collecting
 ts_con |>

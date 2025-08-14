@@ -15,18 +15,15 @@
 #' No other types of files are currently allowed in a `time-series` directory.
 #'
 #' @examples
-#' # Clone example hub
-#' tmp_hub_path <- withr::local_tempdir()
-#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' gert::git_clone(url = example_hub, path = tmp_hub_path)
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' # Connect to time-series data
-#' ts_con <- connect_target_timeseries(tmp_hub_path)
+#' ts_con <- connect_target_timeseries(hub_path)
 #' ts_con
 #' # Collect all time-series data
 #' ts_con |> dplyr::collect()
 #' # Filter for a specific date before collecting
 #' ts_con |>
-#'   dplyr::filter(date == "2020-01-11") |>
+#'   dplyr::filter(target_end_date ==  "2022-12-31") |>
 #'   dplyr::collect()
 #' # Filter for a specific location before collecting
 #' ts_con |>
@@ -37,13 +34,18 @@
 #' s3_con <- connect_target_timeseries(s3_hub_path)
 #' s3_con
 #' s3_con |> dplyr::collect()
-connect_target_timeseries <- function(hub_path = ".", date_col = NULL,
-                                      na = c("NA", ""),
-                                      ignore_files = NULL) {
+connect_target_timeseries <- function(
+  hub_path = ".",
+  date_col = NULL,
+  na = c("NA", ""),
+  ignore_files = NULL
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   ts_path <- validate_target_data_path(hub_path, "time-series")
   ts_ext <- get_target_file_ext(hub_path, ts_path)
-  ts_schema <- create_timeseries_schema(hub_path, date_col,
+  ts_schema <- create_timeseries_schema(
+    hub_path,
+    date_col,
     na = na,
     ignore_files = ignore_files
   )
@@ -58,11 +60,14 @@ connect_target_timeseries <- function(hub_path = ".", date_col = NULL,
   }
   ts_data <- open_target_dataset(
     ts_path,
-    ext = ts_ext, schema = ts_schema,
-    na = na, ignore_files = ignore_files
+    ext = ts_ext,
+    schema = ts_schema,
+    na = na,
+    ignore_files = ignore_files
   )
 
-  structure(ts_data,
+  structure(
+    ts_data,
     class = c("target_timeseries", class(ts_data)),
     ts_path = out_path,
     hub_path = hub_path

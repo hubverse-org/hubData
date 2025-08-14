@@ -1,4 +1,3 @@
-
 #' Create a full path to a file or directory in a SubTreeFileSystem object, usually in S3.
 #'
 #' @param hub_path a `<SubTreeFileSystem>` object representing an S3 cloud hub file system.
@@ -35,9 +34,7 @@ file_system_path <- function(hub_path, path, uri = FALSE) {
 #' @export
 #'
 #' @examples
-#' hub_path <- withr::local_tempdir()
-#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' gert::git_clone(url = example_hub, path = hub_path)
+#' hub_path <- hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' get_s3_bucket_name(hub_path)
 #' # Get config info from GitHub
 #' get_s3_bucket_name(
@@ -64,6 +61,8 @@ get_file_info <- function(hub_path, path) {
   hub_path$GetFileInfo(path)[[1]]
 }
 
-is_SubTreeFileSystem <- function(x) { # nolint: object_name_linter
+# nolint start: object_name_linter
+is_SubTreeFileSystem <- function(x) {
   inherits(x, "SubTreeFileSystem")
 }
+# nolint end
