@@ -21,10 +21,10 @@ test_that("get_target_path ignores misleading filenames around target_type", {
 
   # Add files whose names *contain* the token but aren't exact matches
   td <- fs::path(hub_path, "target-data")
-  readr::write_csv(data.frame(a = 1:3), fs::path(td, "showtime-series.csv"))
-  readr::write_csv(data.frame(a = 1:3), fs::path(td, "time-seriesss.csv"))
-  readr::write_csv(data.frame(a = 1:3), fs::path(td, "pre-oracle-output.csv"))
-  readr::write_csv(data.frame(a = 1:3), fs::path(td, "oracle-output-v2.csv"))
+  arrow::write_csv_arrow(data.frame(a = 1:3), fs::path(td, "showtime-series.csv"))
+  arrow::write_csv_arrow(data.frame(a = 1:3), fs::path(td, "time-seriesss.csv"))
+  arrow::write_csv_arrow(data.frame(a = 1:3), fs::path(td, "pre-oracle-output.csv"))
+  arrow::write_csv_arrow(data.frame(a = 1:3), fs::path(td, "oracle-output-v2.csv"))
 
   # Should still find the canonical files
   expect_equal(
