@@ -45,3 +45,55 @@ use_example_hub_editable <- function(
   fs::file_move(tmp, dest_path)
   dest_path
 }
+
+# Split a single CSV into per-target CSVs under target-data/<target_type>/
+split_csv_by_target <- function(
+  hub_path,
+  dat,
+  target_type = c("oracle-output", "time-series")
+) {
+  target_type <- rlang::arg_match(target_type)
+  out_dir <- fs::path(hub_path, "target-data", target_type)
+
+  # Clean up any previous contents
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
+  split(dat, dat$target) |>
+    purrr::iwalk(function(df, tgt) {
+      tgt_safe <- gsub(" ", "_", tgt, fixed = TRUE)
+      path <- fs::path(out_dir, paste0("target-", tgt_safe), ext = "csv")
+      .local_safe_overwrite(
+        function(path_out) arrow::write_csv_arrow(df, file = path_out),
+        path
+      )
+    })
+
+  out_dir
+}
+
+# Write hive-partitioned parquet by target under target-data/<target_type>/
+write_hive_parquet_by_target <- function(
+  hub_path,
+  dat,
+  target_type = c("oracle-output", "time-series")
+) {
+  target_type <- rlang::arg_match(target_type)
+  out_dir <- fs::path(hub_path, "target-data", target_type)
+
+  # Clean up any previous contents
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
+  arrow::write_dataset(
+    dat,
+    out_dir,
+    partitioning = "target",
+    format = "parquet"
+  )
+  out_dir
+}
