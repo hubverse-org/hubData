@@ -172,7 +172,7 @@ test_that("connect_target_oracle_output fails correctly", {
         target <- gsub(" ", "_", .y, fixed = TRUE)
         path <- fs::path(oo_dir, paste0("target-", target), ext = "csv")
         .local_safe_overwrite(
-          function(p) arrow::write_csv_arrow(.x, file = p),
+          function(path_out) arrow::write_csv_arrow(.x, file = path_out),
           path
         )
       }
@@ -193,12 +193,15 @@ test_that("connect_target_oracle_output fails correctly", {
         if (identical(target, "wk_flu_hosp_rate")) {
           path <- fs::path(oo_dir, paste0("target-", target), ext = "csv")
           .local_safe_overwrite(
-            function(p) arrow::write_csv_arrow(.x, file = p),
+            function(path_out) arrow::write_csv_arrow(.x, file = path_out),
             path
           )
         } else {
           path <- fs::path(oo_dir, paste0("target-", target), ext = "parquet")
-          .local_safe_overwrite(function(p) arrow::write_parquet(.x, p), path)
+          .local_safe_overwrite(
+            function(path_out) arrow::write_parquet(.x, path_out),
+            path
+          )
         }
       }
     )
@@ -230,7 +233,7 @@ test_that("connect_target_oracle_output on multiple non-partitioned files works 
         target <- gsub(" ", "_", .y, fixed = TRUE)
         path <- fs::path(oo_dir, paste0("target-", target), ext = "csv")
         .local_safe_overwrite(
-          function(p) arrow::write_csv_arrow(.x, file = p),
+          function(path_out) arrow::write_csv_arrow(.x, file = path_out),
           path
         )
       }
@@ -321,7 +324,7 @@ test_that("connect_target_oracle_output works on non-partitioned files in subdir
         fs::dir_create(fs::path(oo_dir, target))
         path <- fs::path(oo_dir, target, paste0("target-", target), ext = "csv")
         .local_safe_overwrite(
-          function(p) arrow::write_csv_arrow(.x, file = p),
+          function(path_out) arrow::write_csv_arrow(.x, file = path_out),
           path
         )
       }
@@ -524,7 +527,7 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
         target <- gsub(" ", "_", .y, fixed = TRUE)
         path <- fs::path(oo_dir, paste0("target-", target), ext = "csv")
         .local_safe_overwrite(
-          function(p) arrow::write_csv_arrow(.x, file = p),
+          function(path_out) arrow::write_csv_arrow(.x, file = path_out),
           path
         )
       }
@@ -678,7 +681,7 @@ test_that('connect_target_oracle_output parses "NA" and "" correctly (editable c
   # Introduce literal "NA" text in character column
   oo_dat$location[1] <- "NA"
   .local_safe_overwrite(
-    function(p) arrow::write_csv_arrow(oo_dat, file = p),
+    function(path_out) arrow::write_csv_arrow(oo_dat, file = path_out),
     oo_path
   )
 
