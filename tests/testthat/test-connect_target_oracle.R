@@ -2,7 +2,7 @@
 # Requires helper-hubs.R with:
 # - use_example_hub_readonly()
 # - use_example_hub_editable()
-# - safe_overwrite_file(), write_csv_file(), write_parquet_file()
+# - .local_safe_overwrite()
 
 test_that("connect_target_oracle_output on single file works on embedded hub", {
   hub_path <- use_example_hub_readonly("file")
@@ -30,9 +30,7 @@ test_that("connect_target_oracle_output on single file works on embedded hub", {
     "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double"
   )
 
-  # collect
   all <- dplyr::collect(oo_con)
-
   expect_equal(dim(all), c(627L, 6L))
   expect_s3_class(all, "tbl_df", exact = FALSE)
   expect_true(
@@ -49,14 +47,7 @@ test_that("connect_target_oracle_output on single file works on embedded hub", {
       "oracle_value"
     )
   )
-  expect_equal(
-    unique(all$location),
-    c(
-      "US",
-      "01",
-      "02"
-    )
-  )
+  expect_equal(unique(all$location), c("US", "01", "02"))
   expect_equal(
     unique(all$target),
     c("wk flu hosp rate", "wk flu hosp rate category", "wk inc flu hosp")
@@ -94,14 +85,7 @@ test_that("connect_target_oracle_output on single file works on embedded hub", {
       is.na() |>
       all()
   )
-  expect_equal(
-    unique(filter_date$location),
-    c(
-      "US",
-      "01",
-      "02"
-    )
-  )
+  expect_equal(unique(filter_date$location), c("US", "01", "02"))
   expect_equal(
     unique(filter_date$target),
     c("wk flu hosp rate", "wk flu hosp rate category", "wk inc flu hosp")
@@ -175,11 +159,7 @@ test_that("connect_target_oracle_output fails correctly", {
   )
 
   # fresh temp copy to edit
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
-  tmp <- withr::local_tempdir()
-  hub_path <- fs::path(tmp, fs::path_file(src))
-  fs::dir_copy(src, hub_path, overwrite = TRUE)
-
+  hub_path <- use_example_hub_editable("file")
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 
   # Multiple files/directories under oracle-output
@@ -236,12 +216,7 @@ test_that("connect_target_oracle_output fails correctly", {
 })
 
 test_that("connect_target_oracle_output on multiple non-partitioned files works (editable copy)", {
-  # fresh temp copy to edit
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
-  tmp <- withr::local_tempdir()
-  hub_path <- fs::path(tmp, fs::path_file(src))
-  fs::dir_copy(src, hub_path, overwrite = TRUE)
-
+  hub_path <- use_example_hub_editable("file")
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_dat <- arrow::read_csv_arrow(oo_path)
   fs::file_delete(oo_path)
@@ -331,12 +306,7 @@ test_that("connect_target_oracle_output on multiple non-partitioned files works 
 })
 
 test_that("connect_target_oracle_output works on non-partitioned files in subdirectories (editable copy)", {
-  # fresh temp copy to edit
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
-  tmp <- withr::local_tempdir()
-  hub_path <- fs::path(tmp, fs::path_file(src))
-  fs::dir_copy(src, hub_path, overwrite = TRUE)
-
+  hub_path <- use_example_hub_editable("file")
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_dat <- arrow::read_csv_arrow(oo_path)
   fs::file_delete(oo_path)
@@ -407,12 +377,7 @@ test_that("connect_target_oracle_output works on non-partitioned files in subdir
 })
 
 test_that("connect_target_oracle_output with HIVE-PARTITIONED parquet works (editable copy)", {
-  # fresh temp copy to edit
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
-  tmp <- withr::local_tempdir()
-  hub_path <- fs::path(tmp, fs::path_file(src))
-  fs::dir_copy(src, hub_path, overwrite = TRUE)
-
+  hub_path <- use_example_hub_editable("file")
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_dat <- arrow::read_csv_arrow(oo_path)
   fs::file_delete(oo_path)
@@ -496,7 +461,7 @@ test_that("connect_target_oracle_output works on single-file SubTreeFileSystem (
   skip_on_os("windows") # SubTreeFileSystem lower-level calls are flaky on Windows
 
   # Mirror the embedded hub into a temp FS and mount via SubTreeFileSystem
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  src <- use_example_hub_readonly("file")
   tmp <- withr::local_tempdir("subtree-hub-")
   fs::dir_copy(src, tmp, overwrite = TRUE)
   loc_fs <- arrow::SubTreeFileSystem$create(tmp)
@@ -706,18 +671,12 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
 })
 
 test_that('connect_target_oracle_output parses "NA" and "" correctly (editable copy)', {
-  # fresh temp copy to edit
-  src <- system.file("testhubs/v5/target_file", package = "hubUtils")
-  tmp <- withr::local_tempdir()
-  hub_path <- fs::path(tmp, fs::path_file(src))
-  fs::dir_copy(src, hub_path, overwrite = TRUE)
-
+  hub_path <- use_example_hub_editable("file")
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
   oo_dat <- arrow::read_csv_arrow(oo_path)
 
   # Introduce literal "NA" text in character column
   oo_dat$location[1] <- "NA"
-  # Write NAs as blank strings (default), Windows-safe replacement
   .local_safe_overwrite(
     function(p) arrow::write_csv_arrow(oo_dat, file = p),
     oo_path
@@ -736,7 +695,7 @@ test_that('connect_target_oracle_output parses "NA" and "" correctly (editable c
 })
 
 test_that("connect_target_oracle_output output_type_id_datatype arg works", {
-  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+  hub_path <- use_example_hub_readonly("file")
   oo_con <- connect_target_oracle_output(
     hub_path,
     output_type_id_datatype = "double"

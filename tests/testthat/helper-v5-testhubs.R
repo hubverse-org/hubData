@@ -14,8 +14,28 @@ use_example_hub_readonly <- function(which = c("file", "dir")) {
   if (which == "file") hubutils_target_file_hub() else hubutils_target_dir_hub()
 }
 
+# Make a temp working copy (persists for the calling TEST only)
+# - Uses testthat::teardown_env() by default, so cleanup happens after the test.
+use_example_hub_editable <- function(
+  which = c("file", "dir"),
+  .local_envir = testthat::teardown_env()
+) {
+  which <- rlang::arg_match(which)
+  src <- use_example_hub_readonly(which)
+
+  parent <- fs::path_temp(
+    paste0("hub-", which, "-", sprintf("%08x", as.integer(runif(1, 0, 2^31))))
+  )
+  fs::dir_create(parent, recurse = TRUE)
+  withr::defer(fs::dir_delete(parent), envir = .local_envir)
+
+  # Copy so the returned path IS the hub root (contains `target-data`)
+  dst <- fs::path(parent, fs::path_file(src))
+  fs::dir_copy(src, dst, overwrite = TRUE)
+  dst
+}
+
 # Windows-safe writer: write to tmp, then atomic move over the original
-# Local tiny helper for Windows-safe overwrites
 .local_safe_overwrite <- function(write_fun, dest_path, ...) {
   gc()
   Sys.sleep(0.2)
