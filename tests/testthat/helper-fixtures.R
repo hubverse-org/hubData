@@ -30,3 +30,14 @@ oracle_output_schema_fixture <- function(
     ))
   }
 }
+
+timeseries_schema_fixture <- function(kind = c("csv", "hive")) {
+  kind <- rlang::arg_match(kind)
+  if (kind == "hive") {
+    # partition column (target) appears last
+    "target_end_date: date32[day]\nlocation: string\nobservation: double\ntarget: string"
+  } else {
+    # single-file or multi-file non-partitioned CSV
+    "target_end_date: date32[day]\ntarget: string\nlocation: string\nobservation: double"
+  }
+}
