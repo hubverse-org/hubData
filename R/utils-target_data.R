@@ -151,7 +151,7 @@ get_target_file_ext.SubTreeFileSystem <- function(
 #' @export
 #'
 #' @examples
-#' hub_path <- hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' get_target_path(hub_path)
 #' get_target_path(hub_path, "time-series")
 #' get_target_path(hub_path, "oracle-output")
