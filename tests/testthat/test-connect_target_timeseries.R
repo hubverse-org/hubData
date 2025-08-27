@@ -106,6 +106,10 @@ test_that("connect_target_timeseries fails correctly", {
   )
 })
 
+# Although we generally only allow multiple file datasets of parquet files,
+# (and validate that restriction in hubValidations), connect_target_* functions
+# were written before we set that restriction and at least for now, can handle
+# datasets with multiple CSV files.
 test_that("connect_target_timeseries on multiple non-partitioned CSV files works", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "time-series")
@@ -145,6 +149,10 @@ test_that("connect_target_timeseries on multiple non-partitioned CSV files works
   expect_gt(nrow(res2), 0L)
 })
 
+# Although we generally only allow multiple file datasets of parquet files,
+# (and validate that restriction in hubValidations), connect_target_* functions
+# were written before we set that restriction and at least for now, can handle
+# datasets with multiple CSV files.
 test_that("connect_target_timeseries works with non-partitioned CSVs in subdirectories", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "time-series")
