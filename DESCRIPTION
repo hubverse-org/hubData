@@ -26,7 +26,7 @@ Imports:
     cli,
     dplyr (>= 1.1.0),
     fs,
-    hubUtils (>= 0.4.0.9000),
+    hubUtils (>= 0.6.0.9000),
     lifecycle,
     magrittr,
     memoise,

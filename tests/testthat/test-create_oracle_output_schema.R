@@ -1,63 +1,94 @@
-test_that("create_oracle_output_schema works", {
-  skip_if_offline()
-  tmp_hub_path <- withr::local_tempdir()
-  example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-  gert::git_clone(url = example_hub, path = tmp_hub_path)
-  # Create target oracle-output schema
-  test_schema <- create_oracle_output_schema(tmp_hub_path)
+# Tests for create_oracle_output_schema using embedded example hubs
+# Requires helper-v5-hubs.R with:
+# - use_example_hub_readonly()
+# - use_example_hub_editable()
+# And helper-fixtures.R with:
+# - oracle_output_schema_fixture()  # takes partition_col, output_type_id
 
+test_that("create_oracle_output_schema works on embedded single-file hub", {
+  hub_path <- use_example_hub_readonly("file")
+
+  sch <- create_oracle_output_schema(hub_path)
   expect_equal(
-    test_schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+    sch$ToString(),
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
   )
+})
 
-  # Create target oracle-output schema partitioned on a target_end_date column. As this is
-  # a valid date task ID, schema should be created successfully without specifying date_col.
-  oo_path <- validate_target_data_path(tmp_hub_path, "oracle-output")
-  oo_dir <- fs::path(tmp_hub_path, "target-data", "oracle-output")
-  fs::dir_create(oo_dir)
-  oo_dat <- arrow::read_csv_arrow(oo_path)
+test_that("create_oracle_output_schema works when partitioned by target_end_date", {
+  # editable copy to partition and remove the single file
+  hub_path <- use_example_hub_editable("file")
+  oo_path <- validate_target_data_path(hub_path, "oracle-output")
+  dat <- arrow::read_csv_arrow(oo_path)
+
+  out_dir <- fs::path(hub_path, "target-data", "oracle-output")
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
   arrow::write_dataset(
-    oo_dat,
-    oo_dir,
+    dat,
+    out_dir,
     partitioning = "target_end_date",
     format = "parquet"
   )
   fs::file_delete(oo_path)
 
+  # partitioned schema: partition column appears last
+  sch_hive <- create_oracle_output_schema(hub_path)
   expect_equal(
-    create_oracle_output_schema(tmp_hub_path)$ToString(),
-    "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]" # nolint: line_length_linter
+    sch_hive$ToString(),
+    oracle_output_schema_fixture(
+      partition_col = "target_end_date",
+      output_type_id = "string"
+    )
   )
 
-  # Check that ignoring a partition folder returns the same schema
-  expect_equal(
-    create_oracle_output_schema(
-      tmp_hub_path,
-      ignore_files = "target_end_date=2023-06-17"
-    )$ToString(),
-    "location: string\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double\ntarget_end_date: date32[day]" # nolint: line_length_linter
+  # ignoring a specific partition folder should yield the same schema
+  sch_ign <- create_oracle_output_schema(
+    hub_path,
+    ignore_files = "target_end_date=2023-06-17"
   )
-})
-
-test_that("create_oracle_output_schema works on single-file S3 SubTreeFileSystem hub", {
-  skip_if_offline()
-  hub_path <- s3_bucket("example-complex-forecast-hub")
-  oo_schema <- create_oracle_output_schema(hub_path)
-
   expect_equal(
-    oo_schema$ToString(),
-    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+    sch_ign$ToString(),
+    oracle_output_schema_fixture(
+      partition_col = "target_end_date",
+      output_type_id = "string"
+    )
   )
 })
 
-test_that("create_oracle_output_schema returns r datatypes", {
-  skip_if_offline()
-  hub_path <- s3_bucket("example-complex-forecast-hub")
-  oo_schema <- create_oracle_output_schema(hub_path, r_schema = TRUE)
+test_that("create_oracle_output_schema works on single-file SubTreeFileSystem (local mirror)", {
+  skip_on_os("windows") # SubTreeFileSystem lower-level calls are flaky on Windows
+
+  src <- use_example_hub_readonly("file")
+  tmp <- withr::local_tempdir("subtree-oo-")
+  fs::dir_copy(src, tmp, overwrite = TRUE)
+  loc_fs <- arrow::SubTreeFileSystem$create(tmp)
+
+  cfg <- read_config(tmp)
+  local_mocked_bindings(read_config = function(...) cfg)
+
+  sch <- create_oracle_output_schema(loc_fs)
+  expect_equal(
+    sch$ToString(),
+    oracle_output_schema_fixture(
+      partition_col = NULL,
+      output_type_id = "string"
+    )
+  )
+})
+
+test_that("create_oracle_output_schema returns R datatypes", {
+  hub_path <- use_example_hub_readonly("file")
+  sch_r <- create_oracle_output_schema(hub_path, r_schema = TRUE)
 
   expect_equal(
-    oo_schema,
+    sch_r,
     c(
       location = "character",
       target_end_date = "Date",
@@ -70,15 +101,11 @@ test_that("create_oracle_output_schema returns r datatypes", {
 })
 
 test_that("create_oracle_output_schema output_type_id override works", {
-  skip_if_offline()
-  hub_path <- s3_bucket("example-complex-forecast-hub")
-  oo_schema <- create_oracle_output_schema(
+  hub_path <- use_example_hub_readonly("file")
+  sch_r <- create_oracle_output_schema(
     hub_path,
     r_schema = TRUE,
     output_type_id_datatype = "double"
   )
-  expect_equal(
-    oo_schema[["output_type_id"]],
-    "double"
-  )
+  expect_equal(sch_r[["output_type_id"]], "double")
 })

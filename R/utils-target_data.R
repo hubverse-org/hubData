@@ -10,17 +10,21 @@
 #' @returns The path to the appropriate target data file/directory invisibly.
 #' @noRd
 validate_target_data_path <- function(
-    hub_path, target_type = c(
-      "time-series",
-      "oracle-output"
-    ),
-    call = rlang::caller_env()) {
+  hub_path,
+  target_type = c(
+    "time-series",
+    "oracle-output"
+  ),
+  call = rlang::caller_env()
+) {
   target_type <- rlang::arg_match(target_type)
   ts_path <- get_target_path(hub_path, target_type)
 
   if (length(ts_path) == 0L) {
     cli::cli_abort(
-      c("x" = "No {.field {target_type}} data found in {.path target-data} directory"),
+      c(
+        "x" = "No {.field {target_type}} data found in {.path target-data} directory"
+      ),
       call = call
     )
   }
@@ -28,7 +32,10 @@ validate_target_data_path <- function(
     cli::cli_abort(
       c(
         "x" = "Multiple {.field {target_type}} data found in hub {.path target-data} directory",
-        stats::setNames(paste0("{.path ", basename(ts_path), "}"), rep("*", length(ts_path)))
+        stats::setNames(
+          paste0("{.path ", basename(ts_path), "}"),
+          rep("*", length(ts_path))
+        )
       ),
       call = call
     )
@@ -47,7 +54,11 @@ validate_target_data_path <- function(
 #'
 #' @returns The file extension of the target data file(s) invisibly.
 #' @noRd
-validate_target_file_ext <- function(ts_path, hub_path = NULL, call = rlang::caller_env()) {
+validate_target_file_ext <- function(
+  ts_path,
+  hub_path = NULL,
+  call = rlang::caller_env()
+) {
   ts_ext <- get_target_file_ext(hub_path, ts_path)
   target_type <- fs::path_file(ts_path) |> fs::path_ext_remove() # nolint: object_usage_linter
 
@@ -91,9 +102,7 @@ validate_target_file_ext <- function(ts_path, hub_path = NULL, call = rlang::cal
 #'
 #' @export
 #' @examples
-#' hub_path <- withr::local_tempdir()
-#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' gert::git_clone(url = example_hub, path = hub_path)
+#'  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' target_path <- get_target_path(hub_path, "time-series")
 #' get_target_file_ext(hub_path, target_path)
 get_target_file_ext <- function(hub_path = NULL, target_path) {
@@ -115,7 +124,10 @@ get_target_file_ext.default <- function(hub_path = NULL, target_path) {
 
 #' @noRd
 #' @export
-get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) {
+get_target_file_ext.SubTreeFileSystem <- function(
+  hub_path = NULL,
+  target_path
+) {
   is_dir <- is_cloud_dir(hub_path, target_path)
   if (is_dir) {
     ts_dir_paths <- hub_path$path(target_path)$ls(
@@ -139,9 +151,7 @@ get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) 
 #' @export
 #'
 #' @examples
-#' hub_path <- withr::local_tempdir()
-#' example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-#' gert::git_clone(url = example_hub, path = hub_path)
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' get_target_path(hub_path)
 #' get_target_path(hub_path, "time-series")
 #' get_target_path(hub_path, "oracle-output")
@@ -150,20 +160,26 @@ get_target_file_ext.SubTreeFileSystem <- function(hub_path = NULL, target_path) 
 #' s3_hub_path <- s3_bucket(s3_bucket_name)
 #' get_target_path(s3_hub_path)
 #' get_target_path(s3_hub_path, "oracle-output")
-get_target_path <- function(hub_path, target_type = c("time-series", "oracle-output")) {
+get_target_path <- function(
+  hub_path,
+  target_type = c("time-series", "oracle-output")
+) {
   UseMethod("get_target_path")
 }
 
 
 #' @export
 #' @noRd
-get_target_path.default <- function(hub_path,
-                                    target_type = c("time-series", "oracle-output")) {
+get_target_path.default <- function(
+  hub_path,
+  target_type = c("time-series", "oracle-output")
+) {
   target_type <- rlang::arg_match(target_type)
   target_data_path <- fs::path(hub_path, "target-data")
   checkmate::assert_directory(target_data_path)
 
-  td_files <- fs::dir_ls(target_data_path,
+  td_files <- fs::dir_ls(
+    target_data_path,
     regexp = target_type,
     type = c("file", "directory")
   )
@@ -172,8 +188,10 @@ get_target_path.default <- function(hub_path,
 
 #' @export
 #' @noRd
-get_target_path.SubTreeFileSystem <- function(hub_path,
-                                              target_type = c("time-series", "oracle-output")) {
+get_target_path.SubTreeFileSystem <- function(
+  hub_path,
+  target_type = c("time-series", "oracle-output")
+) {
   target_type <- rlang::arg_match(target_type)
   target_data_path <- hub_path$path("target-data")
 
@@ -209,24 +227,29 @@ get_target_path.SubTreeFileSystem <- function(hub_path,
 get_target_schema <- function(path, ext, na, ignore_files) {
   is_dir <- fs::path_ext(path) == ""
   if (ext == "csv" && is_dir) {
-    file_schema <- arrow::open_dataset(path,
+    file_schema <- arrow::open_dataset(
+      path,
       format = ext,
-      na = na, quoted_na = TRUE,
+      na = na,
+      quoted_na = TRUE,
       factory_options = list(
         selector_ignore_prefixes = ignore_files
       )
     )
   } else if (ext == "parquet" && is_dir) {
-    file_schema <- arrow::open_dataset(path,
+    file_schema <- arrow::open_dataset(
+      path,
       format = ext,
       factory_options = list(
         selector_ignore_prefixes = ignore_files
       )
     )
   } else if (ext == "csv") {
-    file_schema <- arrow::open_dataset(path,
+    file_schema <- arrow::open_dataset(
+      path,
       format = ext,
-      na = na, quoted_na = TRUE
+      na = na,
+      quoted_na = TRUE
     )
   } else {
     file_schema <- arrow::open_dataset(path, format = ext)
@@ -264,16 +287,20 @@ get_target_schema <- function(path, ext, na, ignore_files) {
 open_target_dataset <- function(path, ext, schema, na, ignore_files) {
   is_dir <- fs::path_ext(path) == ""
   if (ext == "csv" && is_dir) {
-    arrow::open_dataset(path,
+    arrow::open_dataset(
+      path,
       format = ext,
       schema = schema,
-      skip = 1L, quoted_na = TRUE, na = na,
+      skip = 1L,
+      quoted_na = TRUE,
+      na = na,
       factory_options = list(
         selector_ignore_prefixes = ignore_files
       )
     )
   } else if (ext == "parquet" && is_dir) {
-    arrow::open_dataset(path,
+    arrow::open_dataset(
+      path,
       format = ext,
       schema = schema,
       factory_options = list(
@@ -281,15 +308,15 @@ open_target_dataset <- function(path, ext, schema, na, ignore_files) {
       )
     )
   } else if (ext == "csv") {
-    arrow::open_dataset(path,
+    arrow::open_dataset(
+      path,
       format = ext,
       schema = schema,
-      skip = 1L, quoted_na = TRUE, na = na
+      skip = 1L,
+      quoted_na = TRUE,
+      na = na
     )
   } else {
-    arrow::open_dataset(path,
-      format = ext,
-      schema = schema
-    )
+    arrow::open_dataset(path, format = ext, schema = schema)
   }
 }

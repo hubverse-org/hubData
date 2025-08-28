@@ -21,9 +21,7 @@ extensions of all files in the directory. If \code{target_path} is a file,
 the function will return the file extension of that file.
 }
 \examples{
-hub_path <- withr::local_tempdir()
-example_hub <- "https://github.com/hubverse-org/example-complex-forecast-hub.git"
-gert::git_clone(url = example_hub, path = hub_path)
+hub_path <- hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 target_path <- get_target_path(hub_path, "time-series")
 get_target_file_ext(hub_path, target_path)
 }
