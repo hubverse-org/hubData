@@ -285,3 +285,18 @@ test_that("connect_target_timeseries works with multi-file SubTreeFileSystem hub
   expect_gt(nrow(few), 0L)
   expect_true(all(few$observation < 1))
 })
+
+test_that("partitioning column schema is detected correctly (#89)", {
+  hub_path_cloud <- s3_bucket("covid-variant-nowcast-hub")
+  con <- connect_target_timeseries(hub_path_cloud)
+
+  expect_s3_class(
+    con,
+    c("target_timeseries", "FileSystemDataset", "Dataset", "ArrowObject", "R6"),
+    exact = TRUE
+  )
+  expect_equal(
+    con$schema$ToString(),
+    "target_date: date32[day]\nlocation: string\nclade: string\nobservation: double\nnowcast_date: date32[day]\nas_of: date32[day]" # nolint: line_length_linter
+  )
+})

@@ -437,3 +437,24 @@ test_that("connect_target_oracle_output output_type_id_datatype arg works", {
     )
   )
 })
+
+test_that("partitioning column schema is detected correctly (#89)", {
+  hub_path_cloud <- s3_bucket("covid-variant-nowcast-hub")
+  con <- connect_target_oracle_output(hub_path_cloud)
+
+  expect_s3_class(
+    con,
+    c(
+      "target_oracle_output",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
+      "R6"
+    ),
+    exact = TRUE
+  )
+  expect_equal(
+    con$schema$ToString(),
+    "location: string\ntarget_date: date32[day]\nclade: string\noracle_value: double\nnowcast_date: date32[day]\nas_of: date32[day]" # nolint: line_length_linter
+  )
+})
