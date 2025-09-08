@@ -109,3 +109,31 @@ test_that("create_oracle_output_schema output_type_id override works", {
   )
   expect_equal(sch_r[["output_type_id"]], "double")
 })
+
+test_that("create_oracle_output_schema non-task ID partition columns detected", {
+  # editable copy to partition and remove the single file
+  hub_path <- use_example_hub_editable("file")
+  oo_path <- validate_target_data_path(hub_path, "oracle-output")
+  dat <- arrow::read_csv_arrow(oo_path)
+  dat$extra_col <- "extra"
+
+  out_dir <- fs::path(hub_path, "target-data", "oracle-output")
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
+  arrow::write_dataset(
+    dat,
+    out_dir,
+    partitioning = c("target_end_date", "extra_col"),
+    format = "parquet"
+  )
+  fs::file_delete(oo_path)
+
+  sch_extra <- create_oracle_output_schema(hub_path)
+  expect_equal(
+    sch_extra$extra_col$ToString(),
+    "extra_col: string"
+  )
+})

@@ -218,5 +218,20 @@ get_partition_schema <- function(
     )
   }
   hub_schema$as_of <- arrow::date32()
+
+  # Ensure all partition vars are in the schema as utf8 (arrow default) if not
+  # defined in the tasks.json config
+  non_hub_schema_partitions <- setdiff(partition_vars, names(hub_schema))
+  if (length(non_hub_schema_partitions) > 0L) {
+    non_hub_schema_partition_schema <- arrow::schema(
+      purrr::map(non_hub_schema_partitions, ~ arrow::field(.x, arrow::utf8()))
+    )
+  } else {
+    non_hub_schema_partition_schema <- arrow::schema()
+  }
+  hub_schema <- arrow::schema(
+    !!!c(hub_schema$fields, non_hub_schema_partition_schema$fields)
+  )
+
   hub_schema[partition_vars]
 }
