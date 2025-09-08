@@ -8,16 +8,21 @@
 #'
 #' @param hub_path A path to the hub. Can be a character string (for local paths)
 #'   or a file system object (e.g. of class `SubTreeFileSystem`) for cloud hubs.
+#' @param subdir Optional character vector of subdirectories within the hub
+#' to list files from.
 #'
 #' @return A character vector of file paths relative to the hub root.
 #'
 #' @keywords internal
 #' @noRd
-list_hub_files <- function(hub_path) {
+list_hub_files <- function(hub_path, subdir = NULL) {
   UseMethod("list_hub_files")
 }
 #' @export
-list_hub_files.default <- function(hub_path) {
+list_hub_files.default <- function(hub_path, subdir = NULL) {
+  if (!is.null(subdir)) {
+    hub_path <- Reduce(fs::path, c(hub_path, subdir))
+  }
   checkmate::assert_directory_exists(hub_path)
   fs::dir_ls(
     hub_path,
@@ -25,7 +30,11 @@ list_hub_files.default <- function(hub_path) {
   )
 }
 #' @export
-list_hub_files.SubTreeFileSystem <- function(hub_path) {
+list_hub_files.SubTreeFileSystem <- function(hub_path, subdir = NULL) {
+  if (!is.null(subdir)) {
+    subdir_path <- Reduce(fs::path, subdir)
+    hub_path <- hub_path$path(subdir_path)
+  }
   hub_path$ls(recursive = TRUE)
 }
 
@@ -51,9 +60,11 @@ list_hub_files.SubTreeFileSystem <- function(hub_path) {
 #'
 #' @keywords internal
 #' @noRd
-get_file_format <- function(config_admin,
-                            file_format = c("csv", "parquet", "arrow"),
-                            call = rlang::caller_env()) {
+get_file_format <- function(
+  config_admin,
+  file_format = c("csv", "parquet", "arrow"),
+  call = rlang::caller_env()
+) {
   config_file_format <- config_admin[["file_format"]]
 
   if (!rlang::is_missing(file_format)) {
@@ -118,14 +129,22 @@ get_file_format <- function(config_admin,
 #'
 #' @keywords internal
 #' @noRd
-model_output_dir_path <- function(hub_path, config_admin, hub_files = NULL,
-                                  call = rlang::caller_env()) {
+model_output_dir_path <- function(
+  hub_path,
+  config_admin,
+  hub_files = NULL,
+  call = rlang::caller_env()
+) {
   UseMethod("model_output_dir_path")
 }
 
 #' @export
-model_output_dir_path.default <- function(hub_path, config_admin, hub_files = NULL,
-                                          call = rlang::caller_env()) {
+model_output_dir_path.default <- function(
+  hub_path,
+  config_admin,
+  hub_files = NULL,
+  call = rlang::caller_env()
+) {
   model_output_dir <- ifelse(
     is.null(config_admin[["model_output_dir"]]),
     fs::path(hub_path, "model-output"),
@@ -142,8 +161,12 @@ model_output_dir_path.default <- function(hub_path, config_admin, hub_files = NU
 }
 
 #' @export
-model_output_dir_path.SubTreeFileSystem <- function(hub_path, config_admin, hub_files,
-                                                    call = rlang::caller_env()) {
+model_output_dir_path.SubTreeFileSystem <- function(
+  hub_path,
+  config_admin,
+  hub_files,
+  call = rlang::caller_env()
+) {
   if (is.null(config_admin[["model_output_dir"]])) {
     model_output_dir <- hub_path$path("model-output")
   } else {
@@ -226,20 +249,27 @@ get_file_format_meta <- function(dataset, model_out_files, file_format) {
 #'
 #' @keywords internal
 #' @noRd
-check_file_format <- function(model_out_files, file_format, skip_checks,
-                              call = rlang::caller_env(), error = FALSE) {
+check_file_format <- function(
+  model_out_files,
+  file_format,
+  skip_checks,
+  call = rlang::caller_env(),
+  error = FALSE
+) {
   dir_file_formats <- get_dir_file_formats(model_out_files)
   valid_file_format <- file_format[file_format %in% dir_file_formats]
 
   if (length(valid_file_format) == 0L && error) {
-    cli::cli_abort("No files of file format{?s}
+    cli::cli_abort(
+      "No files of file format{?s}
                    {.val {file_format}}
                    found in model output directory.",
       call = call
     )
   }
   if (length(valid_file_format) == 0L) {
-    cli::cli_warn("No files of file format{?s}
+    cli::cli_warn(
+      "No files of file format{?s}
                    {.val {file_format}}
                    found in model output directory.",
       call = call
@@ -285,8 +315,12 @@ file_format_n <- function(model_out_files, file_format) {
 #'
 #' @keywords internal
 #' @noRd
-warn_unopened_files <- function(x, dataset, model_out_files,
-                                ignore_files = NULL) {
+warn_unopened_files <- function(
+  x,
+  dataset,
+  model_out_files,
+  ignore_files = NULL
+) {
   x <- as.data.frame(x)
   unopened_file_formats <- purrr::map_lgl(x, ~ .x[1] < .x[2])
   if (any(unopened_file_formats)) {
@@ -357,8 +391,12 @@ warn_unopened_files <- function(x, dataset, model_out_files,
 #'
 #' @keywords internal
 #' @noRd
-list_model_out_files <- function(model_output_dir, hub_files = NULL, file_format = NULL,
-                                 type = "any") {
+list_model_out_files <- function(
+  model_output_dir,
+  hub_files = NULL,
+  file_format = NULL,
+  type = "any"
+) {
   checkmate::assert_string(file_format, null.ok = TRUE)
   UseMethod("list_model_out_files")
 }
@@ -366,8 +404,12 @@ list_model_out_files <- function(model_output_dir, hub_files = NULL, file_format
 
 #' @export
 # hub_files not required but passed for consistency with SubTreeFileSystem method
-list_model_out_files.default <- function(model_output_dir, hub_files = NULL, file_format = NULL,
-                                         type = c("any", "file", "directory")) {
+list_model_out_files.default <- function(
+  model_output_dir,
+  hub_files = NULL,
+  file_format = NULL,
+  type = c("any", "file", "directory")
+) {
   type <- rlang::arg_match(type)
 
   if (is.null(file_format)) {
@@ -382,8 +424,12 @@ list_model_out_files.default <- function(model_output_dir, hub_files = NULL, fil
 }
 
 #' @export
-list_model_out_files.SubTreeFileSystem <- function(model_output_dir, hub_files, file_format = NULL,
-                                                   type = c("any", "file", "directory")) {
+list_model_out_files.SubTreeFileSystem <- function(
+  model_output_dir,
+  hub_files,
+  file_format = NULL,
+  type = c("any", "file", "directory")
+) {
   type <- rlang::arg_match(type)
 
   model_out_files <- hub_files[startsWith(
@@ -392,7 +438,8 @@ list_model_out_files.SubTreeFileSystem <- function(model_output_dir, hub_files, 
   )]
 
   is_dir <- fs::path_ext(model_out_files) == ""
-  out_files <- switch(type,
+  out_files <- switch(
+    type,
     any = model_out_files,
     file = model_out_files[!is_dir],
     directory = model_out_files[is_dir]
@@ -488,8 +535,10 @@ get_dir_file_formats <- function(model_out_files) {
 #'
 #' @keywords internal
 #' @noRd
-list_invalid_format_files <- function(model_out_files,
-                                      file_format = c("csv", "parquet", "arrow")) {
+list_invalid_format_files <- function(
+  model_out_files,
+  file_format = c("csv", "parquet", "arrow")
+) {
   files <- fs::path_file(model_out_files)
   files[fs::path_ext(files) != file_format]
 }
