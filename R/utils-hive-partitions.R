@@ -223,14 +223,14 @@ get_partition_schema <- function(
   # defined in the tasks.json config
   non_hub_schema_partitions <- setdiff(partition_vars, names(hub_schema))
   if (length(non_hub_schema_partitions) > 0L) {
-    non_hub_schema_partition_schema <- arrow::schema(
+    non_hub_part_schema <- arrow::schema(
       purrr::map(non_hub_schema_partitions, ~ arrow::field(.x, arrow::utf8()))
     )
   } else {
-    non_hub_schema_partition_schema <- arrow::schema()
+    non_hub_part_schema <- arrow::schema()
   }
   hub_schema <- arrow::schema(
-    !!!c(hub_schema$fields, non_hub_schema_partition_schema$fields)
+    !!!c(hub_schema$fields, non_hub_part_schema$fields)
   )
 
   hub_schema[partition_vars]
