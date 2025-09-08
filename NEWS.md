@@ -12,6 +12,7 @@
 * Added utilities for working with hive-partitioned data file paths:
   - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
   - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
+- `create_oracle_output_schema()` and `create_timeseries_schema()` now define a schema for hive-partitions whose data types are defined in the `tasks.json config` (#89).
 
 # hubData 1.4.0
 
