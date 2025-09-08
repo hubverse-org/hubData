@@ -28,7 +28,7 @@ a character vector of path(s) to target data file(s) (in the \code{target-data} 
 Get the path(s) to the target data file(s) in the hub directory.
 }
 \examples{
-hub_path <- hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 get_target_path(hub_path)
 get_target_path(hub_path, "time-series")
 get_target_path(hub_path, "oracle-output")
