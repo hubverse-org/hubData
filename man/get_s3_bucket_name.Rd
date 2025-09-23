@@ -16,7 +16,7 @@ The bucket name for the cloud storage location.
 Get the bucket name for the cloud storage location.
 }
 \examples{
-hub_path <- hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 get_s3_bucket_name(hub_path)
 # Get config info from GitHub
 get_s3_bucket_name(
