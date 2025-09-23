@@ -1,3 +1,5 @@
+# hubData (development version)
+
 # hubData 1.5.0
 
 * Added Arrow schema utilities for safely converting and validating column types from `arrow::Schema` objects:
