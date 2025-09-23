@@ -9,6 +9,8 @@
 <url><loc>https://hubverse-org.github.io/hubData/authors.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/index.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/news/index.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/reference/arrow_to_r_datatypes.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/reference/as_r_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/coerce_to_hub_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/collect_hub.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/collect_zoltar.html</loc></url>
@@ -20,12 +22,14 @@
 <url><loc>https://hubverse-org.github.io/hubData/reference/create_oracle_output_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/create_timeseries_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/expand_model_out_val_grid.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/reference/extract_hive_partitions.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/get_s3_bucket_name.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/get_target_file_ext.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/get_target_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/gs_bucket.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/hubData-package.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/index.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/reference/is_hive_partitioned_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/load_model_metadata.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/pipe.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/reference/print.hub_connection.html</loc></url>

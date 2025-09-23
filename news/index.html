@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,31 @@
       <small>Source: <a href="https://github.com/hubverse-org/hubData/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="hubdata-150">hubData 1.5.0<a class="anchor" aria-label="anchor" href="#hubdata-150"></a></h2>
+<ul><li>Added Arrow schema utilities for safely converting and validating column types from <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> objects:
+<ul><li>
+<code><a href="../reference/as_r_schema.html">as_r_schema()</a></code>: Converts an Arrow schema to a named character vector of equivalent R types (e.g., <code>"int32"</code> → <code>"integer"</code>). Errors on unsupported types.</li>
+<li>
+<code><a href="../reference/as_r_schema.html">arrow_schema_to_string()</a></code>: Extracts the raw Arrow type strings for field in a schema.</li>
+<li>
+<code><a href="../reference/as_r_schema.html">is_supported_arrow_type()</a></code>: Returns a named logical vector indicating which schema fields have supported types.</li>
+<li>
+<code><a href="../reference/as_r_schema.html">validate_arrow_schema()</a></code>: Validates that all field types in an Arrow schema are supported. Throws a helpful error otherwise.</li>
+</ul></li>
+<li>Added <code>arrow_to_r_datatypes</code>, a named character vector defining the mapping of safe and portable Arrow types to their R equivalents.</li>
+<li>Added <code>r_schema</code> argument to <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> and <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> functions to enable returning the schema as a vector of R data types instead of an <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> object (<a href="https://github.com/hubverse-org/hubData/issues/95" class="external-link">#95</a>)</li>
+<li>Added <code>output_type_id_datatype</code> argument to <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> functions to allow users to explicitly specify the data type of the <code>output_type_id</code> column in the schema. This ensuring compatibility with <code><a href="../reference/create_hub_schema.html">create_hub_schema()</a></code> and <code><a href="../reference/connect_hub.html">connect_hub()</a></code> (<a href="https://github.com/hubverse-org/hubData/issues/95" class="external-link">#95</a>).</li>
+<li>(Internal) Refactored target data schema and connection tests to use embedded example hubs and reusable schema fixtures, improving reliability and making tests independent of dataset size and ordering.</li>
+<li>Added utilities for working with hive-partitioned data file paths:
+<ul><li>
+<code><a href="../reference/extract_hive_partitions.html">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
+<li>
+<code><a href="../reference/is_hive_partitioned_path.html">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
+</ul></li>
+<li>
+<code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> and <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> now define a schema for hive-partitions whose data types are defined in the <code>tasks.json config</code> (<a href="https://github.com/hubverse-org/hubData/issues/89" class="external-link">#89</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="hubdata-140">hubData 1.4.0<a class="anchor" aria-label="anchor" href="#hubdata-140"></a></h2>
 <ul><li>Added <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> function (experimental) for accessing time-series target data from a hub (<a href="https://github.com/hubverse-org/hubData/issues/71" class="external-link">#71</a>). This includes accessing target data from cloud hubs (<a href="https://github.com/hubverse-org/hubData/issues/75" class="external-link">#75</a>).</li>

@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,15 +74,13 @@ files within the <code>hub-config</code> directory.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">example_hub</span> <span class="op">&lt;-</span> <span class="st">"https://github.com/hubverse-org/example-complex-forecast-hub.git"</span></span></span>
-<span class="r-in"><span><span class="fu">gert</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/gert/reference/git_fetch.html" class="external-link">git_clone</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">example_hub</span>, path <span class="op">=</span> <span class="va">hub_path</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v5/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmptPnLVX/file1da942d8a0d0/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /home/runner/work/_temp/Library/hubUtils/testhubs/v5/target_file/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"time-series"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmptPnLVX/file1da942d8a0d0/target-data/time-series.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /home/runner/work/_temp/Library/hubUtils/testhubs/v5/target_file/target-data/time-series.csv</span>
 <span class="r-in"><span><span class="fu">get_target_path</span><span class="op">(</span><span class="va">hub_path</span>, <span class="st">"oracle-output"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /tmp/RtmptPnLVX/file1da942d8a0d0/target-data/oracle-output.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /home/runner/work/_temp/Library/hubUtils/testhubs/v5/target_file/target-data/oracle-output.csv</span>
 <span class="r-in"><span><span class="co"># Access cloud data</span></span></span>
 <span class="r-in"><span><span class="va">s3_bucket_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_s3_bucket_name.html">get_s3_bucket_name</a></span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="va">s3_bucket_name</span><span class="op">)</span></span></span>
