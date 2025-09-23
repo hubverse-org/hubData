@@ -102,7 +102,7 @@ validate_target_file_ext <- function(
 #'
 #' @export
 #' @examples
-#'  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' target_path <- get_target_path(hub_path, "time-series")
 #' get_target_file_ext(hub_path, target_path)
 get_target_file_ext <- function(hub_path = NULL, target_path) {
@@ -110,8 +110,8 @@ get_target_file_ext <- function(hub_path = NULL, target_path) {
   UseMethod("get_target_file_ext")
 }
 
-# Get the file extension of the target data file(s) in `target_path`. Assumes the target data
-# path has been validated first.
+# Get the file extension of the target data file(s) in `target_path`.
+# Assumes the target data path has been validated first.
 #' @noRd
 #' @export
 get_target_file_ext.default <- function(hub_path = NULL, target_path) {
