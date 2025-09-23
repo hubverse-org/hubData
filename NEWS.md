@@ -9,6 +9,10 @@
 * Added `r_schema` argument to `create_timeseries_schema()` and `create_oracle_output_schema()` functions to enable returning the schema as a vector of R data types instead of an `arrow::Schema` object (#95)
 * Added `output_type_id_datatype` argument to `create_oracle_output_schema()` and `connect_target_oracle_output()` functions to allow users to explicitly specify the data type of the `output_type_id` column in the schema. This ensuring compatibility with `create_hub_schema()` and `connect_hub()` (#95).
 * (Internal) Refactored target data schema and connection tests to use embedded example hubs and reusable schema fixtures, improving reliability and making tests independent of dataset size and ordering.
+* Added utilities for working with hive-partitioned data file paths:
+  - `extract_hive_partitions()` for extracting key value pairs from paths to hive-partitioned data files.
+  - `is_hive_partitioned_path()` for checking if a path is hive-partitioned.
+- `create_oracle_output_schema()` and `create_timeseries_schema()` now define a schema for hive-partitions whose data types are defined in the `tasks.json config` (#89).
 
 # hubData 1.4.0
 

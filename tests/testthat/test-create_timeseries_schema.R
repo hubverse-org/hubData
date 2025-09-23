@@ -128,3 +128,31 @@ test_that("create_timeseries_schema returns R datatypes", {
     )
   )
 })
+
+test_that("create_timeseries_schema non-task ID partition columns detected", {
+  # editable copy to partition and remove the single file
+  hub_path <- use_example_hub_editable("file")
+  ts_path <- validate_target_data_path(hub_path, "time-series")
+  dat <- arrow::read_csv_arrow(ts_path)
+  dat$extra_col <- "extra"
+
+  out_dir <- fs::path(hub_path, "target-data", "time-series")
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
+  arrow::write_dataset(
+    dat,
+    out_dir,
+    partitioning = c("target_end_date", "extra_col"),
+    format = "parquet"
+  )
+  fs::file_delete(ts_path)
+
+  sch_extra <- create_timeseries_schema(hub_path)
+  expect_equal(
+    sch_extra$extra_col$ToString(),
+    "extra_col: string"
+  )
+})

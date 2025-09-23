@@ -44,6 +44,13 @@ create_oracle_output_schema <- function(
     oo_path <- file_system_path(hub_path, oo_path, uri = TRUE)
   }
 
+  partition_schema <- get_partition_schema(
+    hub_path,
+    oo_path,
+    target_type = "oracle-output",
+    hub_schema = hub_schema
+  )
+
   # Although technically this is not required for validating
   # oracle output schema as all column data-types can be determined
   # from the config, we include the step of accessing the schema
@@ -58,7 +65,8 @@ create_oracle_output_schema <- function(
     oo_path,
     ext = oo_ext,
     na = na,
-    ignore_files = ignore_files
+    ignore_files = ignore_files,
+    partition_schema = partition_schema
   )
 
   oo_schema <- hub_schema[hub_schema$names %in% file_schema$names]

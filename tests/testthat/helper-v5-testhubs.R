@@ -16,7 +16,7 @@ use_example_hub_readonly <- function(which = c("file", "dir")) {
 # Cleanup is tied to the test via withr::local_tempdir(.local_envir = ...)
 use_example_hub_editable <- function(
   which = c("file", "dir"),
-  .local_envir = testthat::teardown_env()
+  .local_envir = if (interactive()) .GlobalEnv else testthat::teardown_env()
 ) {
   which <- rlang::arg_match(which)
   src <- use_example_hub_readonly(which)

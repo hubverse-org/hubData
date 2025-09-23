@@ -35,11 +35,19 @@ create_timeseries_schema <- function(
     ts_path <- file_system_path(hub_path, ts_path, uri = TRUE)
   }
 
+  partition_schema <- get_partition_schema(
+    hub_path,
+    ts_path,
+    target_type = "time-series",
+    hub_schema = hub_schema
+  )
+
   file_schema <- get_target_schema(
     ts_path,
     ext = ts_ext,
     na = na,
-    ignore_files = ignore_files
+    ignore_files = ignore_files,
+    partition_schema = partition_schema
   )
 
   ts_schema <- hub_schema[hub_schema$names %in% file_schema$names]

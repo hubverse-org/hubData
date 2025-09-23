@@ -102,7 +102,7 @@ validate_target_file_ext <- function(
 #'
 #' @export
 #' @examples
-#'  hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' target_path <- get_target_path(hub_path, "time-series")
 #' get_target_file_ext(hub_path, target_path)
 get_target_file_ext <- function(hub_path = NULL, target_path) {
@@ -110,8 +110,8 @@ get_target_file_ext <- function(hub_path = NULL, target_path) {
   UseMethod("get_target_file_ext")
 }
 
-# Get the file extension of the target data file(s) in `target_path`. Assumes the target data
-# path has been validated first.
+# Get the file extension of the target data file(s) in `target_path`.
+# Assumes the target data path has been validated first.
 #' @noRd
 #' @export
 get_target_file_ext.default <- function(hub_path = NULL, target_path) {
@@ -219,12 +219,21 @@ get_target_path.SubTreeFileSystem <- function(
 #' @param ext File extension (`"csv"` or `"parquet"`).
 #' @param na Character vector of values to interpret as missing (applies to CSV only).
 #' @param ignore_files Character vector of file name prefixes to ignore when reading directories.
+#' @param partition_schema Optional Arrow [schema][arrow::schema] defining partition
+#'  column data types. If provided, partition columns will be typed according to
+#'  this schema
 #'
 #' @return An Arrow [schema][arrow::schema] object representing the dataset structure.
 #'
 #' @keywords internal
 #' @noRd
-get_target_schema <- function(path, ext, na, ignore_files) {
+get_target_schema <- function(
+  path,
+  ext,
+  na,
+  ignore_files,
+  partition_schema = NULL
+) {
   is_dir <- fs::path_ext(path) == ""
   if (ext == "csv" && is_dir) {
     file_schema <- arrow::open_dataset(
@@ -232,6 +241,7 @@ get_target_schema <- function(path, ext, na, ignore_files) {
       format = ext,
       na = na,
       quoted_na = TRUE,
+      partitioning = partition_schema,
       factory_options = list(
         selector_ignore_prefixes = ignore_files
       )
@@ -240,6 +250,7 @@ get_target_schema <- function(path, ext, na, ignore_files) {
     file_schema <- arrow::open_dataset(
       path,
       format = ext,
+      partitioning = partition_schema,
       factory_options = list(
         selector_ignore_prefixes = ignore_files
       )
