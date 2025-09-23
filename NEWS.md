@@ -1,4 +1,4 @@
-# hubData (development version)
+# hubData 1.5.0
 
 * Added Arrow schema utilities for safely converting and validating column types from `arrow::Schema` objects:
   * `as_r_schema()`: Converts an Arrow schema to a named character vector of equivalent R types (e.g., `"int32"` → `"integer"`). Errors on unsupported types.
