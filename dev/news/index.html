@@ -51,6 +51,14 @@
 <li>Added <code>r_schema</code> argument to <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> and <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> functions to enable returning the schema as a vector of R data types instead of an <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> object (<a href="https://github.com/hubverse-org/hubData/issues/95" class="external-link">#95</a>)</li>
 <li>Added <code>output_type_id_datatype</code> argument to <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> functions to allow users to explicitly specify the data type of the <code>output_type_id</code> column in the schema. This ensuring compatibility with <code><a href="../reference/create_hub_schema.html">create_hub_schema()</a></code> and <code><a href="../reference/connect_hub.html">connect_hub()</a></code> (<a href="https://github.com/hubverse-org/hubData/issues/95" class="external-link">#95</a>).</li>
 <li>(Internal) Refactored target data schema and connection tests to use embedded example hubs and reusable schema fixtures, improving reliability and making tests independent of dataset size and ordering.</li>
+<li>Added utilities for working with hive-partitioned data file paths:
+<ul><li>
+<code><a href="../reference/extract_hive_partitions.html">extract_hive_partitions()</a></code> for extracting key value pairs from paths to hive-partitioned data files.</li>
+<li>
+<code><a href="../reference/is_hive_partitioned_path.html">is_hive_partitioned_path()</a></code> for checking if a path is hive-partitioned.</li>
+</ul></li>
+<li>
+<code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> and <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> now define a schema for hive-partitions whose data types are defined in the <code>tasks.json config</code> (<a href="https://github.com/hubverse-org/hubData/issues/89" class="external-link">#89</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="hubdata-140">hubData 1.4.0<a class="anchor" aria-label="anchor" href="#hubdata-140"></a></h2>

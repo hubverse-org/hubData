@@ -21,12 +21,14 @@
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_oracle_output_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/create_timeseries_schema.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/expand_model_out_val_grid.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/extract_hive_partitions.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/get_s3_bucket_name.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/get_target_file_ext.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/get_target_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/gs_bucket.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/hubData-package.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/index.html</loc></url>
+<url><loc>https://hubverse-org.github.io/hubData/dev/reference/is_hive_partitioned_path.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/load_model_metadata.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/pipe.html</loc></url>
 <url><loc>https://hubverse-org.github.io/hubData/dev/reference/print.hub_connection.html</loc></url>
