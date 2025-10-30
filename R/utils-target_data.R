@@ -395,7 +395,12 @@ get_target_data_colnames <- function(
   config_target_data,
   target_type = c("time-series", "oracle-output")
 ) {
+  checkmate::assert_class(
+    config_target_data,
+    "config"
+  )
   target_type <- match.arg(target_type)
+
   # Get task ID names from observable_unit
   task_ids <- hubUtils::get_observable_unit(
     config_target_data,

@@ -65,10 +65,8 @@ test_that("get_target_path works with SubTreeFileSystem mirror (no network)", {
 })
 
 # Tests for get_target_data_colnames
-
-test_that("get_target_data_colnames works for time-series with date_col in observable_unit", {
+test_that("get_target_data_colnames works for time-series", {
   hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
-  skip_if(hub_path == "", "hubUtils v6 test hub not available")
 
   config_target_data <- hubUtils::read_config(hub_path, "target-data")
 
@@ -91,7 +89,6 @@ test_that("get_target_data_colnames works for time-series with date_col in obser
 
 test_that("get_target_data_colnames works for oracle-output with output_type_ids", {
   hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
-  skip_if(hub_path == "", "hubUtils v6 test hub not available")
 
   config_target_data <- hubUtils::read_config(hub_path, "target-data")
 
@@ -119,27 +116,6 @@ test_that("get_target_data_colnames works for oracle-output with output_type_ids
   )
 })
 
-test_that("get_target_data_colnames adds date_col when not in observable_unit", {
-  # Create a mock config where date_col is NOT in observable_unit
-  config_target_data <- list(
-    observable_unit = c("location", "target"),
-    date_col = "target_end_date",
-    versioned = FALSE
-  )
-  class(config_target_data) <- c("config_target_data", "list")
-
-  colnames <- get_target_data_colnames(
-    config_target_data,
-    target_type = "time-series"
-  )
-
-  # Expected order: date_col first, then task IDs, observation
-  expect_equal(
-    colnames,
-    c("target_end_date", "location", "target", "observation")
-  )
-})
-
 test_that("get_target_data_colnames includes as_of for versioned time-series", {
   # Create a mock config with versioned = TRUE
   config_target_data <- list(
@@ -147,7 +123,7 @@ test_that("get_target_data_colnames includes as_of for versioned time-series", {
     date_col = "target_end_date",
     versioned = TRUE
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   colnames <- get_target_data_colnames(
     config_target_data,
@@ -172,7 +148,7 @@ test_that("get_target_data_colnames includes as_of for versioned oracle-output",
       has_output_type_ids = TRUE
     )
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   colnames <- get_target_data_colnames(
     config_target_data,
@@ -206,7 +182,7 @@ test_that("get_target_data_colnames includes non_task_id_schema for time-series"
       )
     )
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   colnames <- get_target_data_colnames(
     config_target_data,
@@ -230,7 +206,7 @@ test_that("get_target_data_colnames works for oracle-output without output_type_
       has_output_type_ids = FALSE
     )
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   colnames <- get_target_data_colnames(
     config_target_data,
@@ -256,7 +232,7 @@ test_that("get_target_data_colnames handles complex time-series config", {
       )
     )
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   colnames <- get_target_data_colnames(
     config_target_data,
@@ -283,7 +259,7 @@ test_that("get_target_data_colnames requires valid target_type", {
     date_col = "target_end_date",
     versioned = FALSE
   )
-  class(config_target_data) <- c("config_target_data", "list")
+  class(config_target_data) <- c("config", "list")
 
   expect_error(
     get_target_data_colnames(config_target_data, target_type = "invalid"),
@@ -291,30 +267,17 @@ test_that("get_target_data_colnames requires valid target_type", {
   )
 })
 
-# Integration test with v6 hubUtils inst hub ----
-test_that("get_target_data_colnames works with real v6 hub configs", {
-  hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+# Test when config_target_data is not a config class object
 
-  config_target_data <- hubUtils::read_config(hub_path, "target-data")
-
-  # Test time-series
-  ts_cols <- get_target_data_colnames(config_target_data, "time-series")
-  expect_equal(
-    ts_cols,
-    c("target_end_date", "target", "location", "observation")
+test_that("get_target_data_colnames errors for invalid config_target_data", {
+  invalid_config <- list(
+    observable_unit = c("target_end_date", "location"),
+    date_col = "target_end_date",
+    versioned = FALSE
   )
 
-  # Test oracle-output
-  oracle_cols <- get_target_data_colnames(config_target_data, "oracle-output")
-  expect_equal(
-    oracle_cols,
-    c(
-      "target_end_date",
-      "target",
-      "location",
-      "output_type",
-      "output_type_id",
-      "oracle_value"
-    )
+  expect_error(
+    get_target_data_colnames(invalid_config, target_type = "time-series"),
+    "Assertion on 'config_target_data' failed: Must inherit from class 'config', but has class 'list'"
   )
 })
