@@ -1,5 +1,7 @@
 # hubData (development version)
 
+* Added `get_target_data_colnames()` function for extracting and ordering expected column names for target data from target-data.json configuration files (#109).
+
 # hubData 1.5.0
 
 * Added Arrow schema utilities for safely converting and validating column types from `arrow::Schema` objects:

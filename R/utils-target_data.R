@@ -331,3 +331,107 @@ open_target_dataset <- function(path, ext, schema, na, ignore_files) {
     arrow::open_dataset(path, format = ext, schema = schema)
   }
 }
+
+#' Get expected target data column names from config
+#'
+#' Extracts the expected column names for target data from a hub's configuration
+#' files in the correct order. This is useful for validation and schema generation
+#' without needing to inspect the actual dataset.
+#'
+#' @param config_target_data A `config_target_data` object (from
+#'   `hubUtils::read_config(hub_path, "target-data")`)
+#' @param target_type Character string specifying the target data type.
+#'   Must be either `"time-series"` or `"oracle-output"`.
+#'
+#' @return A character vector of expected column names in the correct order:
+#'
+#' - Date column
+#' - Task ID columns (from `observable_unit`)
+#' - Non-task ID columns (time-series only, if specified in config)
+#' - Output type columns (`output_type` and `output_type_id`, oracle-output only if expected)
+#' - Target value column (`observation` for time-series, `oracle_value` for oracle-output)
+#' - `as_of` column (if data is versioned)
+#'
+#' @details
+#' The function builds the column name vector directly from the configuration
+#' objects without requiring dataset inspection. This makes it lightweight,
+#' efficient, and suitable for validation purposes.
+#'
+#' For **time-series** data, columns are ordered as:
+#'
+#' 1. Task ID columns from `observable_unit`
+#' 2. Date column (if not in `observable_unit`)
+#' 3. Non-task ID columns from `target-data.json` (if present)
+#' 4. `observation` column (target value)
+#' 5. `as_of` column (if `versioned = TRUE`)
+#'
+#' For **oracle-output** data, columns are ordered as:
+#'
+#' 1. Task ID columns from `observable_unit`
+#' 2. Date column (if not in `observable_unit`)
+#' 3. `output_type` and `output_type_id` columns (if `has_output_type_ids = TRUE`)
+#' 4. `oracle_value` column (target value)
+#' 5. `as_of` column (if `versioned = TRUE`)
+#'
+#' @export
+#' @importFrom hubUtils get_observable_unit get_date_col get_versioned get_non_task_id_schema get_has_output_type_ids
+#' @examples
+#' # Note: These examples require test data
+#' hub_path <- system.file("testhubs/v6/target_file", package = "hubUtils")
+#' config_target_data <- hubUtils::read_config(hub_path, "target-data")
+#'
+#' # Get time-series column names
+#' get_target_data_colnames(
+#'   config_target_data,
+#'   target_type = "time-series"
+#' )
+#'
+#' # Get oracle-output column names
+#' get_target_data_colnames(
+#'   config_target_data,
+#'   target_type = "oracle-output"
+#' )
+get_target_data_colnames <- function(
+  config_target_data,
+  target_type = c("time-series", "oracle-output")
+) {
+  target_type <- match.arg(target_type)
+  # Get task ID names from observable_unit
+  task_ids <- hubUtils::get_observable_unit(
+    config_target_data,
+    dataset = target_type
+  )
+  # Get date column name
+  date_col <- hubUtils::get_date_col(config_target_data)
+  # Get versioned status for this dataset type
+  versioned <- hubUtils::get_versioned(
+    config_target_data,
+    dataset = target_type
+  )
+  # Initialize column names vector with date_col & task IDs
+  col_names <- unique(c(date_col, task_ids))
+
+  if (target_type == "time-series") {
+    # Add non-task ID columns if present in config
+    non_task_id_schema <- hubUtils::get_non_task_id_schema(config_target_data)
+    col_names <- c(col_names, names(non_task_id_schema))
+    # Add observation column
+    col_names <- c(col_names, "observation")
+  } else {
+    # oracle-output
+    # Add output_type columns if expected
+    has_output_type_ids <- hubUtils::get_has_output_type_ids(config_target_data)
+    if (has_output_type_ids) {
+      col_names <- c(col_names, "output_type", "output_type_id")
+    }
+    # Add oracle_value column
+    col_names <- c(col_names, "oracle_value")
+  }
+
+  # Add as_of column if versioned
+  if (versioned) {
+    col_names <- c(col_names, "as_of")
+  }
+
+  col_names
+}
