@@ -348,7 +348,7 @@ open_target_dataset <- function(path, ext, schema, na, ignore_files) {
 #' - Date column
 #' - Task ID columns (from `observable_unit`)
 #' - Non-task ID columns (time-series only, if specified in config)
-#' - Output type columns (`output_type` and `output_type_id`, oracle-output only if expected)
+#' - Output type columns (`output_type` and `output_type_id`, oracle-output only if specified in config)
 #' - Target value column (`observation` for time-series, `oracle_value` for oracle-output)
 #' - `as_of` column (if data is versioned)
 #'
