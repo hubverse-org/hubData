@@ -116,3 +116,59 @@ validate_arrow_schema <- function(arrow_schema, call = rlang::caller_env()) {
 
   invisible(TRUE)
 }
+
+#' Create R type to Arrow DataType mapping
+#'
+#' Returns a named list mapping base R type strings (e.g., `"character"`, `"integer"`)
+#' to their corresponding Arrow [arrow::DataType] objects. This is the inverse
+#' of [arrow_to_r_datatypes] and is useful when creating Arrow schemas
+#' programmatically from R type specifications.
+#'
+#' @return A named list with 6 entries mapping R types to Arrow DataType objects:
+#' \describe{
+#'   \item{logical}{`arrow::bool()`}
+#'   \item{integer}{`arrow::int32()` (uses int32 as default)}
+#'   \item{double}{`arrow::float64()`}
+#'   \item{character}{`arrow::utf8()`}
+#'   \item{Date}{`arrow::date32()`}
+#'   \item{POSIXct}{`arrow::timestamp(unit = "ms")`}
+#' }
+#'
+#' @details
+#' This function generates the mapping dynamically because Arrow DataType objects
+#' are external pointers that cannot be serialized to `.rda` files. The R type
+#' strings match those used in the `non_task_id_schema` field of `target-data.json`
+#' configuration files.
+#'
+#' This is particularly useful for:
+#' - Creating custom Arrow schemas from R type specifications
+#' - Converting configuration-based type information to Arrow schemas
+#' - Programmatic schema generation
+#'
+#' @seealso [arrow_to_r_datatypes], [create_timeseries_schema()], [create_oracle_output_schema()]
+#' @export
+#' @examples
+#' # Get the mapping
+#' type_map <- r_to_arrow_datatypes()
+#'
+#' # Use it to create Arrow types from R type strings
+#' r_types <- c("character", "integer", "double")
+#' arrow_types <- type_map[r_types]
+#'
+#' # Create a simple Arrow schema
+#' my_schema <- arrow::schema(
+#'   name = type_map[["character"]],
+#'   age = type_map[["integer"]],
+#'   score = type_map[["double"]]
+#' )
+#' my_schema
+r_to_arrow_datatypes <- function() {
+  list(
+    logical = arrow::bool(),
+    integer = arrow::int32(),              # Use int32 as default (not int64)
+    double = arrow::float64(),
+    character = arrow::utf8(),
+    Date = arrow::date32(),
+    POSIXct = arrow::timestamp(unit = "ms")
+  )
+}
