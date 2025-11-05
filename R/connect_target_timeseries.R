@@ -26,20 +26,41 @@
 #' **Pre-v6 hubs**: Original file ordering is preserved regardless of format.
 #'
 #' @examples
-#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
+#' # Basic usage with v6 hub (CSV format)
+#' hub_path_csv <- system.file("testhubs/v6/target_file", package = "hubUtils")
+#'
 #' # Connect to time-series data
-#' ts_con <- connect_target_timeseries(hub_path)
-#' ts_con
+#' ts_con_csv <- connect_target_timeseries(hub_path_csv)
+#' ts_con_csv
+#'
 #' # Collect all time-series data
-#' ts_con |> dplyr::collect()
+#' ts_con_csv |> dplyr::collect()
+#'
 #' # Filter for a specific date before collecting
-#' ts_con |>
+#' ts_con_csv |>
 #'   dplyr::filter(target_end_date ==  "2022-12-31") |>
 #'   dplyr::collect()
+#'
 #' # Filter for a specific location before collecting
-#' ts_con |>
+#' ts_con_csv |>
 #'   dplyr::filter(location == "US") |>
 #'   dplyr::collect()
+#'
+#' # Column Ordering: CSV vs Parquet in v6+ hubs
+#' # For v6+ hubs with target-data.json configuration, column ordering differs
+#' # between CSV and Parquet formats:
+#'
+#' # CSV files preserve original file ordering
+#' names(ts_con_csv)
+#' # The CSV file has columns in its original order from the file
+#'
+#' # Parquet files would be reordered to hubverse convention:
+#' # 1. Date column (target_end_date)
+#' # 2. Other task ID columns (target, location)
+#' # 3. Value column (observation)
+#' # This reordering is safe for Parquet because it matches columns by name
+#' # rather than position during collection.
+#'
 #' # Access Target time-series data from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' s3_con <- connect_target_timeseries(s3_hub_path)

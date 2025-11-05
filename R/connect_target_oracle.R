@@ -23,24 +23,43 @@
 #' **Pre-v6 hubs**: Original file ordering is preserved regardless of format.
 #'
 #' @examples
-#' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
-#' # Connect to oracle-output data
-#' oo_con <- connect_target_oracle_output(hub_path)
-#' oo_con
-#' # Collect all oracle-output data
-#' oo_con |> dplyr::collect()
-#' # Filter for a specific date before collecting
-#' oo_con |>
-#'   dplyr::filter(target_end_date ==  "2022-12-31") |>
-#'   dplyr::collect()
-#' # Filter for a specific location before collecting
-#' oo_con |>
+#' # Column Ordering: CSV vs Parquet in v6+ hubs
+#' # For v6+ hubs with target-data.json, ordering differs by file format
+#'
+#' # Example 1: CSV format (single file) - preserves original file ordering
+#' hub_path_csv <- system.file("testhubs/v6/target_file", package = "hubUtils")
+#' oo_con_csv <- connect_target_oracle_output(hub_path_csv)
+#'
+#' # CSV columns are in their original file order
+#' names(oo_con_csv)
+#'
+#' # Collect and filter as usual
+#' oo_con_csv |> dplyr::collect()
+#' oo_con_csv |>
 #'   dplyr::filter(location == "US") |>
 #'   dplyr::collect()
+#'
+#' # Example 2: Parquet format (directory) - reordered to hubverse convention
+#' hub_path_parquet <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+#' oo_con_parquet <- connect_target_oracle_output(hub_path_parquet)
+#'
+#' # Parquet columns follow hubverse convention (date first, then alphabetical)
+#' names(oo_con_parquet)
+#'
+#' # Reordering is safe for Parquet because it matches columns by name
+#' # rather than position during collection
+#' oo_con_parquet |> dplyr::collect()
+#'
+#' # Both formats support the same filtering operations
+#' oo_con_parquet |>
+#'   dplyr::filter(target_end_date ==  "2022-12-31") |>
+#'   dplyr::collect()
+#'
 #' # Get distinct target_end_date values
-#' oo_con |>
+#' oo_con_parquet |>
 #'   dplyr::distinct(target_end_date) |>
 #'   dplyr::pull(as_vector = TRUE)
+#'
 #' \dontrun{
 #' # Access Target oracle-output data from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
