@@ -56,7 +56,9 @@ create_timeseries_schema <- function(
 
 # Internal helper: Config-based schema creation
 #' @noRd
+# nolint start: object_length_linter
 create_timeseries_schema_from_config <- function(
+  # nolint end
   hub_path,
   config_target_data,
   r_schema = FALSE
@@ -75,11 +77,10 @@ create_timeseries_schema_from_config <- function(
 
   # Get task IDs from tasks config
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  task_ids <- hubUtils::get_task_id_names(config_tasks)
 
   # 1. Start with hub_schema subset for task ID columns
   hub_schema <- create_hub_schema(config_tasks)
-  ts_schema <- hub_schema[hub_schema$names %in% task_ids]
+  ts_schema <- hub_schema[hub_schema$names %in% observable_unit]
 
   # 2. Add date column (Date type)
   ts_schema[[config_date_col]] <- arrow::date32()
@@ -118,7 +119,9 @@ create_timeseries_schema_from_config <- function(
 
 # Internal helper: Inference-based schema creation (existing logic)
 #' @noRd
+# nolint start: object_length_linter
 create_timeseries_schema_from_inference <- function(
+  # nolint end
   hub_path,
   date_col = NULL,
   na = c("NA", ""),

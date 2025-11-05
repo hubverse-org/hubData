@@ -63,7 +63,9 @@ create_oracle_output_schema <- function(
 
 # Internal helper: Config-based schema creation
 #' @noRd
+# nolint start: object_length_linter
 create_oracle_output_schema_from_config <- function(
+  # nolint end
   hub_path,
   config_target_data,
   r_schema = FALSE,
@@ -91,7 +93,6 @@ create_oracle_output_schema_from_config <- function(
 
   # Get task IDs from tasks config
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  task_ids <- hubUtils::get_task_id_names(config_tasks)
 
   # 1. Build hub schema with output_type_id datatype handling
   hub_schema <- create_hub_schema(
@@ -100,7 +101,7 @@ create_oracle_output_schema_from_config <- function(
   )
 
   # 2. Start with subset for task ID columns
-  oo_schema <- hub_schema[hub_schema$names %in% task_ids]
+  oo_schema <- hub_schema[hub_schema$names %in% observable_unit]
 
   # 3. Assign date column (Date type)
   oo_schema[[config_date_col]] <- arrow::date32()
@@ -134,7 +135,9 @@ create_oracle_output_schema_from_config <- function(
 
 # Internal helper: Inference-based schema creation (existing logic)
 #' @noRd
+# nolint start: object_length_linter
 create_oracle_output_schema_from_inference <- function(
+  # nolint end
   hub_path,
   na = c("NA", ""),
   ignore_files = NULL,
