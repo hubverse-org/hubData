@@ -51,7 +51,7 @@ Suggests:
     testthat (>= 3.2.0),
     withr
 Remotes:
-    hubverse-org/hubUtils
+    hubverse-org/hubUtils,
     hubverse-org/hubAdmin
 Config/Needs/website: hubverse-org/hubStyle
 Depends: 
