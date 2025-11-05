@@ -49,6 +49,25 @@ in a hub as an arrow dataset.
 If the target data is split across multiple files in a \code{time-series} directory,
 all files must share the same file format, either csv or parquet.
 No other types of files are currently allowed in a \code{time-series} directory.
+\subsection{Schema Creation}{
+
+This function uses different methods to create the Arrow schema depending on
+the hub configuration version:
+
+\strong{v6+ hubs (with \code{target-data.json}):} Schema is created directly from the
+\code{target-data.json} configuration file using \code{\link[=create_timeseries_schema]{create_timeseries_schema()}}.
+This config-based approach is fast and deterministic, requiring no filesystem
+I/O to scan data files. It's especially beneficial for cloud storage where
+file scanning can be slow.
+
+\strong{Pre-v6 hubs (without \code{target-data.json}):} Schema is inferred by scanning
+the actual data files. This inference-based approach examines file structure
+and content to determine column types.
+
+The function automatically detects which method to use based on the presence
+of \code{target-data.json} in the hub configuration.
+}
+
 \subsection{Schema Ordering}{
 
 Column ordering in the resulting dataset depends on configuration version and file format:
@@ -64,44 +83,44 @@ Parquet's column-by-name matching enables safe reordering.
 }
 }
 \examples{
-# Basic usage with v6 hub (CSV format)
+# Column Ordering: CSV vs Parquet in v6+ hubs
+# For v6+ hubs with target-data.json, ordering differs by file format
+
+# Example 1: CSV format (single file) - preserves original file ordering
 hub_path_csv <- system.file("testhubs/v6/target_file", package = "hubUtils")
-
-# Connect to time-series data
 ts_con_csv <- connect_target_timeseries(hub_path_csv)
-ts_con_csv
 
-# Collect all time-series data
+# CSV columns are in their original file order
+names(ts_con_csv)
+# Note: columns appear in the order they are in the CSV file
+
+# Collect and filter as usual
 ts_con_csv |> dplyr::collect()
-
-# Filter for a specific date before collecting
-ts_con_csv |>
-  dplyr::filter(target_end_date ==  "2022-12-31") |>
-  dplyr::collect()
-
-# Filter for a specific location before collecting
 ts_con_csv |>
   dplyr::filter(location == "US") |>
   dplyr::collect()
 
-# Column Ordering: CSV vs Parquet in v6+ hubs
-# For v6+ hubs with target-data.json configuration, column ordering differs
-# between CSV and Parquet formats:
+# Example 2: Parquet format (directory) - reordered to hubverse convention
+hub_path_parquet <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+ts_con_parquet <- connect_target_timeseries(hub_path_parquet)
 
-# CSV files preserve original file ordering
-names(ts_con_csv)
-# The CSV file has columns in its original order from the file
+# Parquet columns follow hubverse convention
+names(ts_con_parquet)
 
-# Parquet files would be reordered to hubverse convention:
-# 1. Date column (target_end_date)
-# 2. Other task ID columns (target, location)
-# 3. Value column (observation)
-# This reordering is safe for Parquet because it matches columns by name
-# rather than position during collection.
+# Reordering is safe for Parquet because it matches columns by name
+# rather than position during collection
+ts_con_parquet |> dplyr::collect()
 
+# Both formats support the same filtering operations
+ts_con_parquet |>
+  dplyr::filter(target_end_date ==  "2022-12-31") |>
+  dplyr::collect()
+
+\dontrun{
 # Access Target time-series data from a cloud hub
 s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 s3_con <- connect_target_timeseries(s3_hub_path)
 s3_con
 s3_con |> dplyr::collect()
+}
 }

@@ -63,6 +63,25 @@ in a hub as an arrow dataset.
 If the target data is split across multiple files in a \code{oracle-output} directory,
 all files must share the same file format, either csv or parquet.
 No other types of files are currently allowed in a \code{oracle-output} directory.
+\subsection{Schema Creation}{
+
+This function uses different methods to create the Arrow schema depending on
+the hub configuration version:
+
+\strong{v6+ hubs (with \code{target-data.json}):} Schema is created directly from the
+\code{target-data.json} configuration file using \code{\link[=create_oracle_output_schema]{create_oracle_output_schema()}}.
+This config-based approach is fast and deterministic, requiring no filesystem
+I/O to scan data files. It's especially beneficial for cloud storage where
+file scanning can be slow.
+
+\strong{Pre-v6 hubs (without \code{target-data.json}):} Schema is inferred by scanning
+the actual data files. This inference-based approach examines file structure
+and content to determine column types.
+
+The function automatically detects which method to use based on the presence
+of \code{target-data.json} in the hub configuration.
+}
+
 \subsection{Schema Ordering}{
 
 Column ordering in the resulting dataset depends on configuration version and file format:

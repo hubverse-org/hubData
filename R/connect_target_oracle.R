@@ -11,6 +11,24 @@
 #' all files must share the same file format, either csv or parquet.
 #' No other types of files are currently allowed in a `oracle-output` directory.
 #'
+#' ## Schema Creation
+#'
+#' This function uses different methods to create the Arrow schema depending on
+#' the hub configuration version:
+#'
+#' **v6+ hubs (with `target-data.json`):** Schema is created directly from the
+#' `target-data.json` configuration file using [create_oracle_output_schema()].
+#' This config-based approach is fast and deterministic, requiring no filesystem
+#' I/O to scan data files. It's especially beneficial for cloud storage where
+#' file scanning can be slow.
+#'
+#' **Pre-v6 hubs (without `target-data.json`):** Schema is inferred by scanning
+#' the actual data files. This inference-based approach examines file structure
+#' and content to determine column types.
+#'
+#' The function automatically detects which method to use based on the presence
+#' of `target-data.json` in the hub configuration.
+#'
 #' ## Schema Ordering
 #'
 #' Column ordering in the resulting dataset depends on configuration version and file format:
