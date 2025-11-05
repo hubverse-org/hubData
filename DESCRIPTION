@@ -43,6 +43,7 @@ Suggests:
     duckdb,
     gert,
     gh,
+    hubAdmin,
     jsonlite,
     knitr,
     mockery,
@@ -51,6 +52,7 @@ Suggests:
     withr
 Remotes:
     hubverse-org/hubUtils
+    hubverse-org/hubAdmin
 Config/Needs/website: hubverse-org/hubStyle
 Depends: 
     R (>= 4.1)
