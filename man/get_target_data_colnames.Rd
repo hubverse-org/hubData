@@ -22,7 +22,7 @@ A character vector of expected column names in the correct order:
 \item Date column
 \item Task ID columns (from \code{observable_unit})
 \item Non-task ID columns (time-series only, if specified in config)
-\item Output type columns (\code{output_type} and \code{output_type_id}, oracle-output only if expected)
+\item Output type columns (\code{output_type} and \code{output_type_id}, oracle-output only if specified in config)
 \item Target value column (\code{observation} for time-series, \code{oracle_value} for oracle-output)
 \item \code{as_of} column (if data is versioned)
 }

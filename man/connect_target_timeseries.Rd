@@ -49,6 +49,19 @@ in a hub as an arrow dataset.
 If the target data is split across multiple files in a \code{time-series} directory,
 all files must share the same file format, either csv or parquet.
 No other types of files are currently allowed in a \code{time-series} directory.
+\subsection{Schema Ordering}{
+
+Column ordering in the resulting dataset depends on configuration version and file format:
+
+\strong{v6+ hubs (with \code{target-data.json}):}
+\itemize{
+\item \strong{Parquet}: Columns are reordered to the standard hubverse convention (see \code{\link[=get_target_data_colnames]{get_target_data_colnames()}}).
+Parquet's column-by-name matching enables safe reordering.
+\item \strong{CSV}: Original file ordering is preserved to avoid column name/position mismatches during collection.
+}
+
+\strong{Pre-v6 hubs}: Original file ordering is preserved regardless of format.
+}
 }
 \examples{
 hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")

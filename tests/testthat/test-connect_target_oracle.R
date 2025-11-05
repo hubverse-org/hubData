@@ -8,7 +8,7 @@
 # And helper-fixtures.R with:
 # - oracle_output_schema_fixture()
 
-test_that("connect_target_oracle_output on single file works on embedded hub", {
+test_that("connect_target_oracle_output inference on single file works", {
   hub_path <- use_example_hub_readonly("file")
   con <- connect_target_oracle_output(hub_path)
 
@@ -139,7 +139,7 @@ test_that("connect_target_oracle_output fails correctly", {
 # (and validate that restriction in hubValidations), connect_target_* functions
 # were written before we set that restriction and at least for now, can handle
 # datasets with multiple CSV files.
-test_that("connect_target_oracle_output on multiple non-partitioned CSV files works", {
+test_that("connect_target_oracle_output inference on multiple CSVs works", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "oracle-output")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -201,7 +201,7 @@ test_that("connect_target_oracle_output on multiple non-partitioned CSV files wo
 # (and validate that restriction in hubValidations), connect_target_* functions
 # were written before we set that restriction and at least for now, can handle
 # datasets with multiple CSV files.
-test_that("connect_target_oracle_output works on non-partitioned CSVs in subdirectories", {
+test_that("connect_target_oracle_output inference with CSVs in subdirs works", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "oracle-output")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -247,7 +247,7 @@ test_that("connect_target_oracle_output works on non-partitioned CSVs in subdire
   expect_gt(nrow(res2), 0L)
 })
 
-test_that("connect_target_oracle_output with HIVE-PARTITIONED parquet works", {
+test_that("connect_target_oracle_output inference with HIVE partitioned parquet works", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "oracle-output")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -296,7 +296,7 @@ test_that("connect_target_oracle_output with HIVE-PARTITIONED parquet works", {
   expect_gt(nrow(res3), 0L)
 })
 
-test_that("connect_target_oracle_output works on single-file SubTreeFileSystem (local mirror)", {
+test_that("connect_target_oracle_output inference on single-file SubTreeFileSystem works", {
   skip_on_os("windows") # SubTreeFileSystem lower-level calls are flaky on Windows
 
   src <- use_example_hub_readonly("file")
@@ -333,7 +333,7 @@ test_that("connect_target_oracle_output works on single-file SubTreeFileSystem (
   expect_gt(nrow(res), 0L)
 })
 
-test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem hub", {
+test_that("connect_target_oracle_output inference with multi-file SubTreeFileSystem works", {
   skip_on_os("windows")
 
   # Start from temp copy to fan out multi-file
@@ -396,7 +396,7 @@ test_that("connect_target_oracle_output works with multi-file SubTreeFileSystem 
   expect_true(all(lt1$oracle_value < 1))
 })
 
-test_that('connect_target_oracle_output parses "NA" and "" correctly (editable copy)', {
+test_that('connect_target_oracle_output inference parses "NA" and "" correctly', {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "oracle-output")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -423,8 +423,17 @@ test_that('connect_target_oracle_output parses "NA" and "" correctly (editable c
   )
 })
 
-test_that("connect_target_oracle_output output_type_id_datatype arg works", {
-  hub_path <- use_example_hub_readonly("file")
+test_that("connect_target_oracle_output inference output_type_id_datatype arg works", {
+  hub_path <- use_example_hub_editable("file")
+
+  oracle_path <- get_target_path(hub_path, target_type = "oracle-output")
+
+  # Subset oracle output output_type_id to value that can successfully
+  # be converted to numeric
+  arrow::read_csv_arrow(oracle_path) |>
+    dplyr::filter(output_type_id == "1") |>
+    arrow::write_csv_arrow(oracle_path)
+
   con <- connect_target_oracle_output(
     hub_path,
     output_type_id_datatype = "double"
@@ -436,10 +445,32 @@ test_that("connect_target_oracle_output output_type_id_datatype arg works", {
       output_type_id = "double"
     )
   )
+
+  # Check that data can be collected
+  data <- con |>
+    utils::head(1L) |>
+    dplyr::collect()
+
+  expect_s3_class(data, "tbl_df")
+  expect_equal(ncol(data), 6L)
+  expect_equal(nrow(data), 1L)
+  expect_named(
+    data,
+    c(
+      "location",
+      "target_end_date",
+      "target",
+      "output_type",
+      "output_type_id",
+      "oracle_value"
+    )
+  )
 })
 
-test_that("partitioning column schema is detected correctly (#89)", {
+test_that("partitioning column schema is detected correctly via inference (#89)", {
   hub_path_cloud <- s3_bucket("covid-variant-nowcast-hub")
+  # Force inference by mocking has_target_data_config to return FALSE
+  local_mocked_bindings(has_target_data_config = function(...) FALSE)
   con <- connect_target_oracle_output(hub_path_cloud)
 
   expect_s3_class(
@@ -456,5 +487,92 @@ test_that("partitioning column schema is detected correctly (#89)", {
   expect_equal(
     con$schema$ToString(),
     "location: string\ntarget_date: date32[day]\nclade: string\noracle_value: double\nnowcast_date: date32[day]\nas_of: date32[day]" # nolint: line_length_linter
+  )
+})
+
+# v6 config-based tests ----
+
+test_that("connect_target_oracle_output config works with v6 CSV hub", {
+  hub_path <- use_example_hub_readonly("file", v = 6)
+
+  con <- connect_target_oracle_output(hub_path)
+  expect_s3_class(
+    con,
+    c(
+      "target_oracle_output",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
+      "R6"
+    ),
+    exact = TRUE
+  )
+  # Config-based schema in CSVs follows dataset column order
+  expect_equal(
+    con$schema$ToString(),
+    "location: string\ntarget_end_date: date32[day]\ntarget: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+  )
+
+  # Check that data can be collected
+  data <- con |>
+    utils::head(1L) |>
+    dplyr::collect()
+
+  expect_s3_class(data, "tbl_df")
+  expect_equal(ncol(data), 6L)
+  expect_equal(nrow(data), 1L)
+  expect_named(
+    data,
+    c(
+      "location",
+      "target_end_date",
+      "target",
+      "output_type",
+      "output_type_id",
+      "oracle_value"
+    )
+  )
+})
+
+test_that("connect_target_oracle_output config works with v6 parquet partitioned hub", {
+  hub_path <- use_example_hub_readonly("dir", v = 6)
+
+  con <- connect_target_oracle_output(hub_path)
+  expect_s3_class(
+    con,
+    c(
+      "target_oracle_output",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
+      "R6"
+    ),
+    exact = TRUE
+  )
+  # Config-based schema in parquets follows schema column order, even when
+  # partitioned
+  expect_equal(
+    con$schema$ToString(),
+    "target_end_date: date32[day]\ntarget: string\nlocation: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+  )
+
+  # Check that data can be collected
+  data <- con |>
+    utils::head(1L) |>
+    dplyr::collect()
+
+  expect_s3_class(data, "tbl_df")
+  expect_equal(ncol(data), 6L)
+  expect_equal(nrow(data), 1L)
+  expect_named(
+    data,
+    c(
+      "target_end_date",
+      "target",
+      "location",
+      "output_type",
+      "output_type_id",
+      "oracle_value"
+    )
   )
 })

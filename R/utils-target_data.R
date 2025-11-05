@@ -301,8 +301,7 @@ open_target_dataset <- function(path, ext, schema, na, ignore_files) {
     arrow::open_dataset(
       path,
       format = ext,
-      schema = schema,
-      skip = 1L,
+      col_types = schema,
       quoted_na = TRUE,
       na = na,
       factory_options = list(
@@ -322,8 +321,7 @@ open_target_dataset <- function(path, ext, schema, na, ignore_files) {
     arrow::open_dataset(
       path,
       format = ext,
-      schema = schema,
-      skip = 1L,
+      col_types = schema,
       quoted_na = TRUE,
       na = na
     )

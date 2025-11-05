@@ -11,6 +11,17 @@
 #' all files must share the same file format, either csv or parquet.
 #' No other types of files are currently allowed in a `oracle-output` directory.
 #'
+#' ## Schema Ordering
+#'
+#' Column ordering in the resulting dataset depends on configuration version and file format:
+#'
+#' **v6+ hubs (with `target-data.json`):**
+#' - **Parquet**: Columns are reordered to the standard hubverse convention (see [get_target_data_colnames()]).
+#'   Parquet's column-by-name matching enables safe reordering.
+#' - **CSV**: Original file ordering is preserved to avoid column name/position mismatches during collection.
+#'
+#' **Pre-v6 hubs**: Original file ordering is preserved regardless of format.
+#'
 #' @examples
 #' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' # Connect to oracle-output data
@@ -30,11 +41,13 @@
 #' oo_con |>
 #'   dplyr::distinct(target_end_date) |>
 #'   dplyr::pull(as_vector = TRUE)
+#' \dontrun{
 #' # Access Target oracle-output data from a cloud hub
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' s3_con <- connect_target_oracle_output(s3_hub_path)
 #' s3_con
 #' s3_con |> dplyr::collect()
+#' }
 connect_target_oracle_output <- function(
   hub_path = ".",
   na = c("NA", ""),

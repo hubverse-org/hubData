@@ -25,7 +25,8 @@ files within the \code{hub-config} directory.}
 
 \item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
 Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.}
+and does not have the same name as a date typed task ID variable in the config.
+\strong{Note}: Ignored when \code{target-data.json} exists (v6+); date column is read from config.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
@@ -47,6 +48,12 @@ an arrow \verb{<schema>} class object
 }
 \description{
 Create time-series target data file schema
+}
+\details{
+When \code{target-data.json} (v6.0.0+) is present, schema is created directly from config
+without reading target data files. Otherwise, schema is inferred by reading the dataset.
+Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+provides deterministic schema creation.
 }
 \examples{
 hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")

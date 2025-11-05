@@ -5,11 +5,18 @@
 #' @param date_col Optional column name to be interpreted as date. Default is `NULL`.
 #' Useful when the required date column is a partitioning column in the target data
 #' and does not have the same name as a date typed task ID variable in the config.
+#' **Note**: Ignored when `target-data.json` exists (v6+); date column is read from config.
+#'
+#' @details
+#' When `target-data.json` (v6.0.0+) is present, schema is created directly from config
+#' without reading target data files. Otherwise, schema is inferred by reading the dataset.
+#' Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+#' provides deterministic schema creation.
 #'
 #' @return an arrow `<schema>` class object
 #' @export
 #' @importFrom rlang !!!
-#' @importFrom hubUtils read_config
+#' @importFrom hubUtils read_config has_target_data_config
 #' @examples
 #' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' # Create target time-series schema
@@ -18,6 +25,100 @@
 #' s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 #' create_timeseries_schema(s3_hub_path)
 create_timeseries_schema <- function(
+  hub_path,
+  date_col = NULL,
+  na = c("NA", ""),
+  ignore_files = NULL,
+  r_schema = FALSE
+) {
+  # Detect if target-data.json exists
+  use_config <- hubUtils::has_target_data_config(hub_path)
+
+  if (use_config) {
+    # Use config-based deterministic schema creation
+    config_target_data <- hubUtils::read_config(hub_path, "target-data")
+    create_timeseries_schema_from_config(
+      hub_path = hub_path,
+      config_target_data = config_target_data,
+      r_schema = r_schema
+    )
+  } else {
+    # Use existing inference-based schema creation
+    create_timeseries_schema_from_inference(
+      hub_path = hub_path,
+      date_col = date_col,
+      na = na,
+      ignore_files = ignore_files,
+      r_schema = r_schema
+    )
+  }
+}
+
+# Internal helper: Config-based schema creation
+#' @noRd
+create_timeseries_schema_from_config <- function(
+  hub_path,
+  config_target_data,
+  r_schema = FALSE
+) {
+  # Use hubUtils getters to extract config properties
+  config_date_col <- hubUtils::get_date_col(config_target_data)
+  observable_unit <- hubUtils::get_observable_unit(
+    config_target_data,
+    dataset = "time-series"
+  )
+  versioned <- hubUtils::get_versioned(
+    config_target_data,
+    dataset = "time-series"
+  )
+  non_task_id_schema <- hubUtils::get_non_task_id_schema(config_target_data)
+
+  # Get task IDs from tasks config
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  task_ids <- hubUtils::get_task_id_names(config_tasks)
+
+  # 1. Start with hub_schema subset for task ID columns
+  hub_schema <- create_hub_schema(config_tasks)
+  ts_schema <- hub_schema[hub_schema$names %in% task_ids]
+
+  # 2. Add date column (Date type)
+  ts_schema[[config_date_col]] <- arrow::date32()
+
+  # 3. Add non-task ID columns from config
+  if (!is.null(non_task_id_schema) && length(non_task_id_schema) > 0) {
+    # Convert R types to Arrow types
+    r_to_arrow <- r_to_arrow_datatypes()
+    # non_task_id_schema is a named list: list(col1 = "character", col2 = "integer")
+    # Add each column one by one
+    for (col_name in names(non_task_id_schema)) {
+      r_type <- non_task_id_schema[[col_name]]
+      ts_schema[[col_name]] <- r_to_arrow[[r_type]]
+    }
+  }
+  # 4. Add observation column (from hub_schema's value type)
+  ts_schema[["observation"]] <- hub_schema[["value"]]$type
+
+  # 5. Add as_of column if versioned
+  if (versioned) {
+    ts_schema[["as_of"]] <- arrow::date32()
+  }
+
+  # 6. Reorder columns to match expected order
+  expected_colnames <- get_target_data_colnames(
+    config_target_data,
+    target_type = "time-series"
+  )
+  ts_schema <- ts_schema[expected_colnames]
+
+  if (r_schema) {
+    ts_schema <- as_r_schema(ts_schema)
+  }
+  ts_schema
+}
+
+# Internal helper: Inference-based schema creation (existing logic)
+#' @noRd
+create_timeseries_schema_from_inference <- function(
   hub_path,
   date_col = NULL,
   na = c("NA", ""),

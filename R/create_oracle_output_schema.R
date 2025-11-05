@@ -3,10 +3,16 @@
 #' @inheritParams connect_hub
 #' @inheritParams create_hub_schema
 #'
+#' @details
+#' When `target-data.json` (v6.0.0+) is present, schema is created directly from config
+#' without reading target data files. Otherwise, schema is inferred by reading the dataset.
+#' Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+#' provides deterministic schema creation.
+#'
 #' @return an arrow `<schema>` class object
 #' @export
 #' @importFrom rlang !!!
-#' @importFrom hubUtils read_config
+#' @importFrom hubUtils read_config has_target_data_config
 #' @examples
 #' hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 #' # Create target oracle-output schema
@@ -30,6 +36,119 @@ create_oracle_output_schema <- function(
   )
 ) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
+
+  # Detect if target-data.json exists
+  use_config <- hubUtils::has_target_data_config(hub_path)
+
+  if (use_config) {
+    # Use config-based deterministic schema creation
+    config_target_data <- hubUtils::read_config(hub_path, "target-data")
+    create_oracle_output_schema_from_config(
+      hub_path = hub_path,
+      config_target_data = config_target_data,
+      r_schema = r_schema,
+      output_type_id_datatype = output_type_id_datatype
+    )
+  } else {
+    # Use existing inference-based schema creation
+    create_oracle_output_schema_from_inference(
+      hub_path = hub_path,
+      na = na,
+      ignore_files = ignore_files,
+      r_schema = r_schema,
+      output_type_id_datatype = output_type_id_datatype
+    )
+  }
+}
+
+# Internal helper: Config-based schema creation
+#' @noRd
+create_oracle_output_schema_from_config <- function(
+  hub_path,
+  config_target_data,
+  r_schema = FALSE,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
+) {
+  # Use hubUtils getters to extract config properties
+  config_date_col <- hubUtils::get_date_col(config_target_data)
+  observable_unit <- hubUtils::get_observable_unit(
+    config_target_data,
+    dataset = "oracle-output"
+  )
+  versioned <- hubUtils::get_versioned(
+    config_target_data,
+    dataset = "oracle-output"
+  )
+  has_output_type_ids <- hubUtils::get_has_output_type_ids(config_target_data)
+
+  # Get task IDs from tasks config
+  config_tasks <- hubUtils::read_config(hub_path, "tasks")
+  task_ids <- hubUtils::get_task_id_names(config_tasks)
+
+  # 1. Build hub schema with output_type_id datatype handling
+  hub_schema <- create_hub_schema(
+    config_tasks,
+    output_type_id_datatype = output_type_id_datatype
+  )
+
+  # 2. Start with subset for task ID columns
+  oo_schema <- hub_schema[hub_schema$names %in% task_ids]
+
+  # 3. Assign date column (Date type)
+  oo_schema[[config_date_col]] <- arrow::date32()
+
+  # 4. Add output_type and output_type_id if present
+  if (has_output_type_ids) {
+    oo_schema[["output_type"]] <- hub_schema[["output_type"]]$type
+    oo_schema[["output_type_id"]] <- hub_schema[["output_type_id"]]$type
+  }
+
+  # 5. Add oracle_value column (from hub_schema's value type)
+  oo_schema[["oracle_value"]] <- hub_schema[["value"]]$type
+
+  # 6. Add as_of column if versioned
+  if (versioned) {
+    oo_schema[["as_of"]] <- arrow::date32()
+  }
+
+  # 7. Reorder columns to match expected order
+  expected_colnames <- get_target_data_colnames(
+    config_target_data,
+    target_type = "oracle-output"
+  )
+  oo_schema <- oo_schema[expected_colnames]
+
+  if (r_schema) {
+    oo_schema <- as_r_schema(oo_schema)
+  }
+  oo_schema
+}
+
+# Internal helper: Inference-based schema creation (existing logic)
+#' @noRd
+create_oracle_output_schema_from_inference <- function(
+  hub_path,
+  na = c("NA", ""),
+  ignore_files = NULL,
+  r_schema = FALSE,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  )
+) {
   ignore_files <- unique(c(ignore_files, "README", ".DS_Store"))
   oo_path <- validate_target_data_path(hub_path, "oracle-output")
 

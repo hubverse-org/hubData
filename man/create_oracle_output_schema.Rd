@@ -62,6 +62,12 @@ an arrow \verb{<schema>} class object
 \description{
 Create oracle-output target data file schema
 }
+\details{
+When \code{target-data.json} (v6.0.0+) is present, schema is created directly from config
+without reading target data files. Otherwise, schema is inferred by reading the dataset.
+Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+provides deterministic schema creation.
+}
 \examples{
 hub_path <- system.file("testhubs/v5/target_file", package = "hubUtils")
 # Create target oracle-output schema
