@@ -278,3 +278,16 @@ mod_out_con <- hubData::connect_model_output(model_output_dir,
 ```
 
 Beware that `arrow` errors can be somewhat misleading at times so if you do get such a non-informative error, a good place to start would be to check your schema matches the columns and your data can be coerced to the data types specified in the schema.
+
+# Working with target data
+
+While `connect_hub()` and `connect_model_output()` focus on accessing model predictions, modeling hubs also contain target data - the "ground truth" observations that models are trying to predict.
+
+hubData provides dedicated functions for accessing target data:
+
+- `connect_target_timeseries()` - Access historical time-series target observations
+- `connect_target_oracle_output()` - Access target data formatted like model outputs (useful for evaluation)
+
+These functions work similarly to `connect_hub()`, returning Arrow datasets that you can query with `dplyr` verbs and collect with `collect_hub()`.
+
+For detailed examples and best practices for working with target data, including how to join target data with model outputs for evaluation, see `vignette("target_data")`.
