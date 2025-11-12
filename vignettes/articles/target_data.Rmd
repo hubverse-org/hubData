@@ -289,17 +289,33 @@ This workflow of aligning predictions with target observations and computing met
 
 Both `connect_target_timeseries()` and `connect_target_oracle_output()` work seamlessly with cloud-based hubs. Use the same cloud connection approach as with `connect_hub()`:
 
-```{r, eval=FALSE}
+```{r}
 # Connect to a cloud hub
-s3_hub_path <- s3_bucket("example-hub")
+s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 
 # Access time-series target data from cloud
 ts_cloud <- connect_target_timeseries(s3_hub_path)
-ts_cloud |>collect()
+ts_cloud
+```
 
+```{r}
+# Collect a sample of the data
+ts_cloud |>
+  filter(location == "US") |>
+  collect()
+```
+
+```{r}
 # Access oracle-output target data from cloud
 oo_cloud <- connect_target_oracle_output(s3_hub_path)
-oo_cloud |>collect()
+oo_cloud
+```
+
+```{r}
+# Collect a sample of oracle-output data
+oo_cloud |>
+  filter(location == "US") |>
+  collect()
 ```
 
 ## Performance tips for cloud hubs
@@ -322,9 +338,9 @@ ts_cloud |>
 
 2. **Select specific columns**: If you only need certain columns, use `select()` before collecting:
 
-```{r, eval=FALSE}
+```{r}
 ts_cloud |>
- select(location, target_end_date, value) |>
+ select(location, target_end_date, observation) |>
  filter(location == "US") |>
  collect()
 ```
