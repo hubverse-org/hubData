@@ -345,11 +345,6 @@ ts_cloud |>
  collect()
 ```
 
-3. **Use Parquet format when possible**: Hubs that use Parquet format for target data benefit from:
-   - Faster queries
-   - Efficient column selection
-   - Better compression
-
 # Hub version compatibility
 
 The target data functions work transparently across different hub versions:
