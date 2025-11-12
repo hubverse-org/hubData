@@ -1,0 +1,314 @@
+---
+title: "Accessing Target Data"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+Target data represents the "ground truth" observations that models are trying to predict in forecasting hubs. Understanding how to access and work with target data is essential for evaluating model performance, creating visualizations, and conducting analyses.
+
+For a comprehensive overview of what target data is and why it matters in the context of modeling hubs, please refer to the [Hubverse target data guide](https://docs.hubverse.io/en/latest/user-guide/target-data.html).
+
+This vignette focuses on the practical aspects of accessing target data using hubData's specialized functions:
+
+- **Time-series target data**: Historical observations (stored as `target-data/time-series.csv`, `target-data/time-series.parquet`, or in a `target-data/time-series/` directory)
+- **Oracle-output target data**: Model-formatted target observations (stored as `target-data/oracle-output.csv`, `target-data/oracle-output.parquet`, or in a `target-data/oracle-output/` directory)
+
+# Target data structure
+
+Modeling hubs store target data in two complementary formats, each serving distinct purposes in the forecasting workflow:
+
+## Time-series format
+
+Time-series target data represents the **observed counts or rates** in their native format. Each row constitutes an **observable unit** - a unique combination of task ID variables that defines a single observation. This format typically includes:
+- A date variable
+- Location identifiers
+- An `observation` column containing the measured value (e.g., case counts, hospitalization numbers)
+- Other task ID variables
+
+For example, if your task IDs are location and date, then each observable unit is a specific location-date combination (e.g., "US on 2022-10-15"), and the `observation` column contains the value measured for that unit.
+
+**Why time-series format?** This format is designed for:
+- **Model fitting**: Providing historical data for parameter estimation and model training
+- **Visualization**: Supporting tools like hubVis and dashboards that display historical trends
+- **General analysis**: Working with target data in its natural, observational form
+
+## Oracle-output format
+
+Oracle-output target data are generally **derived from time-series data** but formatted to match the structure of model outputs (similar to `model_out_tbl` objects). It represents "what predictions would look like if the target values had been known ahead of time." Like time-series data, each row represents an **observable unit** defined by the task ID variables, but the data is structured as model output. This format includes:
+- `output_type` and `output_type_id`: Only required if the hub collects `pmf` or `cdf` output types. For `mean`, `median`, `quantile`, and `sample` output types, these columns can be omitted entirely.
+- `oracle_value`: the target observation value formatted as an "oracle" prediction
+- Task ID variables (e.g., location, date)
+
+**Why oracle-output format?** This format is designed for:
+- **Model evaluation**: Enabling evaluation tools like hubEvals to directly compare model predictions against observed outcomes
+- **Visualization**: Supporting plots that display predictions alongside target data in a consistent format (e.g., plotting pmf predictions with categorical target data)
+
+By formatting target data as model output with all probability mass on the observed outcome, oracle-output data allows evaluation tools to treat it identically to model predictions.
+
+# Connection approach
+
+Accessing target data follows the same approach as accessing model outputs (see `vignette("connect_hub")` for more details):
+
+- Connections are established through the [`arrow`](https://arrow.apache.org/docs/r/) package, opening datasets as [`FileSystemDataset`s](https://arrow.apache.org/docs/r/reference/Dataset.html)
+- Both `connect_target_timeseries()` and `connect_target_oracle_output()` work with data stored locally or in the cloud (e.g., in AWS S3 buckets)
+- The functions use hub configuration files to determine the appropriate schema for the target data
+- Once connected, you can use `dplyr` verbs to filter and query the data before collecting it into memory
+
+This means the same workflows you use for model output data also apply to target data.
+
+# Accessing time-series target data
+
+First, load the required packages:
+
+```{r setup}
+library(hubData)
+library(dplyr)
+```
+
+Use `connect_target_timeseries()` to open a connection to time-series target data:
+
+```{r}
+hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
+ts_con <- connect_target_timeseries(hub_path)
+ts_con
+```
+
+This shows the Arrow dataset structure, including the schema (column names and data types) and information about the underlying file(s). The connection is lazy - no data is loaded into memory until you explicitly collect it.
+
+You can query and collect data from the connection using `dplyr` verbs:
+
+```{r}
+# Collect all time-series data
+ts_con |>
+ collect()
+```
+
+## Filtering time-series data
+
+You can filter before collecting to work with subsets of the data:
+
+```{r}
+# Filter by location
+ts_con |>
+ filter(location == "US") |>
+ collect()
+
+# Filter by date range
+ts_con |>
+ filter(target_end_date >= "2022-10-01") |>
+ collect()
+
+# Combine multiple filters
+ts_con |>
+ filter(
+    location %in% c("US", "01"),
+    target_end_date >= "2022-10-01"
+  ) |>
+ collect()
+```
+
+# Accessing oracle-output target data
+
+Use `connect_target_oracle_output()` to open a connection to oracle-output target data:
+
+```{r}
+oo_con <- connect_target_oracle_output(hub_path)
+oo_con
+```
+
+Like the time-series connection, this displays the Arrow dataset structure with the schema showing columns formatted like model outputs. Notice the presence of columns like `output_type`, `output_type_id`, and `oracle_value`.
+
+You can query and collect data from this connection:
+
+```{r}
+# Collect all oracle-output data
+oo_con |>
+ collect()
+```
+
+## Filtering oracle-output data
+
+Oracle-output data has the same structure as model output, making it easy to filter by output type:
+
+```{r}
+# Get quantile forecasts only
+oo_con |>
+ filter(output_type == "quantile") |>
+ collect()
+```
+
+Notice that `output_type_id` is `NA` for quantile outputs. This is because the oracle value represents the observed outcome with all probability mass concentrated on that single value - the `oracle_value` applies to all quantile levels. For `pmf` or `cdf` output types, `output_type_id` would specify the category or threshold.
+
+```{r}
+# Get specific quantile levels
+oo_con |>
+ filter(
+    output_type == "quantile",
+    output_type_id %in% c("0.25", "0.5", "0.75")
+  ) |>
+ collect()
+
+# Filter by location and date
+oo_con |>
+ filter(
+    location == "US",
+    target_end_date == "2022-12-31"
+  ) |>
+ collect()
+```
+
+# Working with target data
+
+## Joining target data with model outputs
+
+A common workflow is to join oracle-output target data with model predictions for evaluation. Let's start by connecting to the model outputs and collecting predictions:
+
+```{r}
+# Connect to model outputs
+hub_con <- connect_hub(hub_path)
+
+# Collect model outputs for a specific location and output type
+model_data <- hub_con |>
+ filter(
+    output_type == "quantile",
+    location == "US"
+  ) |>
+  collect_hub()
+
+model_data
+```
+
+Next, collect the corresponding oracle-output target data:
+
+```{r}
+# Collect corresponding oracle-output target data
+target_data <- oo_con |>
+ filter(
+    output_type == "quantile",
+    location == "US"
+  ) |>
+ collect()
+
+target_data
+```
+
+Before joining, we need to remove the `output_type` and `output_type_id` columns from the oracle-output data. For quantile (and mean, median, sample) outputs, these columns don't provide useful information since the oracle value applies across all quantile levels. Keeping them would cause merge conflicts.
+
+**Note:** For `pmf` or `cdf` output types, you would need to keep these columns as they specify the category or threshold being predicted.
+
+```{r}
+# Remove unnecessary columns that would cause merge conflicts
+target_data <- target_data |>
+  select(-c(output_type, output_type_id))
+
+# Join on common task ID columns
+join_cols <- c("location", "target_end_date", "target")
+
+comparison <- model_data |>
+ inner_join(
+    target_data,
+    by = join_cols
+  )
+
+comparison
+```
+
+Now we have successfully aligned predicted values (`value`) with target observations (`oracle_value`) for each combination of task IDs.
+
+## Computing simple metrics
+
+Once you have both model predictions and target data, you can compute evaluation metrics:
+
+```{r}
+# Calculate absolute error for median forecasts
+comparison |>
+ filter(output_type_id == "0.5") |>
+ mutate(
+    abs_error = abs(value - oracle_value)
+  ) |>
+ group_by(model_id) |>
+ summarise(
+    mean_abs_error = mean(abs_error, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+This workflow of aligning predictions with target observations and computing metrics is exactly what evaluation tools like hubEvals automate as part of comprehensive model evaluation pipelines.
+
+# Accessing target data from cloud hubs
+
+Both `connect_target_timeseries()` and `connect_target_oracle_output()` work seamlessly with cloud-based hubs. Use the same cloud connection approach as with `connect_hub()`:
+
+```{r, eval=FALSE}
+# Connect to a cloud hub
+s3_hub_path <- s3_bucket("example-hub")
+
+# Access time-series target data from cloud
+ts_cloud <- connect_target_timeseries(s3_hub_path)
+ts_cloud |>collect()
+
+# Access oracle-output target data from cloud
+oo_cloud <- connect_target_oracle_output(s3_hub_path)
+oo_cloud |>collect()
+```
+
+## Performance tips for cloud hubs
+
+When working with cloud-based target data, consider these performance tips:
+
+1. **Filter before collecting**: Always apply filters on the Arrow dataset before calling `collect()` to minimize data transfer:
+
+```{r, eval=FALSE}
+# Good: filter first, then collect
+ts_cloud |>
+ filter(location == "US") |>
+ collect()
+
+# Less efficient: collect everything, then filter
+ts_cloud |>
+ collect() |>
+ filter(location == "US")
+```
+
+2. **Select specific columns**: If you only need certain columns, use `select()` before collecting:
+
+```{r, eval=FALSE}
+ts_cloud |>
+ select(location, target_end_date, value) |>
+ filter(location == "US") |>
+ collect()
+```
+
+3. **Use Parquet format when possible**: Hubs that use Parquet format for target data benefit from:
+   - Faster queries
+   - Efficient column selection
+   - Better compression
+
+# Hub version compatibility
+
+The target data functions work transparently across different hub versions:
+
+- **Newer hubs (v6+)** with `target-data.json` configuration benefit from optimized schema creation and potentially better performance
+- **Older hubs** without `target-data.json` have their schemas inferred automatically from data files
+
+As a user, you don't need to worry about these implementation details - the same API works for all hubs, and the functions automatically detect and use the appropriate method.
+
+# Summary
+
+- Use `connect_target_timeseries()` for historical observational data
+- Use `connect_target_oracle_output()` for model-formatted target data
+- Both functions return Arrow datasets that work with `dplyr` verbs
+- Filter before collecting to improve performance, especially for cloud hubs
+- Oracle-output format makes it easy to join with model predictions for evaluation
+- The same API works across all hub versions
+
+For more information on:
+- Model output data, see `vignette("connect_hub")`
+- Target data concepts, see the [Hubverse target data guide](https://docs.hubverse.io/en/latest/user-guide/target-data.html)
