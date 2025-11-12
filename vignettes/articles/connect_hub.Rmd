@@ -84,7 +84,11 @@ Using this argument will fail unless the hub meets the following criteria:
 
 ```{r}
 hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/")
-hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
+hub_con_cloud <- hubData::connect_hub(
+  hub_path_cloud,
+  file_format = "parquet",
+  skip_checks = TRUE
+)
 hub_con_cloud
 ```
 
@@ -134,7 +138,8 @@ For example, if you wanted to get all quantile predictions for the last forecast
 ```{r, error=TRUE}
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -165,7 +170,8 @@ last_forecast <- hub_con %>%
 
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == last_forecast
   ) %>%
   hubData::collect_hub()
@@ -181,7 +187,8 @@ _For more details see [DuckDB quacks Arrow: A zero-copy data integration between
 hub_con %>%
   arrow::to_duckdb() %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -197,8 +204,14 @@ The approach does have certain limitations though. For example, an overall unify
 In addition, only a single file_format dataset can be opened.
 
 ```{r}
-model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
-mod_out_con <- hubData::connect_model_output(model_output_dir, file_format = "csv")
+model_output_dir <- system.file(
+  "testhubs/simple/model-output",
+  package = "hubUtils"
+)
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
+  file_format = "csv"
+)
 mod_out_con
 ```
 
@@ -226,8 +239,14 @@ mod_out_con_cloud
 Like `connect_hub()`, `connect_model_output()` has an optional `skip_checks` argument that improves performance:
 
 ```{r}
-mod_out_dir_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
-mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
+mod_out_dir_cloud <- hubData::s3_bucket(
+  "hubverse/hubutils/testhubs/parquet/model-output/"
+)
+mod_out_con_cloud <- hubData::connect_model_output(
+  mod_out_dir_cloud,
+  file_format = "parquet",
+  skip_checks = TRUE
+)
 mod_out_con_cloud
 ```
 
@@ -249,7 +268,8 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
@@ -271,7 +291,8 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )

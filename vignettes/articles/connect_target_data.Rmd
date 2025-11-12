@@ -87,7 +87,7 @@ You can query and collect data from the connection using `dplyr` verbs:
 ```{r}
 # Collect all time-series data
 ts_con |>
- collect()
+  collect()
 ```
 
 ## Filtering time-series data
@@ -97,21 +97,21 @@ You can filter before collecting to work with subsets of the data:
 ```{r}
 # Filter by location
 ts_con |>
- filter(location == "US") |>
- collect()
+  filter(location == "US") |>
+  collect()
 
 # Filter by date range
 ts_con |>
- filter(target_end_date >= "2022-10-01") |>
- collect()
+  filter(target_end_date >= "2022-10-01") |>
+  collect()
 
 # Combine multiple filters
 ts_con |>
- filter(
+  filter(
     location %in% c("US", "01"),
     target_end_date >= "2022-10-01"
   ) |>
- collect()
+  collect()
 ```
 
 # Accessing oracle-output target data
@@ -130,7 +130,7 @@ You can query and collect data from this connection:
 ```{r}
 # Collect all oracle-output data
 oo_con |>
- collect()
+  collect()
 ```
 
 ## Filtering oracle-output data
@@ -140,8 +140,8 @@ Oracle-output data has the same structure as model output, making it easy to fil
 ```{r}
 # Get quantile forecasts only
 oo_con |>
- filter(output_type == "quantile") |>
- collect()
+  filter(output_type == "quantile") |>
+  collect()
 ```
 
 Notice that `output_type_id` is `NA` for quantile outputs. This is because the oracle value represents the observed outcome with all probability mass concentrated on that single value - the `oracle_value` applies to all quantile levels. For `pmf` or `cdf` output types, `output_type_id` would specify the category or threshold.
@@ -149,19 +149,19 @@ Notice that `output_type_id` is `NA` for quantile outputs. This is because the o
 ```{r}
 # Get specific quantile levels
 oo_con |>
- filter(
+  filter(
     output_type == "quantile",
     output_type_id %in% c("0.25", "0.5", "0.75")
   ) |>
- collect()
+  collect()
 
 # Filter by location and date
 oo_con |>
- filter(
+  filter(
     location == "US",
     target_end_date == "2022-12-31"
   ) |>
- collect()
+  collect()
 ```
 
 # Working with target data
@@ -176,7 +176,7 @@ hub_con <- connect_hub(hub_path)
 
 # Collect model outputs for a specific location and output type
 model_data <- hub_con |>
- filter(
+  filter(
     output_type == "quantile",
     location == "US"
   ) |>
@@ -190,11 +190,11 @@ Next, collect the corresponding oracle-output target data:
 ```{r}
 # Collect corresponding oracle-output target data
 target_data <- oo_con |>
- filter(
+  filter(
     output_type == "quantile",
     location == "US"
   ) |>
- collect()
+  collect()
 
 target_data
 ```
@@ -212,7 +212,7 @@ target_data <- target_data |>
 join_cols <- c("location", "target_end_date", "target")
 
 comparison <- model_data |>
- inner_join(
+  inner_join(
     target_data,
     by = join_cols
   )
@@ -272,12 +272,12 @@ Once you have both model predictions and target data, you can compute evaluation
 ```{r}
 # Calculate absolute error for median forecasts
 comparison |>
- filter(output_type_id == "0.5") |>
- mutate(
+  filter(output_type_id == "0.5") |>
+  mutate(
     abs_error = abs(value - oracle_value)
   ) |>
- group_by(model_id) |>
- summarise(
+  group_by(model_id) |>
+  summarise(
     mean_abs_error = mean(abs_error, na.rm = TRUE),
     .groups = "drop"
   )
@@ -327,22 +327,22 @@ When working with cloud-based target data, consider these performance tips:
 ```{r, eval=FALSE}
 # Good: filter first, then collect
 ts_cloud |>
- filter(location == "US") |>
- collect()
+  filter(location == "US") |>
+  collect()
 
 # Less efficient: collect everything, then filter
 ts_cloud |>
- collect() |>
- filter(location == "US")
+  collect() |>
+  filter(location == "US")
 ```
 
 2. **Select specific columns**: If you only need certain columns, use `select()` before collecting:
 
 ```{r}
 ts_cloud |>
- select(location, target_end_date, observation) |>
- filter(location == "US") |>
- collect()
+  select(location, target_end_date, observation) |>
+  filter(location == "US") |>
+  collect()
 ```
 
 # Hub version compatibility
