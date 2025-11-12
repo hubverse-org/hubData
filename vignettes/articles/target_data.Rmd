@@ -222,6 +222,49 @@ comparison
 
 Now we have successfully aligned predicted values (`value`) with target observations (`oracle_value`) for each combination of task IDs.
 
+### Special case: Hubs with horizon-based forecasts
+
+Some hubs collect forecasts using only a reference date (or origin date) and a horizon column, rather than explicitly storing the target end date. In these cases, the target end date is often calculated as `origin_date + (horizon * 7L)` (assuming weekly forecasts).
+
+```{r, include=FALSE}
+# Simulate horizon-based data by removing target_end_date from model_data
+model_data_horizon <- model_data |>
+  select(-target_end_date)
+```
+
+```{r}
+# Model data without target_end_date
+model_data_horizon
+```
+
+When working with such hubs, you'll need to calculate the `target_end_date` in the model output data before joining with target data:
+
+```{r}
+# Calculate target_end_date from origin_date and horizon
+model_data_horizon <- model_data_horizon |>
+  mutate(
+    target_end_date = reference_date + (horizon * 7L)
+  )
+
+model_data_horizon
+```
+
+Now we can join with target data as before:
+
+```{r}
+join_cols <- c("location", "target_end_date", "target")
+
+comparison_horizon <- model_data_horizon |>
+  inner_join(
+    target_data,
+    by = join_cols
+  )
+
+comparison_horizon
+```
+
+Note: The multiplier (7L) assumes weekly horizons. Adjust this based on your hub's configuration (e.g., 1L for daily horizons).
+
 ## Computing simple metrics
 
 Once you have both model predictions and target data, you can compute evaluation metrics:
