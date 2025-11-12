@@ -1,5 +1,5 @@
 ---
-title: "Accessing data from a hub"
+title: "Accessing Model Output Data"
 ---
 
 ```{r, include = FALSE}
@@ -288,6 +288,6 @@ hubData provides dedicated functions for accessing target data:
 - `connect_target_timeseries()` - Access historical time-series target observations
 - `connect_target_oracle_output()` - Access target data formatted like model outputs (useful for evaluation)
 
-These functions work similarly to `connect_hub()`, returning Arrow datasets that you can query with `dplyr` verbs and collect with `collect_hub()`.
+These functions work similarly to `connect_hub()`, returning Arrow datasets that you can query with `dplyr` verbs and collect with `collect()`.
 
-For detailed examples and best practices for working with target data, including how to join target data with model outputs for evaluation, see `vignette("target_data")`.
+For detailed examples and best practices for working with target data, including how to join target data with model outputs for evaluation, see `vignette("connect_target_data")`.
