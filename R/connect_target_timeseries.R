@@ -41,7 +41,7 @@
 #'   Parquet's column-by-name matching enables safe reordering.
 #' - **CSV**: Original file ordering is preserved to avoid column name/position mismatches during collection.
 #'
-#' **Pre-v6 hubs**: Original file ordering is preserved regardless of format.
+#' **Hubs (without `target-data.json`)**: Original file ordering is preserved regardless of format.
 #'
 #' @examples
 #' # Column Ordering: CSV vs Parquet in v6+ hubs
