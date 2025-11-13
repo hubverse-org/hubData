@@ -1,5 +1,8 @@
 # hubData (development version)
 
+* Added `r_to_arrow_datatypes()` function providing an inverse mapping from R data types to Arrow data types, enabling vectorized type conversion when processing `target-data.json` configurations (#107).
+* Enhanced `create_timeseries_schema()` and `create_oracle_output_schema()` to support config-based schema creation when `target-data.json` (v6.0.0+) is present (#107). This enables fast, deterministic schema creation without filesystem I/O, especially beneficial for cloud storage. Functions automatically fall back to inference-based schema creation for pre-v6 hubs or hubs without `target-data.json`, maintaining backward compatibility. This functionality is propagated to `connect_target_timeseries()` and `connect_target_oracle_output()`, which use these schema creation functions internally.
+* Enhanced documentation for `connect_target_timeseries()` and `connect_target_oracle_output()` to clarify column ordering behavior: v6+ Parquet files are reordered to hubverse convention, while CSV files preserve original ordering to avoid column name/position mismatches during collection (#107).
 * Added `get_target_data_colnames()` function for extracting and ordering expected column names for target data from target-data.json configuration files (#109).
 
 # hubData 1.5.0

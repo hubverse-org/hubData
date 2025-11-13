@@ -8,7 +8,7 @@
 # And helper-fixtures.R with:
 # - timeseries_schema_fixture()
 
-test_that("connect_target_timeseries on single file works on embedded hub", {
+test_that("connect_target_timeseries inference works on single-file hub", {
   hub_path <- use_example_hub_readonly("file")
 
   ts_con <- connect_target_timeseries(hub_path)
@@ -110,7 +110,7 @@ test_that("connect_target_timeseries fails correctly", {
 # (and validate that restriction in hubValidations), connect_target_* functions
 # were written before we set that restriction and at least for now, can handle
 # datasets with multiple CSV files.
-test_that("connect_target_timeseries on multiple non-partitioned CSV files works", {
+test_that("connect_target_timeseries inference works on multiple non-partitioned CSVs", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "time-series")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -153,7 +153,7 @@ test_that("connect_target_timeseries on multiple non-partitioned CSV files works
 # (and validate that restriction in hubValidations), connect_target_* functions
 # were written before we set that restriction and at least for now, can handle
 # datasets with multiple CSV files.
-test_that("connect_target_timeseries works with non-partitioned CSVs in subdirectories", {
+test_that("connect_target_timeseries inference works with CSVs in subdirectories", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "time-series")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -194,7 +194,7 @@ test_that("connect_target_timeseries works with non-partitioned CSVs in subdirec
   expect_gt(nrow(res2), 0L)
 })
 
-test_that("connect_target_timeseries with HIVE-PARTITIONED parquet works", {
+test_that("connect_target_timeseries inference handles HIVE-partitioned parquet", {
   hub_path <- use_example_hub_editable("file")
   ts_path <- validate_target_data_path(hub_path, "time-series")
   dat <- arrow::read_csv_arrow(ts_path)
@@ -217,7 +217,7 @@ test_that("connect_target_timeseries with HIVE-PARTITIONED parquet works", {
   )
 })
 
-test_that("connect_target_timeseries works on single-file SubTreeFileSystem (local mirror)", {
+test_that("connect_target_timeseries inference works on SubTreeFileSystem", {
   skip_on_os("windows") # SubTreeFileSystem lower-level calls are flaky on Windows
 
   src <- use_example_hub_readonly("file")
@@ -242,7 +242,7 @@ test_that("connect_target_timeseries works on single-file SubTreeFileSystem (loc
   expect_gt(nrow(res), 0L)
 })
 
-test_that("connect_target_timeseries works with multi-file SubTreeFileSystem hub", {
+test_that("connect_target_timeseries inference works with multi-file SubTreeFileSystem", {
   skip_on_os("windows")
 
   # fan out to multi-file CSVs
@@ -286,8 +286,11 @@ test_that("connect_target_timeseries works with multi-file SubTreeFileSystem hub
   expect_true(all(few$observation < 1))
 })
 
-test_that("partitioning column schema is detected correctly (#89)", {
+test_that("partitioning column schema is detected correctly via inference (#89)", {
   hub_path_cloud <- s3_bucket("covid-variant-nowcast-hub")
+  # Force inference by mocking has_target_data_config to return FALSE. Ensures test
+  #  is testing inference even if hub is updated to v6 later.
+  local_mocked_bindings(has_target_data_config = function(...) FALSE)
   con <- connect_target_timeseries(hub_path_cloud)
 
   expect_s3_class(
@@ -298,5 +301,28 @@ test_that("partitioning column schema is detected correctly (#89)", {
   expect_equal(
     con$schema$ToString(),
     "target_date: date32[day]\nlocation: string\nclade: string\nobservation: double\nnowcast_date: date32[day]\nas_of: date32[day]" # nolint: line_length_linter
+  )
+})
+
+# v6 config-based tests ----
+
+test_that("connect_target_timeseries config works with v6 hub", {
+  hub_path <- use_example_hub_readonly("file", v = 6)
+
+  ts_con <- connect_target_timeseries(hub_path)
+  expect_s3_class(
+    ts_con,
+    c("target_timeseries", "FileSystemDataset", "Dataset", "ArrowObject", "R6"),
+    exact = TRUE
+  )
+  expect_equal(ts_con$schema$ToString(), timeseries_schema_fixture())
+
+  # Verify we can collect data
+  all <- dplyr::collect(ts_con)
+  expect_s3_class(all, "tbl_df", exact = FALSE)
+  expect_gt(nrow(all), 0L)
+  expect_equal(
+    sort(names(all)),
+    sort(c("target_end_date", "target", "location", "observation"))
   )
 })

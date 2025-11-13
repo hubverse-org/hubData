@@ -1,25 +1,30 @@
 # Paths to embedded example hubs (as provided)
-hubutils_target_file_hub <- function() {
-  system.file("testhubs/v5/target_file", package = "hubUtils")
+hubutils_target_file_hub <- function(v = 5) {
+  system.file(sprintf("testhubs/v%s/target_file", v), package = "hubUtils")
 }
-hubutils_target_dir_hub <- function() {
-  system.file("testhubs/v5/target_dir", package = "hubUtils")
+hubutils_target_dir_hub <- function(v = 5) {
+  system.file(sprintf("testhubs/v%s/target_dir", v), package = "hubUtils")
 }
 
 # Use the hub in-place (no edits)
-use_example_hub_readonly <- function(which = c("file", "dir")) {
+use_example_hub_readonly <- function(which = c("file", "dir"), v = 5) {
   which <- rlang::arg_match(which)
-  if (which == "file") hubutils_target_file_hub() else hubutils_target_dir_hub()
+  if (which == "file") {
+    hubutils_target_file_hub(v = v)
+  } else {
+    hubutils_target_dir_hub(v = v)
+  }
 }
 
 # Make a temp working copy (persists for the calling TEST only)
 # Cleanup is tied to the test via withr::local_tempdir(.local_envir = ...)
 use_example_hub_editable <- function(
   which = c("file", "dir"),
-  .local_envir = if (interactive()) .GlobalEnv else testthat::teardown_env()
+  .local_envir = if (interactive()) .GlobalEnv else testthat::teardown_env(),
+  v = 5
 ) {
   which <- rlang::arg_match(which)
-  src <- use_example_hub_readonly(which)
+  src <- use_example_hub_readonly(which, v = v)
 
   # Create a scoped temp dir (deleted after the test)
   parent <- withr::local_tempdir(
