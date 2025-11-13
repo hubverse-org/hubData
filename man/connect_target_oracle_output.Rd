@@ -74,7 +74,7 @@ This config-based approach is fast and deterministic, requiring no filesystem
 I/O to scan data files. It's especially beneficial for cloud storage where
 file scanning can be slow.
 
-\strong{Pre-v6 hubs (without \code{target-data.json}):} Schema is inferred by scanning
+\strong{Hubs (without \code{target-data.json}):} Schema is inferred by scanning
 the actual data files. This inference-based approach examines file structure
 and content to determine column types.
 
@@ -93,7 +93,7 @@ Parquet's column-by-name matching enables safe reordering.
 \item \strong{CSV}: Original file ordering is preserved to avoid column name/position mismatches during collection.
 }
 
-\strong{Pre-v6 hubs}: Original file ordering is preserved regardless of format.
+\strong{Hubs (without \code{target-data.json})}: Original file ordering is preserved regardless of format.
 }
 }
 \examples{

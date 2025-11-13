@@ -24,8 +24,7 @@ of \link{arrow_to_r_datatypes} and is useful when creating Arrow schemas
 programmatically from R type specifications.
 }
 \details{
-This function generates the mapping dynamically because Arrow DataType objects
-are external pointers that cannot be serialized to \code{.rda} files. The R type
+This function generates the mapping dynamically. The R type
 strings match those used in the \code{non_task_id_schema} field of \code{target-data.json}
 configuration files.
 

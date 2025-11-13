@@ -135,8 +135,7 @@ validate_arrow_schema <- function(arrow_schema, call = rlang::caller_env()) {
 #' }
 #'
 #' @details
-#' This function generates the mapping dynamically because Arrow DataType objects
-#' are external pointers that cannot be serialized to `.rda` files. The R type
+#' This function generates the mapping dynamically. The R type
 #' strings match those used in the `non_task_id_schema` field of `target-data.json`
 #' configuration files.
 #'
@@ -162,10 +161,12 @@ validate_arrow_schema <- function(arrow_schema, call = rlang::caller_env()) {
 #'   score = type_map[["double"]]
 #' )
 #' my_schema
+# This function generates the mapping dynamically because Arrow DataType objects
+# are external pointers that cannot be serialized to `.rda` files.
 r_to_arrow_datatypes <- function() {
   list(
     logical = arrow::bool(),
-    integer = arrow::int32(),              # Use int32 as default (not int64)
+    integer = arrow::int32(), # Use int32 as default (not int64)
     double = arrow::float64(),
     character = arrow::utf8(),
     Date = arrow::date32(),
