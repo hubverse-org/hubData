@@ -25,7 +25,7 @@
 #' I/O to scan data files. It's especially beneficial for cloud storage where
 #' file scanning can be slow.
 #'
-#' **Pre-v6 hubs (without `target-data.json`):** Schema is inferred by scanning
+#' **Hubs (without `target-data.json`):** Schema is inferred by scanning
 #' the actual data files. This inference-based approach examines file structure
 #' and content to determine column types.
 #'
