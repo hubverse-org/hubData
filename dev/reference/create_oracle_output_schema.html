@@ -112,6 +112,13 @@ behaviour so use with care.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>an arrow <code>&lt;schema&gt;</code> class object</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>When <code>target-data.json</code> (v6.0.0+) is present, schema is created directly from config
+without reading target data files. Otherwise, schema is inferred by reading the dataset.
+Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+provides deterministic schema creation.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -129,9 +136,9 @@ behaviour so use with care.</p></dd>
 <span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"example-complex-forecast-hub"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">create_oracle_output_schema</span><span class="op">(</span><span class="va">s3_hub_path</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Schema</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target_end_date: date32[day]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> output_type: string</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> output_type_id: string</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> oracle_value: double</span>
@@ -146,7 +153,7 @@ behaviour so use with care.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>

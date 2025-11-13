@@ -37,7 +37,10 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubdata-development-version">hubData (development version)<a class="anchor" aria-label="anchor" href="#hubdata-development-version"></a></h2>
-<ul><li>Added <code><a href="../reference/get_target_data_colnames.html">get_target_data_colnames()</a></code> function for extracting and ordering expected column names for target data from target-data.json configuration files (<a href="https://github.com/hubverse-org/hubData/issues/109" class="external-link">#109</a>).</li>
+<ul><li>Added <code><a href="../reference/r_to_arrow_datatypes.html">r_to_arrow_datatypes()</a></code> function providing an inverse mapping from R data types to Arrow data types, enabling vectorized type conversion when processing <code>target-data.json</code> configurations (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>).</li>
+<li>Enhanced <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> and <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> to support config-based schema creation when <code>target-data.json</code> (v6.0.0+) is present (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>). This enables fast, deterministic schema creation without filesystem I/O, especially beneficial for cloud storage. Functions automatically fall back to inference-based schema creation for pre-v6 hubs or hubs without <code>target-data.json</code>, maintaining backward compatibility. This functionality is propagated to <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code>, which use these schema creation functions internally.</li>
+<li>Enhanced documentation for <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> to clarify column ordering behavior: v6+ Parquet files are reordered to hubverse convention, while CSV files preserve original ordering to avoid column name/position mismatches during collection (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>).</li>
+<li>Added <code><a href="../reference/get_target_data_colnames.html">get_target_data_colnames()</a></code> function for extracting and ordering expected column names for target data from target-data.json configuration files (<a href="https://github.com/hubverse-org/hubData/issues/109" class="external-link">#109</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="hubdata-150">hubData 1.5.0<a class="anchor" aria-label="anchor" href="#hubdata-150"></a></h2>
@@ -142,7 +145,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>

@@ -70,7 +70,8 @@ files within the <code>hub-config</code> directory.</p></dd>
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
 <dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
 Useful when the required date column is a partitioning column in the target data
-and does not have the same name as a date typed task ID variable in the config.</p></dd>
+and does not have the same name as a date typed task ID variable in the config.
+<strong>Note</strong>: Ignored when <code>target-data.json</code> exists (v6+); date column is read from config.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -97,6 +98,13 @@ If <code>TRUE</code>, return a character vector of R data types.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>an arrow <code>&lt;schema&gt;</code> class object</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>When <code>target-data.json</code> (v6.0.0+) is present, schema is created directly from config
+without reading target data files. Otherwise, schema is inferred by reading the dataset.
+Config-based approach avoids file I/O (especially beneficial for cloud storage) and
+provides deterministic schema creation.</p>
     </div>
 
     <div class="section level2">
@@ -128,7 +136,7 @@ If <code>TRUE</code>, return a character vector of R data types.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>

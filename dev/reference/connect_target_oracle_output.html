@@ -113,25 +113,53 @@ behaviour so use with care.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If the target data is split across multiple files in a <code>oracle-output</code> directory,
 all files must share the same file format, either csv or parquet.
-No other types of files are currently allowed in a <code>oracle-output</code> directory.</p>
+No other types of files are currently allowed in a <code>oracle-output</code> directory.</p><div class="section">
+<h3 id="schema-creation">Schema Creation<a class="anchor" aria-label="anchor" href="#schema-creation"></a></h3>
+
+
+<p>This function uses different methods to create the Arrow schema depending on
+the hub configuration version:</p>
+<p><strong>v6+ hubs (with <code>target-data.json</code>):</strong> Schema is created directly from the
+<code>target-data.json</code> configuration file using <code><a href="create_oracle_output_schema.html">create_oracle_output_schema()</a></code>.
+This config-based approach is fast and deterministic, requiring no filesystem
+I/O to scan data files. It's especially beneficial for cloud storage where
+file scanning can be slow.</p>
+<p><strong>Hubs (without <code>target-data.json</code>):</strong> Schema is inferred by scanning
+the actual data files. This inference-based approach examines file structure
+and content to determine column types.</p>
+<p>The function automatically detects which method to use based on the presence
+of <code>target-data.json</code> in the hub configuration.</p>
+</div>
+
+<div class="section">
+<h3 id="schema-ordering">Schema Ordering<a class="anchor" aria-label="anchor" href="#schema-ordering"></a></h3>
+
+
+<p>Column ordering in the resulting dataset depends on configuration version and file format:</p>
+<p><strong>v6+ hubs (with <code>target-data.json</code>):</strong></p><ul><li><p><strong>Parquet</strong>: Columns are reordered to the standard hubverse convention (see <code><a href="get_target_data_colnames.html">get_target_data_colnames()</a></code>).
+Parquet's column-by-name matching enables safe reordering.</p></li>
+<li><p><strong>CSV</strong>: Original file ordering is preserved to avoid column name/position mismatches during collection.</p></li>
+</ul><p><strong>Hubs (without <code>target-data.json</code>)</strong>: Original file ordering is preserved regardless of format.</p>
+</div>
+
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v5/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Connect to oracle-output data</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span> <span class="op">&lt;-</span> <span class="fu">connect_target_oracle_output</span><span class="op">(</span><span class="va">hub_path</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target_oracle_output with 1 csv file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target_end_date: date32[day]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> output_type: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> output_type_id: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> oracle_value: double</span>
-<span class="r-in"><span><span class="co"># Collect all oracle-output data</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Column Ordering: CSV vs Parquet in v6+ hubs</span></span></span>
+<span class="r-in"><span><span class="co"># For v6+ hubs with target-data.json, ordering differs by file format</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1: CSV format (single file) - preserves original file ordering</span></span></span>
+<span class="r-in"><span><span class="va">hub_path_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_file"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_csv</span> <span class="op">&lt;-</span> <span class="fu">connect_target_oracle_output</span><span class="op">(</span><span class="va">hub_path_csv</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># CSV columns are in their original file order</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">oo_con_csv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "location"        "target_end_date" "target"          "output_type"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "output_type_id"  "oracle_value"   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Collect and filter as usual</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_csv</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 627 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target       output_type output_type_id oracle_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -146,26 +174,7 @@ No other types of files are currently allowed in a <code>oracle-output</code> di
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> US       2022-10-22      wk flu hosp… cdf         9                         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> US       2022-10-22      wk flu hosp… cdf         10                        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 617 more rows</span></span>
-<span class="r-in"><span><span class="co"># Filter for a specific date before collecting</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">target_end_date</span> <span class="op">==</span>  <span class="st">"2022-12-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 57 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target       output_type output_type_id oracle_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> US       2022-12-31      wk flu hosp… cdf         1                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> US       2022-12-31      wk flu hosp… cdf         2                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> US       2022-12-31      wk flu hosp… cdf         3                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> US       2022-12-31      wk flu hosp… cdf         4                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> US       2022-12-31      wk flu hosp… cdf         5                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> US       2022-12-31      wk flu hosp… cdf         6                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> US       2022-12-31      wk flu hosp… cdf         7                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> US       2022-12-31      wk flu hosp… cdf         8                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> US       2022-12-31      wk flu hosp… cdf         9                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> US       2022-12-31      wk flu hosp… cdf         10                        1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 47 more rows</span></span>
-<span class="r-in"><span><span class="co"># Filter for a specific location before collecting</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_csv</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 209 × 6</span></span>
@@ -182,40 +191,68 @@ No other types of files are currently allowed in a <code>oracle-output</code> di
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> US       2022-10-22      wk flu hosp… cdf         9                         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> US       2022-10-22      wk flu hosp… cdf         10                        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 199 more rows</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2: Parquet format (directory) - reordered to hubverse convention</span></span></span>
+<span class="r-in"><span><span class="va">hub_path_parquet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testhubs/v6/target_dir"</span>, package <span class="op">=</span> <span class="st">"hubUtils"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_parquet</span> <span class="op">&lt;-</span> <span class="fu">connect_target_oracle_output</span><span class="op">(</span><span class="va">hub_path_parquet</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Parquet columns follow hubverse convention (date first, then alphabetical)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">oo_con_parquet</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "target_end_date" "target"          "location"        "output_type"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "output_type_id"  "oracle_value"   </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Reordering is safe for Parquet because it matches columns by name</span></span></span>
+<span class="r-in"><span><span class="co"># rather than position during collection</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_parquet</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 627 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    target_end_date target       location output_type output_type_id oracle_value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-10-22      wk flu hosp… US       cdf         1                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-10-22      wk flu hosp… US       cdf         2                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-10-22      wk flu hosp… US       cdf         3                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-10-22      wk flu hosp… US       cdf         4                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-10-22      wk flu hosp… US       cdf         5                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-10-22      wk flu hosp… US       cdf         6                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-22      wk flu hosp… US       cdf         7                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-10-22      wk flu hosp… US       cdf         8                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-10-22      wk flu hosp… US       cdf         9                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-22      wk flu hosp… US       cdf         10                        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 617 more rows</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Both formats support the same filtering operations</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_parquet</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">target_end_date</span> <span class="op">==</span>  <span class="st">"2022-12-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 57 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    target_end_date target       location output_type output_type_id oracle_value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk inc flu … 01       mean        <span style="color: #BB0000;">NA</span>                      140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk inc flu … 02       mean        <span style="color: #BB0000;">NA</span>                       44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 47 more rows</span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get distinct target_end_date values</span></span></span>
-<span class="r-in"><span><span class="va">oo_con</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="va">oo_con_parquet</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">target_end_date</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span>as_vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "2022-10-22" "2022-10-29" "2022-11-05" "2022-11-12" "2022-11-19"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "2022-11-26" "2022-12-03" "2022-12-10" "2022-12-17" "2022-12-24"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "2022-12-31"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Access Target oracle-output data from a cloud hub</span></span></span>
 <span class="r-in"><span><span class="va">s3_hub_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="s3_bucket.html">s3_bucket</a></span><span class="op">(</span><span class="st">"example-complex-forecast-hub"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3_con</span> <span class="op">&lt;-</span> <span class="fu">connect_target_oracle_output</span><span class="op">(</span><span class="va">s3_hub_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3_con</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target_oracle_output with 1 csv file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> location: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target_end_date: date32[day]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> target: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> output_type: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> output_type_id: string</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> oracle_value: double</span>
 <span class="r-in"><span><span class="va">s3_con</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 200,340 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    location target_end_date target       output_type output_type_id oracle_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> US       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                     <span style="text-decoration: underline;">2</span>380</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                      141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 02       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                        3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 04       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                       22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 05       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                       50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 06       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                      124</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 08       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                       15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 09       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                        9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 10       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                        1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 11       2022-10-22      wk inc flu … quantile    <span style="color: #BB0000;">NA</span>                        8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 200,330 more rows</span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -227,7 +264,7 @@ No other types of files are currently allowed in a <code>oracle-output</code> di
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>
