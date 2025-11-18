@@ -103,7 +103,7 @@ hub_con
 #> • hub_name: "US CDC FluSight"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/flusight
 #> • file_format: "csv(5/5)", "parquet(2/2)", and "arrow(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/flusight/forecasts"
@@ -150,7 +150,7 @@ hub_con_cloud
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: hubverse/hubutils/testhubs/simple/
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "S3FileSystem"
 #> • model_output_dir: "model-output/"
 #> • config_admin: hub-config/admin.json
@@ -174,29 +174,25 @@ hub_con_cloud
 
 By default,
 [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
-will ignore invalid files in the hub’s model output directory when it
-creates a connection. This check prevents errors when working with the
-data, but it negatively impacts performance.
+skips file validation checks when creating a connection, providing
+optimal performance especially for large cloud-based hubs by minimizing
+I/O operations.
 
-If the cloud-based hub uses a single file type for model output data,
-you can improve performance by using the `skip_checks` argument. This
-argument will bypass the default behavior of scanning the hub’s model
-output directory for invalid files before connecting.
+If you are working with a model output directory that may contain files
+that cannot be opened as part of the dataset (e.g., non-model output
+files with incompatible formats), you can use `skip_checks = FALSE` to
+have
+[`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+attempt to detect and exclude invalid files before connecting. Note that
+this will negatively impact performance due to increased I/O operations.
 
-Using this argument will fail unless the hub meets the following
-criteria:
-
-- the model output directory contains only model output data (no
-  `README.md`, for example)
-- the model output files use a single file format.
+For most hubs validated through the hubValidations package, the default
+`skip_checks = TRUE` behavior is recommended. If invalid files are
+present, consider using the `ignore_files` argument instead.
 
 ``` r
 hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/")
-hub_con_cloud <- hubData::connect_hub(
-  hub_path_cloud,
-  file_format = "parquet",
-  skip_checks = TRUE
-)
+hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet")
 #> ℹ Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`
 #> ℹ Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`
 hub_con_cloud
@@ -242,16 +238,16 @@ hub_con %>%
 #> # A tibble: 276 × 8
 #>    forecast_date horizon target        location output_type output_type_id value
 #>    <date>          <int> <chr>         <chr>    <chr>       <chr>          <dbl>
-#>  1 2023-05-01          1 wk ahead inc… US       quantile    0.01               0
-#>  2 2023-05-01          1 wk ahead inc… US       quantile    0.025              0
-#>  3 2023-05-01          1 wk ahead inc… US       quantile    0.05               0
-#>  4 2023-05-01          1 wk ahead inc… US       quantile    0.1              193
-#>  5 2023-05-01          1 wk ahead inc… US       quantile    0.15             495
-#>  6 2023-05-01          1 wk ahead inc… US       quantile    0.2              618
-#>  7 2023-05-01          1 wk ahead inc… US       quantile    0.25             717
-#>  8 2023-05-01          1 wk ahead inc… US       quantile    0.3              774
-#>  9 2023-05-01          1 wk ahead inc… US       quantile    0.35             822
-#> 10 2023-05-01          1 wk ahead inc… US       quantile    0.4              857
+#>  1 2023-04-24          1 wk ahead inc… US       quantile    0.01               0
+#>  2 2023-04-24          1 wk ahead inc… US       quantile    0.025              0
+#>  3 2023-04-24          1 wk ahead inc… US       quantile    0.05               0
+#>  4 2023-04-24          1 wk ahead inc… US       quantile    0.1              281
+#>  5 2023-04-24          1 wk ahead inc… US       quantile    0.15             600
+#>  6 2023-04-24          1 wk ahead inc… US       quantile    0.2              717
+#>  7 2023-04-24          1 wk ahead inc… US       quantile    0.25             817
+#>  8 2023-04-24          1 wk ahead inc… US       quantile    0.3              877
+#>  9 2023-04-24          1 wk ahead inc… US       quantile    0.35             913
+#> 10 2023-04-24          1 wk ahead inc… US       quantile    0.4              965
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: model_id <chr>
 ```
@@ -304,18 +300,18 @@ hub_con_cloud %>%
   dplyr::filter(output_type == "quantile", location == "US") %>%
   hubData::collect_hub()
 #> # A tibble: 230 × 9
-#>    model_id        origin_date target     horizon location age_group output_type
-#>  * <chr>           <date>      <chr>        <int> <chr>    <chr>     <chr>      
-#>  1 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  2 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  3 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  4 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  5 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  6 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  7 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  8 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#>  9 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
-#> 10 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>    model_id     origin_date target        horizon location age_group output_type
+#>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
+#>  1 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  2 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  3 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  4 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  5 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  6 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  7 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  8 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  9 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#> 10 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -394,16 +390,16 @@ hub_con %>%
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -549,10 +545,16 @@ mod_out_con_cloud
 #> model_id: string
 ```
 
-Like
-[`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md),
 [`connect_model_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
-has an optional `skip_checks` argument that improves performance:
+also has a `skip_checks` argument. Unlike
+[`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md),
+which defaults to `skip_checks = TRUE` for optimal performance with
+validated hubs,
+[`connect_model_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+defaults to `skip_checks = FALSE` since it is designed to work with
+model output directories that may be in draft form and contain invalid
+files. You can improve performance by setting `skip_checks = TRUE` if
+you know your directory contains only valid model output files:
 
 ``` r
 mod_out_dir_cloud <- hubData::s3_bucket(

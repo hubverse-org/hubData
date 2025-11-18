@@ -2,6 +2,31 @@
 
 ## hubData (development version)
 
+### Breaking changes
+
+- **BREAKING:** Changed default value of `skip_checks` parameter from
+  `FALSE` to `TRUE` in
+  [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+  ([\#114](https://github.com/hubverse-org/hubData/issues/114)). This
+  significantly improves performance, especially for large cloud hubs
+  (AWS S3, GCS), by skipping file validation checks that require high
+  I/O operations. The previous default behavior of detecting and
+  excluding invalid files can still be accessed by explicitly setting
+  `skip_checks = FALSE`. This change aligns with the Python hubdata
+  package default and reflects that hubs validated through
+  hubValidations should not require additional file checks. Users with
+  model output directories containing invalid files should either:
+  - Use the `ignore_files` argument to exclude specific files, or
+  - Set `skip_checks = FALSE` explicitly, or
+  - Ensure their model-output directories contain only valid model
+    output files
+- Note:
+  [`connect_model_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+  retains its default of `skip_checks = FALSE` as it is designed for
+  working with model output directories that may be in draft form.
+
+### New features and improvements
+
 - Added comprehensive “Accessing Target Data” vignette demonstrating how
   to use
   [`connect_target_timeseries()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_timeseries.md)

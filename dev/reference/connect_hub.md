@@ -13,7 +13,7 @@ connect_hub(
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
   partitions = list(model_id = arrow::utf8()),
-  skip_checks = FALSE,
+  skip_checks = TRUE,
   na = c("NA", ""),
   ignore_files = NULL
 )
@@ -81,13 +81,19 @@ connect_model_output(
 
 - skip_checks:
 
-  Logical. If `FALSE` (default), check `file_format` parameter against
-  the hub's model output files. Also excludes invalid model output files
-  when opening hub datasets. Setting to `TRUE` will improve performance,
-  most noticeable on large cloud hubs, but will result in an error if
-  the model output directory includes invalid files. If invalid
-  (non-model output date files) are contained in the model output
-  directory, use `ignore_files` argument to ignore them.
+  Logical. If `TRUE` (default), skip validation checks when opening hub
+  datasets, providing optimal performance especially for large cloud
+  hubs (AWS S3, GCS) by minimizing I/O operations. However, this will
+  result in an error if the model output directory contains files that
+  cannot be opened as part of the dataset. Setting to `FALSE` will
+  attempt to open and exclude any invalid files that cannot be read as
+  part of the dataset. This results in slower performance due to
+  increased I/O operations but provides more robustness when working
+  with directories that may contain invalid files. Note that hubs
+  validated through the hubValidations package should not require these
+  additional checks. If invalid (non-model output) files are present in
+  the model output directory, use the `ignore_files` argument to exclude
+  them.
 
 - na:
 
@@ -173,7 +179,7 @@ hub_con
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
@@ -200,7 +206,7 @@ hub_con
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
@@ -302,7 +308,7 @@ connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(2/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"

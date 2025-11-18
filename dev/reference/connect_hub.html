@@ -52,7 +52,7 @@ Data can be stored in a local directory or in the cloud on AWS or GCS.</p>
 <span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
 <span>    <span class="st">"logical"</span>, <span class="st">"Date"</span><span class="op">)</span>,</span>
 <span>  partitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model_id <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">utf8</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  skip_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  skip_checks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
@@ -119,13 +119,18 @@ partitioning column.</p></dd>
 
 
 <dt id="arg-skip-checks">skip_checks<a class="anchor" aria-label="anchor" href="#arg-skip-checks"></a></dt>
-<dd><p>Logical. If <code>FALSE</code> (default), check <code>file_format</code> parameter
-against the hub's model output files. Also excludes invalid model output files
-when opening hub datasets.
-Setting to <code>TRUE</code> will improve performance, most noticeable on large cloud hubs,
-but will result in an error if the model output directory includes invalid files.
-If invalid (non-model output date files) are contained in the model output
-directory, use <code>ignore_files</code> argument to ignore them.</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default), skip validation checks when
+opening hub datasets, providing optimal performance especially for large cloud
+hubs (AWS S3, GCS) by minimizing I/O operations. However, this will result in
+an error if the model output directory contains files that cannot be opened as
+part of the dataset.
+Setting to <code>FALSE</code> will attempt to open and exclude any invalid files that
+cannot be read as part of the dataset. This results in slower performance due to
+increased I/O operations but provides more robustness when working with directories
+that may contain invalid files.
+Note that hubs validated through the hubValidations package should not require
+these additional checks. If invalid (non-model output) files are present in the
+model output directory, use the <code>ignore_files</code> argument to exclude them.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -204,7 +209,7 @@ model output directory which is not part of a fully configured hub.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">/home/runner/work/_temp/Library/hubUtils/testhubs/simple</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span> and <span style="color: #0000BB;">"parquet(1/1)"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">FALSE</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> model_output_dir:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span>
@@ -231,7 +236,7 @@ model output directory which is not part of a fully configured hub.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">/home/runner/work/_temp/Library/hubUtils/testhubs/simple</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(3/3)"</span> and <span style="color: #0000BB;">"parquet(1/1)"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">FALSE</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> model_output_dir:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span>
@@ -333,7 +338,7 @@ model output directory which is not part of a fully configured hub.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_name: <span style="color: #0000BB;">"Simple Forecast Hub"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> hub_path: <span style="color: #0000BB;">/home/runner/work/_temp/Library/hubUtils/testhubs/simple</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_format: <span style="color: #0000BB;">"csv(2/3)"</span> and <span style="color: #0000BB;">"parquet(1/1)"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">TRUE</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> checks: <span style="color: #0000BB;">FALSE</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> file_system: <span style="color: #0000BB;">"LocalFileSystem"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> model_output_dir:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">"/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"</span></span>

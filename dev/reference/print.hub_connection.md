@@ -45,7 +45,7 @@ hub_con
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
@@ -71,7 +71,7 @@ print(hub_con)
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
@@ -97,7 +97,7 @@ print(hub_con, verbose = TRUE)
 #> • hub_name: "Simple Forecast Hub"
 #> • hub_path: /home/runner/work/_temp/Library/hubUtils/testhubs/simple
 #> • file_format: "csv(3/3)" and "parquet(1/1)"
-#> • checks: TRUE
+#> • checks: FALSE
 #> • file_system: "LocalFileSystem"
 #> • model_output_dir:
 #>   "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
@@ -141,7 +141,7 @@ print(hub_con, verbose = TRUE)
 #>   ..- attr(*, "dimnames")=List of 2
 #>   .. ..$ : chr [1:2] "n_open" "n_in_dir"
 #>   .. ..$ : chr [1:2] "csv" "parquet"
-#>  - attr(*, "checks")= logi TRUE
+#>  - attr(*, "checks")= logi FALSE
 #>  - attr(*, "file_system")= chr "LocalFileSystem"
 #>  - attr(*, "hub_path")= chr "/home/runner/work/_temp/Library/hubUtils/testhubs/simple"
 #>  - attr(*, "model_output_dir")= chr "/home/runner/work/_temp/Library/hubUtils/testhubs/simple/model-output"
