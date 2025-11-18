@@ -4,3 +4,57 @@ template:
 development:
   mode: auto
 
+reference:
+- title: Hub Connections
+  desc: Functions for connecting to hubs and hub data
+  contents:
+  - matches("^connect_")
+
+- title: Data Collection
+  desc: Functions for collecting data from hub connections
+  contents:
+  - matches("^collect_")
+
+- title: Schema Creation and Management
+  desc: Functions for creating and managing Arrow schemas
+  contents:
+  - matches("^create_.*_schema$")
+  - coerce_to_hub_schema
+  - as_r_schema
+
+- title: Model Output Utilities
+  desc: Functions for working with model outputs
+  contents:
+  - expand_model_out_val_grid
+  - create_model_out_submit_tmpl
+  - load_model_metadata
+
+- title: Target Data Utilities
+  desc: Helper functions for target data
+  contents:
+  - matches("^get_target_")
+
+- title: Cloud Storage
+  desc: Functions for working with cloud storage
+  contents:
+  - s3_bucket
+  - gs_bucket
+  - get_s3_bucket_name
+
+- title: Hive Partitioning
+  desc: Functions for working with hive-partitioned data
+  contents:
+  - matches("hive")
+
+- title: Data Type Conversion
+  desc: Utilities for converting between Arrow and R data types
+  contents:
+  - matches("_to_.*_datatypes$")
+
+- title: Package Documentation and Utilities
+  desc: Package-level documentation, print methods, and re-exports
+  contents:
+  - print.hub_connection
+  - "`%>%`"
+  - reexports
+
