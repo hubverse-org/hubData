@@ -10,6 +10,7 @@
 
 ## New features and improvements
 
+* Added comprehensive "Accessing Target Data" vignette demonstrating how to use `connect_target_timeseries()` and `connect_target_oracle_output()` to access target data, including filtering, joining with model outputs, and working with cloud-based hubs (#108).
 * Added `r_to_arrow_datatypes()` function providing an inverse mapping from R data types to Arrow data types, enabling vectorized type conversion when processing `target-data.json` configurations (#107).
 * Enhanced `create_timeseries_schema()` and `create_oracle_output_schema()` to support config-based schema creation when `target-data.json` (v6.0.0+) is present (#107). This enables fast, deterministic schema creation without filesystem I/O, especially beneficial for cloud storage. Functions automatically fall back to inference-based schema creation for pre-v6 hubs or hubs without `target-data.json`, maintaining backward compatibility. This functionality is propagated to `connect_target_timeseries()` and `connect_target_oracle_output()`, which use these schema creation functions internally.
 * Enhanced documentation for `connect_target_timeseries()` and `connect_target_oracle_output()` to clarify column ordering behavior: v6+ Parquet files are reordered to hubverse convention, while CSV files preserve original ordering to avoid column name/position mismatches during collection (#107).

@@ -1,5 +1,5 @@
 ---
-title: "Accessing data from a hub"
+title: "Accessing Model Output Data"
 ---
 
 ```{r, include = FALSE}
@@ -133,7 +133,8 @@ For example, if you wanted to get all quantile predictions for the last forecast
 ```{r, error=TRUE}
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -164,7 +165,8 @@ last_forecast <- hub_con %>%
 
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == last_forecast
   ) %>%
   hubData::collect_hub()
@@ -180,7 +182,8 @@ _For more details see [DuckDB quacks Arrow: A zero-copy data integration between
 hub_con %>%
   arrow::to_duckdb() %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -196,8 +199,14 @@ The approach does have certain limitations though. For example, an overall unify
 In addition, only a single file_format dataset can be opened.
 
 ```{r}
-model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
-mod_out_con <- hubData::connect_model_output(model_output_dir, file_format = "csv")
+model_output_dir <- system.file(
+  "testhubs/simple/model-output",
+  package = "hubUtils"
+)
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
+  file_format = "csv"
+)
 mod_out_con
 ```
 
@@ -229,8 +238,14 @@ and contain invalid files. You can improve performance by setting `skip_checks =
 directory contains only valid model output files:
 
 ```{r}
-mod_out_dir_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
-mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
+mod_out_dir_cloud <- hubData::s3_bucket(
+  "hubverse/hubutils/testhubs/parquet/model-output/"
+)
+mod_out_con_cloud <- hubData::connect_model_output(
+  mod_out_dir_cloud,
+  file_format = "parquet",
+  skip_checks = TRUE
+)
 mod_out_con_cloud
 ```
 
@@ -252,7 +267,8 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
@@ -274,10 +290,24 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
 ```
 
 Beware that `arrow` errors can be somewhat misleading at times so if you do get such a non-informative error, a good place to start would be to check your schema matches the columns and your data can be coerced to the data types specified in the schema.
+
+# Working with target data
+
+While `connect_hub()` and `connect_model_output()` focus on accessing model predictions, modeling hubs also contain target data - the "ground truth" observations that models are trying to predict.
+
+hubData provides dedicated functions for accessing target data:
+
+- `connect_target_timeseries()` - Access historical time-series target observations
+- `connect_target_oracle_output()` - Access target data formatted like model outputs (useful for evaluation)
+
+These functions work similarly to `connect_hub()`, returning Arrow datasets that you can query with `dplyr` verbs and collect with `collect()`.
+
+For detailed examples and best practices for working with target data, including how to join target data with model outputs for evaluation, see `vignette("connect_target_data")`.
