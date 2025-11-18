@@ -1,4 +1,4 @@
-# Accessing data from a hub
+# Accessing Model Output Data
 
 An important function of `hubData` is allowing for the connection to
 data in the `model-output` directory to facilitate extraction,
@@ -192,7 +192,11 @@ criteria:
 
 ``` r
 hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/")
-hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet", skip_checks = TRUE)
+hub_con_cloud <- hubData::connect_hub(
+  hub_path_cloud,
+  file_format = "parquet",
+  skip_checks = TRUE
+)
 #> ℹ Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`
 #> ℹ Updating superseded URL `Infectious-Disease-Modeling-hubs` to `hubverse-org`
 hub_con_cloud
@@ -238,16 +242,16 @@ hub_con %>%
 #> # A tibble: 276 × 8
 #>    forecast_date horizon target        location output_type output_type_id value
 #>    <date>          <int> <chr>         <chr>    <chr>       <chr>          <dbl>
-#>  1 2023-04-24          1 wk ahead inc… US       quantile    0.01               0
-#>  2 2023-04-24          1 wk ahead inc… US       quantile    0.025              0
-#>  3 2023-04-24          1 wk ahead inc… US       quantile    0.05               0
-#>  4 2023-04-24          1 wk ahead inc… US       quantile    0.1              281
-#>  5 2023-04-24          1 wk ahead inc… US       quantile    0.15             600
-#>  6 2023-04-24          1 wk ahead inc… US       quantile    0.2              717
-#>  7 2023-04-24          1 wk ahead inc… US       quantile    0.25             817
-#>  8 2023-04-24          1 wk ahead inc… US       quantile    0.3              877
-#>  9 2023-04-24          1 wk ahead inc… US       quantile    0.35             913
-#> 10 2023-04-24          1 wk ahead inc… US       quantile    0.4              965
+#>  1 2023-05-01          1 wk ahead inc… US       quantile    0.01               0
+#>  2 2023-05-01          1 wk ahead inc… US       quantile    0.025              0
+#>  3 2023-05-01          1 wk ahead inc… US       quantile    0.05               0
+#>  4 2023-05-01          1 wk ahead inc… US       quantile    0.1              193
+#>  5 2023-05-01          1 wk ahead inc… US       quantile    0.15             495
+#>  6 2023-05-01          1 wk ahead inc… US       quantile    0.2              618
+#>  7 2023-05-01          1 wk ahead inc… US       quantile    0.25             717
+#>  8 2023-05-01          1 wk ahead inc… US       quantile    0.3              774
+#>  9 2023-05-01          1 wk ahead inc… US       quantile    0.35             822
+#> 10 2023-05-01          1 wk ahead inc… US       quantile    0.4              857
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: model_id <chr>
 ```
@@ -274,16 +278,16 @@ tbl
 #> # A tibble: 276 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.4           
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: value <dbl>
 
@@ -300,18 +304,18 @@ hub_con_cloud %>%
   dplyr::filter(output_type == "quantile", location == "US") %>%
   hubData::collect_hub()
 #> # A tibble: 230 × 9
-#>    model_id     origin_date target        horizon location age_group output_type
-#>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
-#>  1 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  2 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  3 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  4 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  5 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  6 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  7 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  8 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  9 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#> 10 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>    model_id        origin_date target     horizon location age_group output_type
+#>  * <chr>           <date>      <chr>        <int> <chr>    <chr>     <chr>      
+#>  1 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  2 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  3 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  4 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  5 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  6 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  7 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  8 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  9 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#> 10 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -328,7 +332,8 @@ forecast date in the hub, you might try:
 ``` r
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -352,16 +357,16 @@ hub_con %>%
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>    <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -381,23 +386,24 @@ last_forecast <- hub_con %>%
 
 hub_con %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == last_forecast
   ) %>%
   hubData::collect_hub()
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -419,7 +425,8 @@ DuckDB](https://duckdb.org/2021/12/03/duck-arrow.html).*
 hub_con %>%
   arrow::to_duckdb() %>%
   dplyr::filter(
-    output_type == "quantile", location == "US",
+    output_type == "quantile",
+    location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) %>%
   hubData::collect_hub()
@@ -455,8 +462,14 @@ to connect and parse data correctly cannot be guaranteed across files.
 In addition, only a single file_format dataset can be opened.
 
 ``` r
-model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
-mod_out_con <- hubData::connect_model_output(model_output_dir, file_format = "csv")
+model_output_dir <- system.file(
+  "testhubs/simple/model-output",
+  package = "hubUtils"
+)
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
+  file_format = "csv"
+)
 mod_out_con
 #> 
 #> ── <mod_out_connection/FileSystemDataset> ──
@@ -490,16 +503,16 @@ mod_out_con %>%
 #> # A tibble: 138 × 8
 #>    model_id origin_date target horizon location output_type output_type_id value
 #>  * <chr>    <date>      <chr>    <int> <chr>    <chr>                <dbl> <int>
-#>  1 team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135
-#>  2 team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137
-#>  3 team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139
-#>  4 team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140
-#>  5 team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141
-#>  6 team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141
-#>  7 team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142
-#>  8 team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143
-#>  9 team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144
-#> 10 team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145
+#>  1 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135
+#>  2 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137
+#>  3 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139
+#>  4 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140
+#>  5 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141
+#>  6 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141
+#>  7 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142
+#>  8 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143
+#>  9 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144
+#> 10 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145
 #> # ℹ 128 more rows
 ```
 
@@ -542,8 +555,14 @@ Like
 has an optional `skip_checks` argument that improves performance:
 
 ``` r
-mod_out_dir_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/model-output/")
-mod_out_con_cloud <- hubData::connect_model_output(mod_out_dir_cloud, file_format = "parquet", skip_checks = TRUE)
+mod_out_dir_cloud <- hubData::s3_bucket(
+  "hubverse/hubutils/testhubs/parquet/model-output/"
+)
+mod_out_con_cloud <- hubData::connect_model_output(
+  mod_out_dir_cloud,
+  file_format = "parquet",
+  skip_checks = TRUE
+)
 mod_out_con_cloud
 #> 
 #> ── <mod_out_connection/FileSystemDataset> ──
@@ -593,7 +612,8 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
@@ -638,7 +658,8 @@ model_output_schema <- arrow::schema(
   model_id = string()
 )
 
-mod_out_con <- hubData::connect_model_output(model_output_dir,
+mod_out_con <- hubData::connect_model_output(
+  model_output_dir,
   file_format = "csv",
   schema = model_output_schema
 )
@@ -650,3 +671,31 @@ Beware that `arrow` errors can be somewhat misleading at times so if you
 do get such a non-informative error, a good place to start would be to
 check your schema matches the columns and your data can be coerced to
 the data types specified in the schema.
+
+## Working with target data
+
+While
+[`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+and
+[`connect_model_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+focus on accessing model predictions, modeling hubs also contain target
+data - the “ground truth” observations that models are trying to
+predict.
+
+hubData provides dedicated functions for accessing target data:
+
+- [`connect_target_timeseries()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_timeseries.md) -
+  Access historical time-series target observations
+- [`connect_target_oracle_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_oracle_output.md) -
+  Access target data formatted like model outputs (useful for
+  evaluation)
+
+These functions work similarly to
+[`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md),
+returning Arrow datasets that you can query with `dplyr` verbs and
+collect with
+[`collect()`](https://dplyr.tidyverse.org/reference/compute.html).
+
+For detailed examples and best practices for working with target data,
+including how to join target data with model outputs for evaluation, see
+`vignette("connect_target_data")`.

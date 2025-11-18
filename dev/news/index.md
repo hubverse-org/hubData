@@ -2,6 +2,14 @@
 
 ## hubData (development version)
 
+- Added comprehensive “Accessing Target Data” vignette demonstrating how
+  to use
+  [`connect_target_timeseries()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_timeseries.md)
+  and
+  [`connect_target_oracle_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_oracle_output.md)
+  to access target data, including filtering, joining with model
+  outputs, and working with cloud-based hubs
+  ([\#108](https://github.com/hubverse-org/hubData/issues/108)).
 - Added
   [`r_to_arrow_datatypes()`](https://hubverse-org.github.io/hubData/dev/reference/r_to_arrow_datatypes.md)
   function providing an inverse mapping from R data types to Arrow data

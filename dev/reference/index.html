@@ -20,7 +20,8 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/connect_hub.html">Accessing data from a hub</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/connect_hub.html">Accessing Model Output Data</a></li>
+    <li><a class="dropdown-item" href="../articles/connect_target_data.html">Accessing Target Data</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubData/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -35,9 +36,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="hub-connections">Hub Connections<a class="anchor" aria-label="anchor" href="#hub-connections"></a></h2>
 
-
+      <div class="section-desc"><p>Functions for connecting to hubs and hub data</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -45,41 +46,6 @@
 
 
       <dl><dt>
-
-          <code><a href="arrow_to_r_datatypes.html">arrow_to_r_datatypes</a></code>
-
-        </dt>
-        <dd>Mapping of Arrow types to base R types</dd>
-
-        <dt>
-
-          <code><a href="as_r_schema.html">as_r_schema()</a></code> <code><a href="as_r_schema.html">arrow_schema_to_string()</a></code> <code><a href="as_r_schema.html">is_supported_arrow_type()</a></code> <code><a href="as_r_schema.html">validate_arrow_schema()</a></code>
-
-        </dt>
-        <dd>Convert or validate an Arrow schema for compatibility with base R column types</dd>
-
-        <dt>
-
-          <code><a href="coerce_to_hub_schema.html">coerce_to_hub_schema()</a></code> <code><a href="coerce_to_hub_schema.html">coerce_to_character()</a></code>
-
-        </dt>
-        <dd>Coerce data.frame/tibble column data types to hub schema data types or character.</dd>
-
-        <dt>
-
-          <code><a href="collect_hub.html">collect_hub()</a></code>
-
-        </dt>
-        <dd>Collect Hub model output data</dd>
-
-        <dt>
-
-          <code><a href="collect_zoltar.html">collect_zoltar()</a></code>
-
-        </dt>
-        <dd>Load forecasts from zoltardata.com in hubverse format</dd>
-
-        <dt>
 
           <code><a href="connect_hub.html">connect_hub()</a></code> <code><a href="connect_hub.html">connect_model_output()</a></code>
 
@@ -99,20 +65,45 @@
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Open connection to time-series target data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-collection">Data Collection<a class="anchor" aria-label="anchor" href="#data-collection"></a></h2>
+
+      <div class="section-desc"><p>Functions for collecting data from hub connections</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="collect_hub.html">collect_hub()</a></code>
+
+        </dt>
+        <dd>Collect Hub model output data</dd>
 
         <dt>
+
+          <code><a href="collect_zoltar.html">collect_zoltar()</a></code>
+
+        </dt>
+        <dd>Load forecasts from zoltardata.com in hubverse format</dd>
+      </dl></div><div class="section level2">
+      <h2 id="schema-creation-and-management">Schema Creation and Management<a class="anchor" aria-label="anchor" href="#schema-creation-and-management"></a></h2>
+
+      <div class="section-desc"><p>Functions for creating and managing Arrow schemas</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="create_hub_schema.html">create_hub_schema()</a></code>
 
         </dt>
         <dd>Create a Hub arrow schema</dd>
-
-        <dt>
-
-          <code><a href="create_model_out_submit_tmpl.html">create_model_out_submit_tmpl()</a></code>
-          <span class="badge lifecycle lifecycle-defunct">defunct</span>
-        </dt>
-        <dd>Create a model output submission file template</dd>
 
         <dt>
 
@@ -130,6 +121,29 @@
 
         <dt>
 
+          <code><a href="coerce_to_hub_schema.html">coerce_to_hub_schema()</a></code> <code><a href="coerce_to_hub_schema.html">coerce_to_character()</a></code>
+
+        </dt>
+        <dd>Coerce data.frame/tibble column data types to hub schema data types or character.</dd>
+
+        <dt>
+
+          <code><a href="as_r_schema.html">as_r_schema()</a></code> <code><a href="as_r_schema.html">arrow_schema_to_string()</a></code> <code><a href="as_r_schema.html">is_supported_arrow_type()</a></code> <code><a href="as_r_schema.html">validate_arrow_schema()</a></code>
+
+        </dt>
+        <dd>Convert or validate an Arrow schema for compatibility with base R column types</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-output-utilities">Model Output Utilities<a class="anchor" aria-label="anchor" href="#model-output-utilities"></a></h2>
+
+      <div class="section-desc"><p>Functions for working with model outputs</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
           <code><a href="expand_model_out_val_grid.html">expand_model_out_val_grid()</a></code>
           <span class="badge lifecycle lifecycle-defunct">defunct</span>
         </dt>
@@ -137,19 +151,28 @@
 
         <dt>
 
-          <code><a href="extract_hive_partitions.html">extract_hive_partitions()</a></code>
-
+          <code><a href="create_model_out_submit_tmpl.html">create_model_out_submit_tmpl()</a></code>
+          <span class="badge lifecycle lifecycle-defunct">defunct</span>
         </dt>
-        <dd>Extract Hive-style partition key-value pairs from a path</dd>
+        <dd>Create a model output submission file template</dd>
 
         <dt>
 
-          <code><a href="get_s3_bucket_name.html">get_s3_bucket_name()</a></code>
+          <code><a href="load_model_metadata.html">load_model_metadata()</a></code>
 
         </dt>
-        <dd>Get the bucket name for the cloud storage location.</dd>
+        <dd>Compile hub model metadata</dd>
+      </dl></div><div class="section level2">
+      <h2 id="target-data-utilities">Target Data Utilities<a class="anchor" aria-label="anchor" href="#target-data-utilities"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Helper functions for target data</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="get_target_data_colnames.html">get_target_data_colnames()</a></code>
 
@@ -169,6 +192,22 @@
 
         </dt>
         <dd>Get the path(s) to the target data file(s) in the hub directory.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="cloud-storage">Cloud Storage<a class="anchor" aria-label="anchor" href="#cloud-storage"></a></h2>
+
+      <div class="section-desc"><p>Functions for working with cloud storage</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="s3_bucket.html">s3_bucket</a></code>
+
+        </dt>
+        <dd>Connect to an AWS S3 bucket</dd>
 
         <dt>
 
@@ -179,19 +218,67 @@
 
         <dt>
 
+          <code><a href="get_s3_bucket_name.html">get_s3_bucket_name()</a></code>
+
+        </dt>
+        <dd>Get the bucket name for the cloud storage location.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="hive-partitioning">Hive Partitioning<a class="anchor" aria-label="anchor" href="#hive-partitioning"></a></h2>
+
+      <div class="section-desc"><p>Functions for working with hive-partitioned data</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="extract_hive_partitions.html">extract_hive_partitions()</a></code>
+
+        </dt>
+        <dd>Extract Hive-style partition key-value pairs from a path</dd>
+
+        <dt>
+
           <code><a href="is_hive_partitioned_path.html">is_hive_partitioned_path()</a></code>
 
         </dt>
         <dd>Check whether a path contains Hive-style partitioning</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-type-conversion">Data Type Conversion<a class="anchor" aria-label="anchor" href="#data-type-conversion"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Utilities for converting between Arrow and R data types</p></div>
 
-          <code><a href="load_model_metadata.html">load_model_metadata()</a></code>
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="arrow_to_r_datatypes.html">arrow_to_r_datatypes</a></code>
 
         </dt>
-        <dd>Compile hub model metadata</dd>
+        <dd>Mapping of Arrow types to base R types</dd>
 
         <dt>
+
+          <code><a href="r_to_arrow_datatypes.html">r_to_arrow_datatypes()</a></code>
+
+        </dt>
+        <dd>Create R type to Arrow DataType mapping</dd>
+      </dl></div><div class="section level2">
+      <h2 id="package-documentation-and-utilities">Package Documentation and Utilities<a class="anchor" aria-label="anchor" href="#package-documentation-and-utilities"></a></h2>
+
+      <div class="section-desc"><p>Package-level documentation, print methods, and re-exports</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="print.hub_connection.html">print(<i>&lt;hub_connection&gt;</i>)</a></code> <code><a href="print.hub_connection.html">print(<i>&lt;mod_out_connection&gt;</i>)</a></code>
 
@@ -200,19 +287,20 @@
 
         <dt>
 
-          <code><a href="r_to_arrow_datatypes.html">r_to_arrow_datatypes()</a></code>
+          <code><a href="pipe.html">`%&gt;%`</a></code>
 
         </dt>
-        <dd>Create R type to Arrow DataType mapping</dd>
+        <dd>Pipe operator</dd>
 
         <dt>
 
-          <code><a href="s3_bucket.html">s3_bucket</a></code>
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">as_model_out_tbl</a></code> <code><a href="reexports.html">validate_model_out_tbl</a></code> <code><a href="reexports.html">model_id_merge</a></code> <code><a href="reexports.html">model_id_split</a></code>
 
         </dt>
-        <dd>Connect to an AWS S3 bucket</dd>
+        <dd>Objects exported from other packages</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

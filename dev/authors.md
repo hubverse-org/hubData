@@ -23,12 +23,12 @@ Source:
 
 Krystalli A (2025). *hubData: Tools for accessing and working with
 hubverse data*. R package version 1.5.0.9000,
-<https://github.com/hubverse-org/hubData>.
+<https://hubverse-org.github.io/hubData>.
 
     @Manual{,
       title = {hubData: Tools for accessing and working with hubverse data},
       author = {Anna Krystalli},
       year = {2025},
       note = {R package version 1.5.0.9000},
-      url = {https://github.com/hubverse-org/hubData},
+      url = {https://hubverse-org.github.io/hubData},
     }

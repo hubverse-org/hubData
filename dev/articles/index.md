@@ -2,5 +2,7 @@
 
 ### All vignettes
 
-- [Accessing data from a
-  hub](https://hubverse-org.github.io/hubData/dev/articles/connect_hub.md):
+- [Accessing Model Output
+  Data](https://hubverse-org.github.io/hubData/dev/articles/connect_hub.md):
+- [Accessing Target
+  Data](https://hubverse-org.github.io/hubData/dev/articles/connect_target_data.md):
