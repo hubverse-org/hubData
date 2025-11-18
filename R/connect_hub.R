@@ -26,13 +26,18 @@
 #' If supplied, it will override hub configuration setting. Multiple formats can
 #' be supplied to `connect_hub` but only a single file format can be supplied to
 #' `connect_model_output`.
-#' @param skip_checks Logical. If `FALSE` (default), check `file_format` parameter
-#' against the hub's model output files. Also excludes invalid model output files
-#'  when opening hub datasets.
-#' Setting to `TRUE` will improve performance, most noticeable on large cloud hubs,
-#' but will result in an error if the model output directory includes invalid files.
-#' If invalid (non-model output date files) are contained in the model output
-#' directory, use `ignore_files` argument to ignore them.
+#' @param skip_checks Logical. If `TRUE` (default), skip validation checks when
+#' opening hub datasets, providing optimal performance especially for large cloud
+#' hubs (AWS S3, GCS) by minimizing I/O operations. However, this will result in
+#' an error if the model output directory contains files that cannot be opened as
+#' part of the dataset.
+#' Setting to `FALSE` will attempt to open and exclude any invalid files that
+#' cannot be read as part of the dataset. This results in slower performance due to
+#' increased I/O operations but provides more robustness when working with directories
+#' that may contain invalid files.
+#' Note that hubs validated through the hubValidations package should not require
+#' these additional checks. If invalid (non-model output) files are present in the
+#' model output directory, use the `ignore_files` argument to exclude them.
 #' @param na A character vector of strings to interpret as missing values. Only
 #' applies to CSV files. The default is `c("NA", "")`. Useful when actual character
 #' string `"NA"` values are used in the data. In such a case, use empty cells to
@@ -100,7 +105,7 @@ connect_hub <- function(hub_path,
                           "logical", "Date"
                         ),
                         partitions = list(model_id = arrow::utf8()),
-                        skip_checks = FALSE, na = c("NA", ""),
+                        skip_checks = TRUE, na = c("NA", ""),
                         ignore_files = NULL) {
   UseMethod("connect_hub")
 }
@@ -115,7 +120,7 @@ connect_hub.default <- function(hub_path,
                                   "logical", "Date"
                                 ),
                                 partitions = list(model_id = arrow::utf8()),
-                                skip_checks = FALSE, na = c("NA", ""),
+                                skip_checks = TRUE, na = c("NA", ""),
                                 ignore_files = NULL) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
@@ -215,7 +220,7 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
                                             "Date"
                                           ),
                                           partitions = list(model_id = arrow::utf8()),
-                                          skip_checks = FALSE, na = c("NA", ""),
+                                          skip_checks = TRUE, na = c("NA", ""),
                                           ignore_files = NULL) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)

@@ -70,25 +70,20 @@ hub_con_cloud
 
 ### Performance considerations
 
-By default, `connect_hub()` will ignore invalid files in the hub's model output directory when it creates a connection.
-This check prevents errors when working with the data, but it negatively impacts performance.
+By default, `connect_hub()` skips file validation checks when creating a connection, providing optimal
+performance especially for large cloud-based hubs by minimizing I/O operations.
 
-If the cloud-based hub uses a single file type for model output data, you can improve performance by using the
-`skip_checks` argument. This argument will bypass the default behavior of scanning the hub's model output directory for
-invalid files before connecting.
+If you are working with a model output directory that may contain files that cannot be opened as part of
+the dataset (e.g., non-model output files with incompatible formats), you can use `skip_checks = FALSE`
+to have `connect_hub()` attempt to detect and exclude invalid files before connecting. Note that this
+will negatively impact performance due to increased I/O operations.
 
-Using this argument will fail unless the hub meets the following criteria:
-
-- the model output directory contains only model output data (no `README.md`, for example)
-- the model output files use a single file format.
+For most hubs validated through the hubValidations package, the default `skip_checks = TRUE` behavior is
+recommended. If invalid files are present, consider using the `ignore_files` argument instead.
 
 ```{r}
 hub_path_cloud <- hubData::s3_bucket("hubverse/hubutils/testhubs/parquet/")
-hub_con_cloud <- hubData::connect_hub(
-  hub_path_cloud,
-  file_format = "parquet",
-  skip_checks = TRUE
-)
+hub_con_cloud <- hubData::connect_hub(hub_path_cloud, file_format = "parquet")
 hub_con_cloud
 ```
 
@@ -236,7 +231,11 @@ mod_out_con_cloud <- hubData::connect_model_output(
 mod_out_con_cloud
 ```
 
-Like `connect_hub()`, `connect_model_output()` has an optional `skip_checks` argument that improves performance:
+`connect_model_output()` also has a `skip_checks` argument. Unlike `connect_hub()`, which defaults to
+`skip_checks = TRUE` for optimal performance with validated hubs, `connect_model_output()` defaults to
+`skip_checks = FALSE` since it is designed to work with model output directories that may be in draft form
+and contain invalid files. You can improve performance by setting `skip_checks = TRUE` if you know your
+directory contains only valid model output files:
 
 ```{r}
 mod_out_dir_cloud <- hubData::s3_bucket(

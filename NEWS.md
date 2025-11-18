@@ -1,5 +1,15 @@
 # hubData (development version)
 
+## Breaking changes
+
+* **BREAKING:** Changed default value of `skip_checks` parameter from `FALSE` to `TRUE` in `connect_hub()` (#114). This significantly improves performance, especially for large cloud hubs (AWS S3, GCS), by skipping file validation checks that require high I/O operations. The previous default behavior of detecting and excluding invalid files can still be accessed by explicitly setting `skip_checks = FALSE`. This change aligns with the Python hubdata package default and reflects that hubs validated through hubValidations should not require additional file checks. Users with model output directories containing invalid files should either:
+  - Use the `ignore_files` argument to exclude specific files, or
+  - Set `skip_checks = FALSE` explicitly, or
+  - Ensure their model-output directories contain only valid model output files
+* Note: `connect_model_output()` retains its default of `skip_checks = FALSE` as it is designed for working with model output directories that may be in draft form.
+
+## New features and improvements
+
 * Added comprehensive "Accessing Target Data" vignette demonstrating how to use `connect_target_timeseries()` and `connect_target_oracle_output()` to access target data, including filtering, joining with model outputs, and working with cloud-based hubs (#108).
 * Added `r_to_arrow_datatypes()` function providing an inverse mapping from R data types to Arrow data types, enabling vectorized type conversion when processing `target-data.json` configurations (#107).
 * Enhanced `create_timeseries_schema()` and `create_oracle_output_schema()` to support config-based schema creation when `target-data.json` (v6.0.0+) is present (#107). This enables fast, deterministic schema creation without filesystem I/O, especially beneficial for cloud storage. Functions automatically fall back to inference-based schema creation for pre-v6 hubs or hubs without `target-data.json`, maintaining backward compatibility. This functionality is propagated to `connect_target_timeseries()` and `connect_target_oracle_output()`, which use these schema creation functions internally.

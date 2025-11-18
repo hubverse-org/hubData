@@ -12,7 +12,7 @@ are authorized to access the bucket's contents.
 See \code{\link[arrow:gs_bucket]{arrow::gs_bucket()}} for details.
 }
 \examples{
-\dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (FALSE) withAutoprint(\{ # examplesIf}
 bucket <- gs_bucket("voltrondata-labs-datasets")
 \dontshow{\}) # examplesIf}
 }

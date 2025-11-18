@@ -11,7 +11,7 @@ connect_hub(
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
     "logical", "Date"),
   partitions = list(model_id = arrow::utf8()),
-  skip_checks = FALSE,
+  skip_checks = TRUE,
   na = c("NA", ""),
   ignore_files = NULL
 )
@@ -65,13 +65,18 @@ behaviour so use with care.}
 \item{partitions}{a named list specifying the arrow data types of any
 partitioning column.}
 
-\item{skip_checks}{Logical. If \code{FALSE} (default), check \code{file_format} parameter
-against the hub's model output files. Also excludes invalid model output files
-when opening hub datasets.
-Setting to \code{TRUE} will improve performance, most noticeable on large cloud hubs,
-but will result in an error if the model output directory includes invalid files.
-If invalid (non-model output date files) are contained in the model output
-directory, use \code{ignore_files} argument to ignore them.}
+\item{skip_checks}{Logical. If \code{TRUE} (default), skip validation checks when
+opening hub datasets, providing optimal performance especially for large cloud
+hubs (AWS S3, GCS) by minimizing I/O operations. However, this will result in
+an error if the model output directory contains files that cannot be opened as
+part of the dataset.
+Setting to \code{FALSE} will attempt to open and exclude any invalid files that
+cannot be read as part of the dataset. This results in slower performance due to
+increased I/O operations but provides more robustness when working with directories
+that may contain invalid files.
+Note that hubs validated through the hubValidations package should not require
+these additional checks. If invalid (non-model output) files are present in the
+model output directory, use the \code{ignore_files} argument to exclude them.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character

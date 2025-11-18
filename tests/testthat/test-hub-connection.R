@@ -60,7 +60,7 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
     )
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- "test/model_output_dir"
@@ -129,7 +129,7 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
     )
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   # overwrite path attributes to make snapshot portable
   attr(hub_con, "model_output_dir") <- basename(attr(hub_con, "model_output_dir"))
@@ -173,7 +173,7 @@ test_that("connect_hub works on local flusight forecasting hub", {
     )
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   expect_equal(
     purrr::map_int(
@@ -208,7 +208,7 @@ test_that("connect_hub file_format override works on local hub", {
     "LocalFileSystem"
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   expect_equal(
     class(hub_con),
@@ -431,7 +431,7 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
     ))
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   expect_equal(
     attr(hub_con, "file_system"),
@@ -479,7 +479,7 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
     ))
   )
 
-  expect_true(attr(hub_con, "checks"))
+  expect_false(attr(hub_con, "checks"))
 
   expect_equal(
     attr(hub_con, "file_system"),
@@ -642,7 +642,7 @@ test_that("connect_hub works when skip_checks is true and hub has multiple file 
 
 test_that("connect_hub detects unopenned files correctly", {
   hub_path <- testthat::test_path("testdata/error_file")
-  expect_snapshot(connect_hub(hub_path))
+  expect_snapshot(connect_hub(hub_path, skip_checks = FALSE))
 })
 
 test_that("output_type_id_datatype arg works in connect_hub on local hub", {
