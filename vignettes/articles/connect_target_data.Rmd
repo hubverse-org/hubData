@@ -27,6 +27,7 @@ Modeling hubs store target data in two complementary formats, each serving disti
 ## Time-series format
 
 Time-series target data represents the **observed counts or rates** in their native format. Each row constitutes an **observable unit** - a unique combination of task ID variables that defines a single observation. This format typically includes:
+
 - A date variable
 - Location identifiers
 - An `observation` column containing the measured value (e.g., case counts, hospitalization numbers)
@@ -35,6 +36,7 @@ Time-series target data represents the **observed counts or rates** in their nat
 For example, if your task IDs are location and date, then each observable unit is a specific location-date combination (e.g., "US on 2022-10-15"), and the `observation` column contains the value measured for that unit.
 
 **Why time-series format?** This format is designed for:
+
 - **Model fitting**: Providing historical data for parameter estimation and model training
 - **Visualization**: Supporting tools like hubVis and dashboards that display historical trends
 - **General analysis**: Working with target data in its natural, observational form
@@ -42,11 +44,13 @@ For example, if your task IDs are location and date, then each observable unit i
 ## Oracle-output format
 
 Oracle-output target data are generally **derived from time-series data** but formatted to match the structure of model outputs (similar to `model_out_tbl` objects). It represents "what predictions would look like if the target values had been known ahead of time." Like time-series data, each row represents an **observable unit** defined by the task ID variables, but the data is structured as model output. This format includes:
+
 - `output_type` and `output_type_id`: Only required if the hub collects `pmf` or `cdf` output types. For `mean`, `median`, `quantile`, and `sample` output types, these columns can be omitted entirely.
 - `oracle_value`: the target observation value formatted as an "oracle" prediction
 - Task ID variables (e.g., location, date)
 
 **Why oracle-output format?** This format is designed for:
+
 - **Model evaluation**: Enabling evaluation tools like hubEvals to directly compare model predictions against observed outcomes
 - **Visualization**: Supporting plots that display predictions alongside target data in a consistent format (e.g., plotting pmf predictions with categorical target data)
 
@@ -147,11 +151,11 @@ oo_con |>
 Notice that `output_type_id` is `NA` for quantile outputs. This is because the oracle value represents the observed outcome with all probability mass concentrated on that single value - the `oracle_value` applies to all quantile levels. For `pmf` or `cdf` output types, `output_type_id` would specify the category or threshold.
 
 ```{r}
-# Get specific quantile levels
+# Get specific pmf category
 oo_con |>
   filter(
-    output_type == "quantile",
-    output_type_id %in% c("0.25", "0.5", "0.75")
+    output_type == "pmf",
+    output_type_id == "large"
   ) |>
   collect()
 
