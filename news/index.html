@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,8 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/connect_hub.html">Accessing data from a hub</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/connect_hub.html">Accessing Model Output Data</a></li>
+    <li><a class="dropdown-item" href="../articles/connect_target_data.html">Accessing Target Data</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/hubverse-org/hubData/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -32,9 +33,30 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/hubverse-org/hubData/blob/v1.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/hubverse-org/hubData/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="hubdata-200">hubData 2.0.0<a class="anchor" aria-label="anchor" href="#hubdata-200"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-2-0-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-2-0-0"></a></h3>
+<ul><li>
+<strong>BREAKING:</strong> Changed default value of <code>skip_checks</code> parameter from <code>FALSE</code> to <code>TRUE</code> in <code><a href="../reference/connect_hub.html">connect_hub()</a></code> (<a href="https://github.com/hubverse-org/hubData/issues/114" class="external-link">#114</a>). This significantly improves performance, especially for large cloud hubs (AWS S3, GCS), by skipping file validation checks that require high I/O operations. The previous default behavior of detecting and excluding invalid files can still be accessed by explicitly setting <code>skip_checks = FALSE</code>. This change aligns with the Python hubdata package default and reflects that hubs validated through hubValidations should not require additional file checks. Users with model output directories containing invalid files should either:
+<ul><li>Use the <code>ignore_files</code> argument to exclude specific files, or</li>
+<li>Set <code>skip_checks = FALSE</code> explicitly, or</li>
+<li>Ensure their model-output directories contain only valid model output files</li>
+</ul></li>
+<li>Note: <code><a href="../reference/connect_hub.html">connect_model_output()</a></code> retains its default of <code>skip_checks = FALSE</code> as it is designed for working with model output directories that may be in draft form.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-and-improvements-2-0-0">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-2-0-0"></a></h3>
+<ul><li>Added comprehensive “Accessing Target Data” vignette demonstrating how to use <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> to access target data, including filtering, joining with model outputs, and working with cloud-based hubs (<a href="https://github.com/hubverse-org/hubData/issues/108" class="external-link">#108</a>).</li>
+<li>Added <code><a href="../reference/r_to_arrow_datatypes.html">r_to_arrow_datatypes()</a></code> function providing an inverse mapping from R data types to Arrow data types, enabling vectorized type conversion when processing <code>target-data.json</code> configurations (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>).</li>
+<li>Enhanced <code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> and <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> to support config-based schema creation when <code>target-data.json</code> (v6.0.0+) is present (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>). This enables fast, deterministic schema creation without filesystem I/O, especially beneficial for cloud storage. Functions automatically fall back to inference-based schema creation for pre-v6 hubs or hubs without <code>target-data.json</code>, maintaining backward compatibility. This functionality is propagated to <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code>, which use these schema creation functions internally.</li>
+<li>Enhanced documentation for <code><a href="../reference/connect_target_timeseries.html">connect_target_timeseries()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> to clarify column ordering behavior: v6+ Parquet files are reordered to hubverse convention, while CSV files preserve original ordering to avoid column name/position mismatches during collection (<a href="https://github.com/hubverse-org/hubData/issues/107" class="external-link">#107</a>).</li>
+<li>Added <code><a href="../reference/get_target_data_colnames.html">get_target_data_colnames()</a></code> function for extracting and ordering expected column names for target data from target-data.json configuration files (<a href="https://github.com/hubverse-org/hubData/issues/109" class="external-link">#109</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="hubdata-150">hubData 1.5.0<a class="anchor" aria-label="anchor" href="#hubdata-150"></a></h2>
 <ul><li>Added Arrow schema utilities for safely converting and validating column types from <code><a href="https://arrow.apache.org/docs/r/reference/Schema-class.html" class="external-link">arrow::Schema</a></code> objects:
@@ -138,7 +160,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer></div>
