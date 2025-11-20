@@ -26,7 +26,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -254,18 +254,18 @@ data:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 4</span></span></span>
-<span><span class="co">#&gt;    target_end_date target          location observation</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      wk inc flu hosp US              <span style="text-decoration: underline;">2</span>380</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-29      wk inc flu hosp US              <span style="text-decoration: underline;">4</span>353</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-11-05      wk inc flu hosp US              <span style="text-decoration: underline;">6</span>571</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-11-12      wk inc flu hosp US              <span style="text-decoration: underline;">8</span>848</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-11-19      wk inc flu hosp US             <span style="text-decoration: underline;">11</span>427</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-11-26      wk inc flu hosp US             <span style="text-decoration: underline;">19</span>846</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-03      wk inc flu hosp US             <span style="text-decoration: underline;">26</span>333</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-10      wk inc flu hosp US             <span style="text-decoration: underline;">23</span>851</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-17      wk inc flu hosp US             <span style="text-decoration: underline;">21</span>435</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-24      wk inc flu hosp US             <span style="text-decoration: underline;">19</span>286</span></span>
+<span><span class="co">#&gt;    target_end_date target           location observation</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      wk flu hosp rate US             0.716</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-29      wk flu hosp rate US             1.31 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-11-05      wk flu hosp rate US             1.98 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-11-12      wk flu hosp rate US             2.66 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-11-19      wk flu hosp rate US             3.44 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-11-26      wk flu hosp rate US             5.97 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-03      wk flu hosp rate US             7.93 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-10      wk flu hosp rate US             7.18 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-17      wk flu hosp rate US             6.45 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-24      wk flu hosp rate US             5.81 </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 12 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Filter by date range</span></span>
@@ -401,24 +401,24 @@ For <code>pmf</code> or <code>cdf</code> output types,
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 6</span></span></span>
 <span><span class="co">#&gt;    target_end_date target       location output_type output_type_id oracle_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         8                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         9                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         10                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      wk flu hosp… US       cdf         11                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      wk flu hosp… US       cdf         12                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      wk inc flu … US       quantile    <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      wk flu hosp… US       pmf         low                       0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      wk flu hosp… US       pmf         moderate                  0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      wk flu hosp… US       pmf         high                      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2022-12-31      wk flu hosp… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         8                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         9                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      wk flu hosp… US       cdf         10                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      wk flu hosp… US       cdf         11                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      wk flu hosp… US       cdf         12                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      wk flu hosp… US       pmf         low                       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      wk flu hosp… US       pmf         moderate                  0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      wk flu hosp… US       pmf         high                      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      wk flu hosp… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2022-12-31      wk inc flu … US       quantile    <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 2022-12-31      wk inc flu … US       sample      <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span></code></pre></div>
 </div>
 </div>

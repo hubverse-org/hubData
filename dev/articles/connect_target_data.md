@@ -177,18 +177,18 @@ ts_con |>
   filter(location == "US") |>
   collect()
 #> # A tibble: 22 × 4
-#>    target_end_date target          location observation
-#>    <date>          <chr>           <chr>          <dbl>
-#>  1 2022-10-22      wk inc flu hosp US              2380
-#>  2 2022-10-29      wk inc flu hosp US              4353
-#>  3 2022-11-05      wk inc flu hosp US              6571
-#>  4 2022-11-12      wk inc flu hosp US              8848
-#>  5 2022-11-19      wk inc flu hosp US             11427
-#>  6 2022-11-26      wk inc flu hosp US             19846
-#>  7 2022-12-03      wk inc flu hosp US             26333
-#>  8 2022-12-10      wk inc flu hosp US             23851
-#>  9 2022-12-17      wk inc flu hosp US             21435
-#> 10 2022-12-24      wk inc flu hosp US             19286
+#>    target_end_date target           location observation
+#>    <date>          <chr>            <chr>          <dbl>
+#>  1 2022-10-22      wk flu hosp rate US             0.716
+#>  2 2022-10-29      wk flu hosp rate US             1.31 
+#>  3 2022-11-05      wk flu hosp rate US             1.98 
+#>  4 2022-11-12      wk flu hosp rate US             2.66 
+#>  5 2022-11-19      wk flu hosp rate US             3.44 
+#>  6 2022-11-26      wk flu hosp rate US             5.97 
+#>  7 2022-12-03      wk flu hosp rate US             7.93 
+#>  8 2022-12-10      wk flu hosp rate US             7.18 
+#>  9 2022-12-17      wk flu hosp rate US             6.45 
+#> 10 2022-12-24      wk flu hosp rate US             5.81 
 #> # ℹ 12 more rows
 
 # Filter by date range
@@ -333,24 +333,24 @@ oo_con |>
 #> # A tibble: 19 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-12-31      wk flu hosp… US       cdf         1                         0
-#>  2 2022-12-31      wk flu hosp… US       cdf         2                         0
-#>  3 2022-12-31      wk flu hosp… US       cdf         3                         0
-#>  4 2022-12-31      wk flu hosp… US       cdf         4                         0
-#>  5 2022-12-31      wk flu hosp… US       cdf         5                         0
-#>  6 2022-12-31      wk flu hosp… US       cdf         6                         1
-#>  7 2022-12-31      wk flu hosp… US       cdf         7                         1
-#>  8 2022-12-31      wk flu hosp… US       cdf         8                         1
-#>  9 2022-12-31      wk flu hosp… US       cdf         9                         1
-#> 10 2022-12-31      wk flu hosp… US       cdf         10                        1
-#> 11 2022-12-31      wk flu hosp… US       cdf         11                        1
-#> 12 2022-12-31      wk flu hosp… US       cdf         12                        1
-#> 13 2022-12-31      wk inc flu … US       mean        NA                    19369
-#> 14 2022-12-31      wk inc flu … US       quantile    NA                    19369
-#> 15 2022-12-31      wk flu hosp… US       pmf         low                       0
-#> 16 2022-12-31      wk flu hosp… US       pmf         moderate                  0
-#> 17 2022-12-31      wk flu hosp… US       pmf         high                      1
-#> 18 2022-12-31      wk flu hosp… US       pmf         very high                 0
+#>  1 2022-12-31      wk inc flu … US       mean        NA                    19369
+#>  2 2022-12-31      wk flu hosp… US       cdf         1                         0
+#>  3 2022-12-31      wk flu hosp… US       cdf         2                         0
+#>  4 2022-12-31      wk flu hosp… US       cdf         3                         0
+#>  5 2022-12-31      wk flu hosp… US       cdf         4                         0
+#>  6 2022-12-31      wk flu hosp… US       cdf         5                         0
+#>  7 2022-12-31      wk flu hosp… US       cdf         6                         1
+#>  8 2022-12-31      wk flu hosp… US       cdf         7                         1
+#>  9 2022-12-31      wk flu hosp… US       cdf         8                         1
+#> 10 2022-12-31      wk flu hosp… US       cdf         9                         1
+#> 11 2022-12-31      wk flu hosp… US       cdf         10                        1
+#> 12 2022-12-31      wk flu hosp… US       cdf         11                        1
+#> 13 2022-12-31      wk flu hosp… US       cdf         12                        1
+#> 14 2022-12-31      wk flu hosp… US       pmf         low                       0
+#> 15 2022-12-31      wk flu hosp… US       pmf         moderate                  0
+#> 16 2022-12-31      wk flu hosp… US       pmf         high                      1
+#> 17 2022-12-31      wk flu hosp… US       pmf         very high                 0
+#> 18 2022-12-31      wk inc flu … US       quantile    NA                    19369
 #> 19 2022-12-31      wk inc flu … US       sample      NA                    19369
 ```
 

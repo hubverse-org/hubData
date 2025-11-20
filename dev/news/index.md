@@ -2,6 +2,8 @@
 
 ## hubData (development version)
 
+## hubData 2.0.0
+
 ### Breaking changes
 
 - **BREAKING:** Changed default value of `skip_checks` parameter from
