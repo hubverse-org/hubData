@@ -266,3 +266,28 @@ test_that("create_oracle_output_schema config handles versioned + has_output_typ
     )
   )
 })
+
+test_that("create_oracle_output_schema inference warns when no date column found", {
+  # Create editable hub and modify data to have no date column
+  hub_path <- use_example_hub_editable("file")
+  oo_path <- validate_target_data_path(hub_path, "oracle-output")
+  dat <- arrow::read_csv_arrow(oo_path)
+
+  # Remove the date column
+  dat_no_date <- dat |>
+    dplyr::select(-target_end_date)
+
+  .local_safe_overwrite(
+    function(out_path) arrow::write_csv_arrow(dat_no_date, file = out_path),
+    oo_path
+  )
+
+  # Should warn (not error) about missing date column
+  expect_warning(
+    sch <- create_oracle_output_schema(hub_path),
+    "No.*date.*type column found"
+  )
+
+  # Schema should still be created
+  expect_s3_class(sch, "Schema")
+})
