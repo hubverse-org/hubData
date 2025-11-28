@@ -303,3 +303,28 @@ test_that("create_timeseries_schema config ignores date_col parameter", {
   )
   expect_true("target_end_date" %in% names(sch))
 })
+
+test_that("create_timeseries_schema inference warns when no date column found", {
+  # Create editable hub and modify data to have no date column
+  hub_path <- use_example_hub_editable("file")
+  ts_path <- validate_target_data_path(hub_path, "time-series")
+  dat <- arrow::read_csv_arrow(ts_path)
+
+  # Remove the date column
+  dat_no_date <- dat |>
+    dplyr::select(-target_end_date)
+
+  .local_safe_overwrite(
+    function(out_path) arrow::write_csv_arrow(dat_no_date, file = out_path),
+    ts_path
+  )
+
+  # Should warn (not error) about missing date column
+  expect_warning(
+    sch <- create_timeseries_schema(hub_path),
+    "No.*date.*type column found"
+  )
+
+  # Schema should still be created
+  expect_s3_class(sch, "Schema")
+})

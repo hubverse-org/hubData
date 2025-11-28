@@ -183,11 +183,11 @@ create_timeseries_schema_from_inference <- function(
     )
   )
   if (!has_date_col) {
-    cli::cli_abort(
+    cli::cli_warn(
       c(
-        "x" = "No {.cls date} type column found in {.path {basename(ts_path)}}.",
-        "i" = "Must contain at least one column other than optional {.arg as_of}
-        column interprettable as {.cls date}."
+        "!" = "No {.cls date} type column found in {.path {basename(ts_path)}}.",
+        "i" = "A {.cls date} column (other than optional {.arg as_of}) that represents
+        the date observations actually occurred is required for target data to be useful."
       )
     )
   }
