@@ -22,13 +22,13 @@ Source:
 [`DESCRIPTION`](https://github.com/hubverse-org/hubData/blob/main/DESCRIPTION)
 
 Krystalli A (2025). *hubData: Tools for accessing and working with
-hubverse data*. R package version 2.0.0.9000,
+hubverse data*. R package version 2.0.0.9001,
 <https://hubverse-org.github.io/hubData>.
 
     @Manual{,
       title = {hubData: Tools for accessing and working with hubverse data},
       author = {Anna Krystalli},
       year = {2025},
-      note = {R package version 2.0.0.9000},
+      note = {R package version 2.0.0.9001},
       url = {https://hubverse-org.github.io/hubData},
     }
