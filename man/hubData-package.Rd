@@ -13,6 +13,7 @@ A set of utility functions for accessing and working with forecast and target da
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://hubverse-org.github.io/hubData}
   \item \url{https://github.com/hubverse-org/hubData}
   \item Report bugs at \url{https://github.com/hubverse-org/hubData/issues}
 }

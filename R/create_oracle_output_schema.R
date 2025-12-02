@@ -2,6 +2,7 @@
 #'
 #' @inheritParams connect_hub
 #' @inheritParams create_hub_schema
+#' @inheritParams create_timeseries_schema
 #'
 #' @details
 #' When `target-data.json` (v6.0.0+) is present, schema is created directly from config
@@ -22,6 +23,7 @@
 #' create_oracle_output_schema(s3_hub_path)
 create_oracle_output_schema <- function(
   hub_path,
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   r_schema = FALSE,
@@ -53,6 +55,7 @@ create_oracle_output_schema <- function(
     # Use existing inference-based schema creation
     create_oracle_output_schema_from_inference(
       hub_path = hub_path,
+      date_col = date_col,
       na = na,
       ignore_files = ignore_files,
       r_schema = r_schema,
@@ -139,6 +142,7 @@ create_oracle_output_schema_from_config <- function(
 create_oracle_output_schema_from_inference <- function(
   # nolint end
   hub_path,
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   r_schema = FALSE,
@@ -198,6 +202,19 @@ create_oracle_output_schema_from_inference <- function(
   oo_schema <- arrow::schema(
     !!!c(oo_schema$fields, file_schema[missing]$fields)
   )
+
+  if (!is.null(date_col)) {
+    checkmate::assert_character(date_col, len = 1L)
+    if (!date_col %in% oo_schema$names) {
+      cli::cli_abort(
+        c(
+          "x" = "Column {.arg {date_col}} not found in {.path {basename(oo_path)}} file(s).",
+          "i" = "Column must be present in the file or partition to be used as the date column."
+        )
+      )
+    }
+    oo_schema[[date_col]] <- arrow::date32()
+  }
 
   has_date_col <- any(
     purrr::map_lgl(

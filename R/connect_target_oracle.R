@@ -3,6 +3,7 @@
 #' `r lifecycle::badge("experimental")` Open the oracle-output target data file(s)
 #' in a hub as an arrow dataset.
 #' @inheritParams connect_hub
+#' @inheritParams create_timeseries_schema
 #'
 #' @returns An arrow dataset object of subclass <target_oracle_output>.
 #' @export
@@ -87,6 +88,7 @@
 #' }
 connect_target_oracle_output <- function(
   hub_path = ".",
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   output_type_id_datatype = c(
@@ -105,6 +107,7 @@ connect_target_oracle_output <- function(
   oo_ext <- get_target_file_ext(hub_path, oo_path)
   oo_schema <- create_oracle_output_schema(
     hub_path,
+    date_col = date_col,
     ignore_files = ignore_files,
     output_type_id_datatype = output_type_id_datatype
   )

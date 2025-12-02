@@ -291,3 +291,68 @@ test_that("create_oracle_output_schema inference warns when no date column found
   # Schema should still be created
   expect_s3_class(sch, "Schema")
 })
+
+test_that("create_oracle_output_schema config ignores date_col parameter", {
+  hub_path <- use_example_hub_readonly("file", v = 6)
+
+  # date_col parameter should be ignored when config exists
+  sch <- create_oracle_output_schema(hub_path, date_col = "ignored_col")
+
+  # Should use date_col from config (target_end_date)
+  expect_equal(
+    sch$ToString(),
+    "target_end_date: date32[day]\ntarget: string\nlocation: string\noutput_type: string\noutput_type_id: string\noracle_value: double" # nolint: line_length_linter
+  )
+  expect_true("target_end_date" %in% names(sch))
+})
+
+test_that("create_oracle_output_schema inference uses date_col for non-task ID partition column", {
+  # Create editable hub to partition by a non-task ID date column
+  hub_path <- use_example_hub_editable("file")
+  oo_path <- validate_target_data_path(hub_path, "oracle-output")
+  dat <- arrow::read_csv_arrow(oo_path)
+
+  # Add a date column that's not a task ID (simulates calculated date like origin_date + horizon)
+  dat$non_taskid_date <- as.character(dat$target_end_date)
+  dat <- dat |> dplyr::select(-target_end_date)
+
+  out_dir <- fs::path(hub_path, "target-data", "oracle-output")
+  if (fs::dir_exists(out_dir)) {
+    fs::dir_delete(out_dir)
+  }
+  fs::dir_create(out_dir)
+
+  arrow::write_dataset(
+    dat,
+    out_dir,
+    partitioning = "non_taskid_date",
+    format = "parquet"
+  )
+  fs::file_delete(oo_path)
+
+  # Without date_col, non_taskid_date would be inferred as string
+  sch_no_date_col <- create_oracle_output_schema(hub_path)
+  expect_equal(
+    sch_no_date_col$non_taskid_date$ToString(),
+    "non_taskid_date: string"
+  )
+
+  # With date_col, non_taskid_date should be Date
+  sch_with_date_col <- create_oracle_output_schema(
+    hub_path,
+    date_col = "non_taskid_date"
+  )
+  expect_equal(
+    sch_with_date_col$non_taskid_date$ToString(),
+    "non_taskid_date: date32[day]"
+  )
+})
+
+test_that("create_oracle_output_schema inference errors when date_col not found", {
+  hub_path <- use_example_hub_readonly("file")
+
+  expect_error(
+    create_oracle_output_schema(hub_path, date_col = "nonexistent_col"),
+    "Column.*nonexistent_col.*not found"
+  )
+})

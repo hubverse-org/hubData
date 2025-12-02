@@ -6,6 +6,7 @@
 \usage{
 create_oracle_output_schema(
   hub_path,
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   r_schema = FALSE,
@@ -23,6 +24,11 @@ For more details consult the
 in the \code{arrow} package.
 The hub must be fully configured with valid \code{admin.json} and \code{tasks.json}
 files within the \code{hub-config} directory.}
+
+\item{date_col}{Optional column name to be interpreted as date. Default is \code{NULL}.
+Useful when the required date column is a partitioning column in the target data
+and does not have the same name as a date typed task ID variable in the config.
+\strong{Note}: Ignored when \code{target-data.json} exists (v6+); date column is read from config.}
 
 \item{na}{A character vector of strings to interpret as missing values. Only
 applies to CSV files. The default is \code{c("NA", "")}. Useful when actual character
