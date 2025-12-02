@@ -7,6 +7,8 @@ target data from Infectious Disease Modeling Hubs.
 
 Useful links:
 
+- <https://hubverse-org.github.io/hubData>
+
 - <https://github.com/hubverse-org/hubData>
 
 - Report bugs at <https://github.com/hubverse-org/hubData/issues>

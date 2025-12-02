@@ -9,7 +9,7 @@ in a hub as an arrow dataset."><meta property="og:image" content="https://hubver
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,7 @@ in a hub as an arrow dataset.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">connect_target_oracle_output</span><span class="op">(</span></span>
 <span>  hub_path <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  date_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>  ignore_files <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_type_id_datatype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"from_config"</span>, <span class="st">"auto"</span>, <span class="st">"character"</span>, <span class="st">"double"</span>, <span class="st">"integer"</span>,</span>
@@ -69,6 +70,13 @@ For more details consult the
 in the <code>arrow</code> package.
 The hub must be fully configured with valid <code>admin.json</code> and <code>tasks.json</code>
 files within the <code>hub-config</code> directory.</p></dd>
+
+
+<dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
+<dd><p>Optional column name to be interpreted as date. Default is <code>NULL</code>.
+Useful when the required date column is a partitioning column in the target data
+and does not have the same name as a date typed task ID variable in the config.
+<strong>Note</strong>: Ignored when <code>target-data.json</code> exists (v6+); date column is read from config.</p></dd>
 
 
 <dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
@@ -227,16 +235,16 @@ Parquet's column-by-name matching enables safe reordering.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 57 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    target_end_date target       location output_type output_type_id oracle_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         8                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         9                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         10                        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk inc flu … 01       mean        <span style="color: #BB0000;">NA</span>                      140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk inc flu … 02       mean        <span style="color: #BB0000;">NA</span>                       44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 47 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get distinct target_end_date values</span></span></span>
