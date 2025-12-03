@@ -2,6 +2,33 @@
 
 ## hubData (development version)
 
+### New features and improvements
+
+- Added `date_col` parameter to
+  [`create_oracle_output_schema()`](https://hubverse-org.github.io/hubData/dev/reference/create_oracle_output_schema.md)
+  and
+  [`connect_target_oracle_output()`](https://hubverse-org.github.io/hubData/dev/reference/connect_target_oracle_output.md)
+  to match time-series functionality
+  ([\#121](https://github.com/hubverse-org/hubData/issues/121)). In
+  inference mode (when `target-data.json` is not present), users can now
+  specify which column contains date information to ensure it’s typed as
+  [`date32()`](https://arrow.apache.org/docs/r/reference/data-type.html).
+  The parameter is ignored in v6+ config mode where date columns are
+  defined in the configuration.
+
+### Bug fixes and minor improvements
+
+- [`create_timeseries_schema()`](https://hubverse-org.github.io/hubData/dev/reference/create_timeseries_schema.md)
+  and
+  [`create_oracle_output_schema()`](https://hubverse-org.github.io/hubData/dev/reference/create_oracle_output_schema.md)
+  now issue a warning instead of an error when no date column is
+  detected during schema inference (when `target-data.json` config is
+  not present)
+  ([\#119](https://github.com/hubverse-org/hubData/issues/119)). This
+  allows schema creation to succeed and enables validation tools to
+  properly catch and report missing date columns with better error
+  messages.
+
 ## hubData 2.0.0
 
 ### Breaking changes

@@ -38,6 +38,15 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubdata-development-version">hubData (development version)<a class="anchor" aria-label="anchor" href="#hubdata-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-and-improvements-development-version">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-development-version"></a></h3>
+<ul><li>Added <code>date_col</code> parameter to <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> and <code><a href="../reference/connect_target_oracle_output.html">connect_target_oracle_output()</a></code> to match time-series functionality (<a href="https://github.com/hubverse-org/hubData/issues/121" class="external-link">#121</a>). In inference mode (when <code>target-data.json</code> is not present), users can now specify which column contains date information to ensure it’s typed as <code><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">date32()</a></code>. The parameter is ignored in v6+ config mode where date columns are defined in the configuration.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-and-minor-improvements-development-version">Bug fixes and minor improvements<a class="anchor" aria-label="anchor" href="#bug-fixes-and-minor-improvements-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/create_timeseries_schema.html">create_timeseries_schema()</a></code> and <code><a href="../reference/create_oracle_output_schema.html">create_oracle_output_schema()</a></code> now issue a warning instead of an error when no date column is detected during schema inference (when <code>target-data.json</code> config is not present) (<a href="https://github.com/hubverse-org/hubData/issues/119" class="external-link">#119</a>). This allows schema creation to succeed and enables validation tools to properly catch and report missing date columns with better error messages.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="hubdata-200">hubData 2.0.0<a class="anchor" aria-label="anchor" href="#hubdata-200"></a></h2>
