@@ -42,14 +42,18 @@
 #' distributions in particular, i.e. which combinations of task ID values
 #' represent individual samples.
 #' @export
-expand_model_out_val_grid <- function(config_tasks,
-                                      round_id,
-                                      required_vals_only = FALSE,
-                                      all_character = FALSE,
-                                      as_arrow_table = FALSE,
-                                      bind_model_tasks = TRUE,
-                                      include_sample_ids = FALSE) {
-  lifecycle::deprecate_stop(when = "1.0.0",
-                            what = "expand_model_out_val_grid()",
-                            with = "hubValidations::expand_model_out_grid()")
+expand_model_out_val_grid <- function(
+  config_tasks,
+  round_id,
+  required_vals_only = FALSE,
+  all_character = FALSE,
+  as_arrow_table = FALSE,
+  bind_model_tasks = TRUE,
+  include_sample_ids = FALSE
+) {
+  lifecycle::deprecate_stop(
+    when = "1.0.0",
+    what = "expand_model_out_val_grid()",
+    with = "hubValidations::expand_model_out_grid()"
+  )
 }

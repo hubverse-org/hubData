@@ -5,6 +5,4 @@ std_col_datatypes <- list(
   value = "numeric"
 )
 
-usethis::use_data(std_col_datatypes,
-  overwrite = TRUE, internal = TRUE
-)
+usethis::use_data(std_col_datatypes, overwrite = TRUE, internal = TRUE)

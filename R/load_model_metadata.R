@@ -28,15 +28,19 @@ load_model_metadata <- function(hub_path, model_ids = NULL) {
 
 # cyclomatic complexity of 17 instead of 15 acceptable
 #' @export
-load_model_metadata.default <- function(hub_path, model_ids = NULL) { # nolint: cyclocomp_linter
+load_model_metadata.default <- function(hub_path, model_ids = NULL) {
+  # nolint: cyclocomp_linter
   if (!dir.exists(hub_path)) {
     cli::cli_abort(c("x" = "{.path {hub_path}} directory does not exist."))
   }
   if (!dir.exists(fs::path(hub_path, "model-metadata"))) {
-    cli::cli_abort(c("x" = "{.path model-metadata} directory not found in root of Hub."))
+    cli::cli_abort(c(
+      "x" = "{.path model-metadata} directory not found in root of Hub."
+    ))
   }
 
-  metadata_paths <- fs::dir_ls(fs::path(hub_path, "model-metadata"),
+  metadata_paths <- fs::dir_ls(
+    fs::path(hub_path, "model-metadata"),
     glob = "*.y*ml"
   )
   if (!is.null(model_ids)) {
@@ -85,8 +89,12 @@ load_model_metadata.default <- function(hub_path, model_ids = NULL) { # nolint: 
   }
 
   meta_names <- names(meta_tbl)
-  if (!"model_id" %in% meta_names && all(c("team_abbr", "model_abbr") %in% meta_names)) {
-    meta_tbl[["model_id"]] <- paste(meta_tbl[["team_abbr"]],
+  if (
+    !"model_id" %in% meta_names &&
+      all(c("team_abbr", "model_abbr") %in% meta_names)
+  ) {
+    meta_tbl[["model_id"]] <- paste(
+      meta_tbl[["team_abbr"]],
       meta_tbl[["model_abbr"]],
       sep = "-"
     )

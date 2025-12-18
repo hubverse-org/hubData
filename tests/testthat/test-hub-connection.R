@@ -7,9 +7,14 @@ test_that("connect_hub works on local simple forecasting hub", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet")
-    ))
+    structure(
+      c(3L, 3L, 1L, 1L),
+      dim = c(2L, 2L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet")
+      )
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -18,7 +23,10 @@ test_that("connect_hub works on local simple forecasting hub", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "UnionDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -46,7 +54,11 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(4L, 4L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "parquet"))
+    structure(
+      c(4L, 4L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "parquet")
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -55,7 +67,10 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -113,9 +128,14 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(5L, 5L, 2L, 2L, 1L, 1L), dim = 2:3, dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet", "arrow")
-    ))
+    structure(
+      c(5L, 5L, 2L, 2L, 1L, 1L),
+      dim = 2:3,
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet", "arrow")
+      )
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -124,7 +144,10 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "UnionDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -132,7 +155,10 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
   expect_false(attr(hub_con, "checks"))
 
   # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- basename(attr(hub_con, "model_output_dir"))
+  attr(hub_con, "model_output_dir") <- basename(attr(
+    hub_con,
+    "model_output_dir"
+  ))
   attr(hub_con, "hub_path") <- basename(attr(hub_con, "hub_path"))
   expect_snapshot(str(hub_con))
 
@@ -140,7 +166,6 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
   out_df <- hub_con %>%
     dplyr::filter(is.na(output_type_id)) %>%
     dplyr::collect()
-
 
   expect_snapshot(str(dplyr::arrange(out_df, value)))
 
@@ -157,9 +182,14 @@ test_that("connect_hub works on local flusight forecasting hub", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(5L, 5L, 2L, 2L, 1L, 1L), dim = 2:3, dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet", "arrow")
-    ))
+    structure(
+      c(5L, 5L, 2L, 2L, 1L, 1L),
+      dim = 2:3,
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet", "arrow")
+      )
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -168,7 +198,10 @@ test_that("connect_hub works on local flusight forecasting hub", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "UnionDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -190,8 +223,6 @@ test_that("connect_hub works on local flusight forecasting hub", {
 })
 
 
-
-
 test_that("connect_hub file_format override works on local hub", {
   # Simple forecasting Hub example ----
 
@@ -201,7 +232,11 @@ test_that("connect_hub file_format override works on local hub", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+    structure(
+      c(3L, 3L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "csv")
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -213,7 +248,10 @@ test_that("connect_hub file_format override works on local hub", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -233,13 +271,20 @@ test_that("Overriding output_type_id data type works correctly", {
 test_that("connect_model_output works on local model_output_dir", {
   # Simple forecasting Hub example ----
 
-  mod_out_path <- system.file("testhubs/simple/model-output", package = "hubUtils")
+  mod_out_path <- system.file(
+    "testhubs/simple/model-output",
+    package = "hubUtils"
+  )
   mod_out_con <- connect_model_output(mod_out_path)
 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(mod_out_con, "file_format"),
-    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+    structure(
+      c(3L, 3L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "csv")
+    )
   )
   expect_true(attr(mod_out_con, "checks"))
 
@@ -250,7 +295,10 @@ test_that("connect_model_output works on local model_output_dir", {
   expect_equal(
     class(mod_out_con),
     c(
-      "mod_out_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "mod_out_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -259,14 +307,13 @@ test_that("connect_model_output works on local model_output_dir", {
   expect_snapshot(mod_out_con)
   expect_snapshot(str(mod_out_con))
 
-
   expect_equal(length(mod_out_con$files), 3L)
-
 
   # provide custom schema
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   config_tasks <- hubUtils::read_config(hub_path, "tasks")
-  schema_csv <- create_hub_schema(config_tasks,
+  schema_csv <- create_hub_schema(
+    config_tasks,
     output_type_id_datatype = "character"
   )
   mod_out_con <- connect_model_output(mod_out_path, schema = schema_csv)
@@ -288,7 +335,11 @@ test_that("connect_model_output works on s3 model_output_dir", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(mod_out_con_cloud, "file_format"),
-    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+    structure(
+      c(3L, 3L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "csv")
+    )
   )
   expect_true(attr(mod_out_con_cloud, "checks"))
 
@@ -299,7 +350,10 @@ test_that("connect_model_output works on s3 model_output_dir", {
   expect_equal(
     class(mod_out_con_cloud),
     c(
-      "mod_out_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "mod_out_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -316,7 +370,11 @@ test_that("connect_model_output works on s3 model_output_dir", {
   )
   expect_equal(
     attr(mod_out_con_cloud_skip, "file_format"),
-    structure(c(3L, 3L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+    structure(
+      c(3L, 3L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "csv")
+    )
   )
   expect_false(attr(mod_out_con_cloud_skip, "checks"))
 
@@ -327,7 +385,10 @@ test_that("connect_model_output works on s3 model_output_dir", {
   expect_equal(
     class(mod_out_con_cloud_skip),
     c(
-      "mod_out_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "mod_out_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -341,15 +402,24 @@ test_that("connect_model_output works on s3 model_output_dir", {
 test_that("connect_model_output fails on empty model_output_dir", {
   # Simple forecasting Hub example ----
 
-  mod_out_path <- system.file("testhubs/empty/model-output", package = "hubUtils")
+  mod_out_path <- system.file(
+    "testhubs/empty/model-output",
+    package = "hubUtils"
+  )
   expect_snapshot(connect_model_output(mod_out_path), error = TRUE)
-  expect_snapshot(connect_model_output(mod_out_path, file_format = "parquet"),
+  expect_snapshot(
+    connect_model_output(mod_out_path, file_format = "parquet"),
     error = TRUE
   )
 
   mod_out_path <- s3_bucket("hubverse/hubutils/testhubs/empty/model-output")
   expect_snapshot(connect_model_output(mod_out_path), error = TRUE)
-  expect_snapshot(connect_model_output(mod_out_path, file_format = "parquet", skip_checks = TRUE),
+  expect_snapshot(
+    connect_model_output(
+      mod_out_path,
+      file_format = "parquet",
+      skip_checks = TRUE
+    ),
     error = TRUE
   )
 })
@@ -368,14 +438,15 @@ test_that("hub_connection print method works", {
 })
 
 test_that("mod_out_connection print method works", {
-  mod_out_path <- system.file("testhubs/simple/model-output", package = "hubUtils")
+  mod_out_path <- system.file(
+    "testhubs/simple/model-output",
+    package = "hubUtils"
+  )
   mod_out_con <- connect_model_output(mod_out_path)
   attr(mod_out_con, "model_output_dir") <- "test/model_output_dir"
 
   expect_snapshot(mod_out_con)
 })
-
-
 
 
 test_that("connect_hub data extraction works on simple forecasting hub", {
@@ -384,34 +455,42 @@ test_that("connect_hub data extraction works on simple forecasting hub", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   hub_con <- connect_hub(hub_path)
 
-  expect_snapshot(hub_con %>%
-    dplyr::filter(
-      origin_date == "2022-10-08",
-      horizon == 2,
-      output_type_id == 0.01
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    hub_con %>%
+      dplyr::filter(
+        origin_date == "2022-10-08",
+        horizon == 2,
+        output_type_id == 0.01
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 
-  expect_snapshot(hub_con %>%
-    dplyr::filter(
-      horizon == 2,
-      age_group == "65+"
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    hub_con %>%
+      dplyr::filter(
+        horizon == 2,
+        age_group == "65+"
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 
-
-  model_output_dir <- system.file("testhubs/simple/model-output", package = "hubUtils")
+  model_output_dir <- system.file(
+    "testhubs/simple/model-output",
+    package = "hubUtils"
+  )
   model_output_con <- connect_model_output(model_output_dir = model_output_dir)
-  expect_snapshot(model_output_con %>%
-    dplyr::filter(
-      origin_date == "2022-10-08",
-      horizon == 2,
-      output_type_id == 0.01
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    model_output_con %>%
+      dplyr::filter(
+        origin_date == "2022-10-08",
+        horizon == 2,
+        output_type_id == 0.01
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 })
 
 
@@ -426,9 +505,14 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet")
-    ))
+    structure(
+      c(3L, 3L, 1L, 1L),
+      dim = c(2L, 2L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet")
+      )
+    )
   )
 
   expect_false(attr(hub_con, "checks"))
@@ -441,7 +525,10 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "UnionDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -451,13 +538,15 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(str(hub_con))
 
-  expect_snapshot(hub_con %>%
-    dplyr::filter(
-      horizon == 2,
-      age_group == "65+"
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    hub_con %>%
+      dplyr::filter(
+        horizon == 2,
+        age_group == "65+"
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 })
 
 test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS", {
@@ -474,9 +563,14 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(4L, 4L), dim = c(2L, 1L), dimnames = list(
-      c("n_open", "n_in_dir"), c("parquet")
-    ))
+    structure(
+      c(4L, 4L),
+      dim = c(2L, 1L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("parquet")
+      )
+    )
   )
 
   expect_false(attr(hub_con, "checks"))
@@ -489,7 +583,10 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -499,13 +596,15 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(str(hub_con))
 
-  expect_snapshot(hub_con %>%
-    dplyr::filter(
-      horizon == 2,
-      age_group == "65+"
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    hub_con %>%
+      dplyr::filter(
+        horizon == 2,
+        age_group == "65+"
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 })
 
 
@@ -526,7 +625,11 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   suppressMessages({
     expect_message(
       {
-        hub_con <- connect_hub(hub_path, file_format = "parquet", skip_checks = TRUE)
+        hub_con <- connect_hub(
+          hub_path,
+          file_format = "parquet",
+          skip_checks = TRUE
+        )
       },
       "superseded URL"
     )
@@ -535,9 +638,14 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(4L, 4L), dim = c(2L, 1L), dimnames = list(
-      c("n_open", "n_in_dir"), c("parquet")
-    ))
+    structure(
+      c(4L, 4L),
+      dim = c(2L, 1L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("parquet")
+      )
+    )
   )
 
   expect_false(attr(hub_con, "checks"))
@@ -550,7 +658,10 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "FileSystemDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "FileSystemDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -560,13 +671,15 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   attr(hub_con, "hub_path") <- "test/hub_path"
   expect_snapshot(str(hub_con))
 
-  expect_snapshot(hub_con %>%
-    dplyr::filter(
-      horizon == 2,
-      age_group == "65+"
-    ) %>%
-    dplyr::collect() %>%
-    str())
+  expect_snapshot(
+    hub_con %>%
+      dplyr::filter(
+        horizon == 2,
+        age_group == "65+"
+      ) %>%
+      dplyr::collect() %>%
+      str()
+  )
 })
 
 
@@ -614,9 +727,14 @@ test_that("connect_hub works when skip_checks is true and hub has multiple file 
   # Tests that paths are assigned to attributes correctly
   expect_equal(
     attr(hub_con, "file_format"),
-    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet")
-    ))
+    structure(
+      c(3L, 3L, 1L, 1L),
+      dim = c(2L, 2L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet")
+      )
+    )
   )
   expect_equal(
     attr(hub_con, "file_system"),
@@ -625,7 +743,10 @@ test_that("connect_hub works when skip_checks is true and hub has multiple file 
   expect_equal(
     class(hub_con),
     c(
-      "hub_connection", "UnionDataset", "Dataset", "ArrowObject",
+      "hub_connection",
+      "UnionDataset",
+      "Dataset",
+      "ArrowObject",
       "R6"
     )
   )
@@ -672,13 +793,12 @@ test_that("connect_hub doesn't validate files when skip_checks is TRUE", {
 test_that("connect_hub works when ignoring files", {
   hub_path <- testthat::test_path("testdata/error_file")
   expect_warning(
-    connect_hub(hub_path,
-      skip_checks = FALSE
-    ),
+    connect_hub(hub_path, skip_checks = FALSE),
     regexp = "The following potentially invalid model output file not opened .*2022-11-28-baseline.csv.*"
   )
   expect_equal(
-    suppressWarnings(connect_hub(hub_path, skip_checks = FALSE)) |> attr("file_format"),
+    suppressWarnings(connect_hub(hub_path, skip_checks = FALSE)) |>
+      attr("file_format"),
     structure(8:9, dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
   )
 
@@ -689,10 +809,15 @@ test_that("connect_hub works when ignoring files", {
   )
   expect_equal(
     attr(error_con, "file_format"),
-    structure(c(9L, 9L), dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
+    structure(
+      c(9L, 9L),
+      dim = 2:1,
+      dimnames = list(c("n_open", "n_in_dir"), "csv")
+    )
   )
 
-  con <- connect_hub(hub_path,
+  con <- connect_hub(
+    hub_path,
     ignore_files = "2022-11-28-baseline.csv",
     skip_checks = TRUE
   )
@@ -702,7 +827,6 @@ test_that("connect_hub works when ignoring files", {
     structure(8:9, dim = 2:1, dimnames = list(c("n_open", "n_in_dir"), "csv"))
   )
   expect_s3_class(collect_hub(con), "model_out_tbl")
-
 
   # connect_hub now ignores README files by default
   temp_hub <- withr::local_tempdir()
@@ -720,9 +844,14 @@ test_that("connect_hub works when ignoring files", {
   expect_s3_class(readme_con, "hub_connection")
   expect_equal(
     attr(readme_con, "file_format"),
-    structure(c(3L, 3L, 1L, 1L), dim = c(2L, 2L), dimnames = list(
-      c("n_open", "n_in_dir"), c("csv", "parquet")
-    ))
+    structure(
+      c(3L, 3L, 1L, 1L),
+      dim = c(2L, 2L),
+      dimnames = list(
+        c("n_open", "n_in_dir"),
+        c("csv", "parquet")
+      )
+    )
   )
   expect_s3_class(collect_hub(readme_con), "model_out_tbl")
 
