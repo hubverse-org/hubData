@@ -1,4 +1,4 @@
-yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
+yyyy_mm_dd_date_format <- "%Y-%m-%d" # e.g., '2017-01-17'
 
 #' Load forecasts from zoltardata.com in hubverse format
 #'
@@ -64,65 +64,157 @@ yyyy_mm_dd_date_format <- "%Y-%m-%d"  # e.g., '2017-01-17'
 #'
 #' @importFrom rlang .data
 #' @importFrom zoltr do_zoltar_query
-collect_zoltar <- function(project_name, models = NULL, timezeros = NULL, units = NULL, targets = NULL,
-                           types = NULL, as_of = NULL, point_output_type = "median") {
+collect_zoltar <- function(
+  project_name,
+  models = NULL,
+  timezeros = NULL,
+  units = NULL,
+  targets = NULL,
+  types = NULL,
+  as_of = NULL,
+  point_output_type = "median"
+) {
   zoltar_connection <- zoltr::new_connection()
-  zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
+  zoltr::zoltar_authenticate(
+    zoltar_connection,
+    Sys.getenv("Z_USERNAME"),
+    Sys.getenv("Z_PASSWORD")
+  )
 
-  project_url <- validate_arguments(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of,
-                                    point_output_type)
-  forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection, project_url = project_url,
-                                      query_type = "forecasts", units = units, timezeros = timezeros, models = models,
-                                      targets = targets, types = types, as_of = as_of)
-  if (nrow(forecasts) == 0) {  # special case
-    data.frame(model_id = character(), timezero = character(), season = character(), unit = character(),
-               horizon = character(), target = character(), output_type = character(), output_type_id = character(),
-               value = numeric()) |>
+  project_url <- validate_arguments(
+    zoltar_connection,
+    project_name,
+    models,
+    timezeros,
+    units,
+    targets,
+    types,
+    as_of,
+    point_output_type
+  )
+  forecasts <- zoltr::do_zoltar_query(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url,
+    query_type = "forecasts",
+    units = units,
+    timezeros = timezeros,
+    models = models,
+    targets = targets,
+    types = types,
+    as_of = as_of
+  )
+  if (nrow(forecasts) == 0) {
+    # special case
+    data.frame(
+      model_id = character(),
+      timezero = character(),
+      season = character(),
+      unit = character(),
+      horizon = character(),
+      target = character(),
+      output_type = character(),
+      output_type_id = character(),
+      value = numeric()
+    ) |>
       hubUtils::as_model_out_tbl()
   } else {
     zoltar_targets_df <- zoltr::targets(zoltar_connection, project_url)
-    format_to_hub_model_output(forecasts, zoltar_targets_df, point_output_type) |>
+    format_to_hub_model_output(
+      forecasts,
+      zoltar_targets_df,
+      point_output_type
+    ) |>
       hubUtils::as_model_out_tbl()
   }
 }
 
 
 #' @importFrom rlang .data
-format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_output_type) {
+format_to_hub_model_output <- function(
+  forecasts,
+  zoltar_targets_df,
+  point_output_type
+) {
   hub_model_outputs <- forecasts |>
-    dplyr::left_join(zoltar_targets_df[, c("name", "numeric_horizon")], by = c("target" = "name")) |>
-    dplyr::mutate(numeric_value = ifelse(!is.na(.data$value),
-                                         stringr::str_detect(.data$value, "[^\\d|\\.]", negate = TRUE),
-                                         TRUE),
-                  numeric_sample = ifelse(!is.na(sample),
-                                          stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE),
-                                          TRUE)) |>
-    dplyr::filter(.data$numeric_value, .data$numeric_sample, !class %in% c("named", "mode")) |>
+    dplyr::left_join(
+      zoltar_targets_df[, c("name", "numeric_horizon")],
+      by = c("target" = "name")
+    ) |>
+    dplyr::mutate(
+      numeric_value = ifelse(
+        !is.na(.data$value),
+        stringr::str_detect(.data$value, "[^\\d|\\.]", negate = TRUE),
+        TRUE
+      ),
+      numeric_sample = ifelse(
+        !is.na(sample),
+        stringr::str_detect(sample, "[^\\d|\\.]", negate = TRUE),
+        TRUE
+      )
+    ) |>
+    dplyr::filter(
+      .data$numeric_value,
+      .data$numeric_sample,
+      !class %in% c("named", "mode")
+    ) |>
     dplyr::mutate(value = as.numeric(.data$value)) |>
-    dplyr::mutate(hub_target = stringr::str_squish(stringr::str_remove(.data$target, paste0(.data$numeric_horizon)))) |>
+    dplyr::mutate(
+      hub_target = stringr::str_squish(stringr::str_remove(
+        .data$target,
+        paste0(.data$numeric_horizon)
+      ))
+    ) |>
     dplyr::group_split(class) |>
     purrr::map(.f = function(split_outputs) {
       class <- split_outputs$class[1]
       if (class == "bin") {
         split_outputs |>
-          dplyr::mutate(output_type = "pmf", output_type_id = cat, hub_value = as.numeric(.data$prob))
+          dplyr::mutate(
+            output_type = "pmf",
+            output_type_id = cat,
+            hub_value = as.numeric(.data$prob)
+          )
       } else if (class == "point") {
-        cli::cli_warn(paste0("Passed query includes `point` forecasts, which do not map cleanly to a hubverse output",
-                             " type. They were mapped to {.val {point_output_type}}."))
+        cli::cli_warn(paste0(
+          "Passed query includes `point` forecasts, which do not map cleanly to a hubverse output",
+          " type. They were mapped to {.val {point_output_type}}."
+        ))
         split_outputs |>
-          dplyr::mutate(output_type = point_output_type, output_type_id = NA, hub_value = .data$value)
+          dplyr::mutate(
+            output_type = point_output_type,
+            output_type_id = NA,
+            hub_value = .data$value
+          )
       } else if (class %in% c("mean", "median")) {
         split_outputs |>
-          dplyr::mutate(output_type = class, output_type_id = NA, hub_value = .data$value)
+          dplyr::mutate(
+            output_type = class,
+            output_type_id = NA,
+            hub_value = .data$value
+          )
       } else if (class == "quantile") {
         split_outputs |>
-          dplyr::mutate(output_type = "quantile", output_type_id = as.character(.data$quantile),
-                        hub_value = .data$value)
+          dplyr::mutate(
+            output_type = "quantile",
+            output_type_id = as.character(.data$quantile),
+            hub_value = .data$value
+          )
       } else if (class == "sample") {
         split_outputs |>
-          dplyr::mutate(output_type = "sample", hub_value = suppressWarnings(as.numeric(sample))) |>
-          dplyr::group_by(.data$model, .data$timezero, .data$unit, .data$target) |>
-          dplyr::mutate(output_type_id = as.character(dplyr::row_number()), .before = "hub_value") |>
+          dplyr::mutate(
+            output_type = "sample",
+            hub_value = suppressWarnings(as.numeric(sample))
+          ) |>
+          dplyr::group_by(
+            .data$model,
+            .data$timezero,
+            .data$unit,
+            .data$target
+          ) |>
+          dplyr::mutate(
+            output_type_id = as.character(dplyr::row_number()),
+            .before = "hub_value"
+          ) |>
           dplyr::ungroup()
       }
     }) |>
@@ -134,21 +226,46 @@ format_to_hub_model_output <- function(forecasts, zoltar_targets_df, point_outpu
   # - numeric_horizon
   # - hub_target, output_type, output_type_id, hub_value
 
-  hub_model_outputs[, c("model", "timezero", "season", "unit", "numeric_horizon", "hub_target", "output_type",
-                        "output_type_id", "hub_value")] |>
-    dplyr::rename(model_id = "model", horizon = "numeric_horizon", target = "hub_target",
-                  value = "hub_value")
+  hub_model_outputs[, c(
+    "model",
+    "timezero",
+    "season",
+    "unit",
+    "numeric_horizon",
+    "hub_target",
+    "output_type",
+    "output_type_id",
+    "hub_value"
+  )] |>
+    dplyr::rename(
+      model_id = "model",
+      horizon = "numeric_horizon",
+      target = "hub_target",
+      value = "hub_value"
+    )
 }
 
-validate_arguments <- function(zoltar_connection, project_name, models, timezeros, units, targets, types, as_of,
-                               point_output_type = "median") {
+validate_arguments <- function(
+  zoltar_connection,
+  project_name,
+  models,
+  timezeros,
+  units,
+  targets,
+  types,
+  as_of,
+  point_output_type = "median"
+) {
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == project_name, "url"]
   if (length(project_url) == 0) {
     cli::cli_abort("invalid project_name: {.val {project_name}}")
   }
 
-  project_models <- zoltr::models(zoltar_connection = zoltar_connection, project_url = project_url)
+  project_models <- zoltr::models(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )
   if (!all(models %in% project_models$model_abbr)) {
     # nolint start
     missing_models <- setdiff(models, project_models)
@@ -158,7 +275,7 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
 
   input_timezeros_as_dates <- lapply(timezeros, FUN = function(x) {
     if (stringr::str_length(x) == 10) {
-      as.Date(x, yyyy_mm_dd_date_format)  # NA if invalid format
+      as.Date(x, yyyy_mm_dd_date_format) # NA if invalid format
     } else {
       NA
     }
@@ -167,15 +284,23 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
     cli::cli_abort("one or more invalid timezero formats")
   }
 
-  project_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection, project_url = project_url)$timezero_date
+  project_timezeros <- zoltr::timezeros(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )$timezero_date
   if (!all(timezeros %in% project_timezeros)) {
     # nolint start
     missing_timezeros <- setdiff(timezeros, project_timezeros)
-    cli::cli_abort("timezero{?s} not found in project: {.val {missing_timezeros}}")
+    cli::cli_abort(
+      "timezero{?s} not found in project: {.val {missing_timezeros}}"
+    )
     # nolint end
   }
 
-  project_units <- zoltr::zoltar_units(zoltar_connection = zoltar_connection, project_url = project_url)$abbreviation
+  project_units <- zoltr::zoltar_units(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )$abbreviation
   if (!all(units %in% project_units)) {
     # nolint start
     missing_units <- setdiff(units, project_units)
@@ -183,7 +308,10 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
     # nolint end
   }
 
-  project_targets <- zoltr::targets(zoltar_connection = zoltar_connection, project_url = project_url)$name
+  project_targets <- zoltr::targets(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )$name
   if (!all(targets %in% project_targets)) {
     # nolint start
     missing_targets <- setdiff(targets, project_targets)
@@ -203,7 +331,8 @@ validate_arguments <- function(zoltar_connection, project_name, models, timezero
     {
       strftime(as_of, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE)
     },
-    error = function(e) {  # e.g., Error in as.POSIXlt.character(x, tz = tz)
+    error = function(e) {
+      # e.g., Error in as.POSIXlt.character(x, tz = tz)
       cli::cli_abort("invalid as_of")
     }
   )

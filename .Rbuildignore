@@ -21,3 +21,4 @@
 ^\.pre-commit-config\.yaml$
 ^CLAUDE\.md$
 ^\.claude$
+^[.]?air[.]toml$

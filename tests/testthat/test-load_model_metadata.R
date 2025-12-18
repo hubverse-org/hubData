@@ -37,7 +37,9 @@ test_that("resulting tibble has team_abbr, model_abbr, and model_id_columns", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   model_metadata <- load_model_metadata(hub_path)
   expect_snapshot(str(model_metadata))
-  expect_true(all(c("team_abbr", "model_abbr", "model_id") %in% names(model_metadata)))
+  expect_true(all(
+    c("team_abbr", "model_abbr", "model_id") %in% names(model_metadata)
+  ))
 })
 
 # Specifying non-existent models throws an error
