@@ -6,7 +6,7 @@ test_that("coerce_to_hub_schema works", {
       hub_path,
       "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv"
     )
-  ) %>%
+  ) |>
     coerce_to_character()
 
   expect_snapshot(str(

@@ -163,8 +163,8 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
   expect_snapshot(str(hub_con))
 
   # Test that NAs are parsed correctly
-  out_df <- hub_con %>%
-    dplyr::filter(is.na(output_type_id)) %>%
+  out_df <- hub_con |>
+    dplyr::filter(is.na(output_type_id)) |>
     dplyr::collect()
 
   expect_snapshot(str(dplyr::arrange(out_df, value)))
@@ -456,23 +456,23 @@ test_that("connect_hub data extraction works on simple forecasting hub", {
   hub_con <- connect_hub(hub_path)
 
   expect_snapshot(
-    hub_con %>%
+    hub_con |>
       dplyr::filter(
         origin_date == "2022-10-08",
         horizon == 2,
         output_type_id == 0.01
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 
   expect_snapshot(
-    hub_con %>%
+    hub_con |>
       dplyr::filter(
         horizon == 2,
         age_group == "65+"
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 
@@ -482,13 +482,13 @@ test_that("connect_hub data extraction works on simple forecasting hub", {
   )
   model_output_con <- connect_model_output(model_output_dir = model_output_dir)
   expect_snapshot(
-    model_output_con %>%
+    model_output_con |>
       dplyr::filter(
         origin_date == "2022-10-08",
         horizon == 2,
         output_type_id == 0.01
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 })
@@ -539,12 +539,12 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
   expect_snapshot(str(hub_con))
 
   expect_snapshot(
-    hub_con %>%
+    hub_con |>
       dplyr::filter(
         horizon == 2,
         age_group == "65+"
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 })
@@ -597,12 +597,12 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
   expect_snapshot(str(hub_con))
 
   expect_snapshot(
-    hub_con %>%
+    hub_con |>
       dplyr::filter(
         horizon == 2,
         age_group == "65+"
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 })
@@ -672,12 +672,12 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   expect_snapshot(str(hub_con))
 
   expect_snapshot(
-    hub_con %>%
+    hub_con |>
       dplyr::filter(
         horizon == 2,
         age_group == "65+"
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       str()
   )
 })

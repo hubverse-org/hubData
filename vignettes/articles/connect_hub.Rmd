@@ -93,8 +93,8 @@ To access data from a hub connection you can use dplyr verbs and construct query
 
 To perform the queries, you can use `dplyr`'s `collect()` function:
 ```{r}
-hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   dplyr::collect()
 ```
 
@@ -105,8 +105,8 @@ Note however that in the above example, while the output contains the required `
 Conveniently, you can use the `hubData` wrapper `collect_hub()` which converts the output of `dplyr::collect()` to a `model_out_tbl` class object where possible:
 
 ```{r}
-tbl <- hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+tbl <- hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 
 tbl
@@ -119,8 +119,8 @@ class(tbl)
 Accessing data from hubs in the cloud is exactly the same:
 
 ```{r}
-hub_con_cloud %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+hub_con_cloud |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 ```
 
@@ -131,12 +131,12 @@ Note that [not all `dplyr` filtering options are available](https://arrow.apache
 For example, if you wanted to get all quantile predictions for the last forecast date in the hub, you might try:
 
 ```{r, error=TRUE}
-hub_con %>%
+hub_con |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
-  ) %>%
+  ) |>
   hubData::collect_hub()
 ```
 
@@ -145,9 +145,9 @@ This doesn't work however as `arrow` does not have an equivalent `max` method fo
 In such a situation, you could collect after applying the first filtering level which does work for arrow and then finish the filtering on the in-memory data returned by collect.
 
 ```{r}
-hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
-  hubData::collect_hub() %>%
+hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
+  hubData::collect_hub() |>
   dplyr::filter(forecast_date == max(forecast_date))
 ```
 
@@ -157,18 +157,18 @@ Alternatively, depending on the size of the data, in might be quicker to filter 
 2. use the last forecast date in the filtering query.
 
 ```{r}
-last_forecast <- hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
-  dplyr::pull(forecast_date, as_vector = TRUE) %>%
+last_forecast <- hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
+  dplyr::pull(forecast_date, as_vector = TRUE) |>
   max(na.rm = TRUE)
 
 
-hub_con %>%
+hub_con |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == last_forecast
-  ) %>%
+  ) |>
   hubData::collect_hub()
 ```
 
@@ -179,13 +179,13 @@ You could alternatively use `arrow::to_duckdb()` to first convert the dataset co
 _For more details see [DuckDB quacks Arrow: A zero-copy data integration between Apache Arrow and DuckDB](https://duckdb.org/2021/12/03/duck-arrow.html)._
 
 ```{r}
-hub_con %>%
-  arrow::to_duckdb() %>%
+hub_con |>
+  arrow::to_duckdb() |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
-  ) %>%
+  ) |>
   hubData::collect_hub()
 ```
 
@@ -213,8 +213,8 @@ mod_out_con
 Accessing data follows the same procedure described for fully configured hubs:
 
 ```{r}
-mod_out_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+mod_out_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 ```
 

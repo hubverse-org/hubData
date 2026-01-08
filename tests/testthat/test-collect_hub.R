@@ -13,46 +13,46 @@ test_that("collect_hub works on local simple forecasting hub", {
 
   # Collect after filtering
   expect_snapshot(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
       collect_hub()
   )
   expect_s3_class(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
       collect_hub(),
     c("model_out_tbl", "tbl_df", "tbl", "data.frame")
   )
 
   # Pass arguments to as_model_out_tbl
   expect_snapshot(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
       collect_hub(remove_empty = TRUE)
   )
 
   # Check that tibble retuned and message issued when coercion to model_out_tbl
   # not possible
   expect_snapshot(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
       collect_hub()
   )
   expect_s3_class(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
-      collect_hub() %>%
-      suppressMessages() %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
+      collect_hub() |>
+      suppressMessages() |>
       suppressWarnings(),
     c("tbl_df", "tbl", "data.frame")
   )
 
   # Check that silencing works when coercion not possible
   expect_snapshot(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
       collect_hub(silent = TRUE)
   )
   expect_s3_class(
-    dplyr::filter(hub_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
+    dplyr::filter(hub_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
       collect_hub(silent = TRUE),
     c("tbl_df", "tbl", "data.frame")
   )
@@ -80,19 +80,19 @@ test_that("collect_hub works on model output directories", {
   )
 
   expect_snapshot(
-    dplyr::filter(mod_out_con, is.na(output_type_id)) %>%
+    dplyr::filter(mod_out_con, is.na(output_type_id)) |>
       collect_hub()
   )
 
   # Check behaviour when coercion to model_out_tbl not possible
   expect_snapshot(
-    dplyr::filter(mod_out_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
+    dplyr::filter(mod_out_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
       collect_hub()
   )
   expect_snapshot(
-    dplyr::filter(mod_out_con, is.na(output_type_id)) %>%
-      dplyr::select(target) %>%
+    dplyr::filter(mod_out_con, is.na(output_type_id)) |>
+      dplyr::select(target) |>
       collect_hub(silent = TRUE)
   )
 })
