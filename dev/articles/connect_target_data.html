@@ -273,18 +273,18 @@ data:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2022-10-01"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 66 × 4</span></span></span>
-<span><span class="co">#&gt;    target_end_date target          location observation</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      wk inc flu hosp 02                 3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      wk inc flu hosp 01               141</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      wk inc flu hosp US              <span style="text-decoration: underline;">2</span>380</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      wk inc flu hosp 02                14</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      wk inc flu hosp 01               262</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      wk inc flu hosp US              <span style="text-decoration: underline;">4</span>353</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      wk inc flu hosp 02                10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      wk inc flu hosp 01               360</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      wk inc flu hosp US              <span style="text-decoration: underline;">6</span>571</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      wk inc flu hosp 02                20</span></span>
+<span><span class="co">#&gt;    target_end_date target           location observation</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      wk flu hosp rate 02             0.422</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      wk flu hosp rate 01             2.78 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      wk flu hosp rate US             0.716</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      wk flu hosp rate 02             1.97 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      wk flu hosp rate 01             5.17 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      wk flu hosp rate US             1.31 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      wk flu hosp rate 02             1.41 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      wk flu hosp rate 01             7.11 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      wk flu hosp rate US             1.98 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      wk flu hosp rate 02             2.81 </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 56 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Combine multiple filters</span></span>
@@ -401,19 +401,19 @@ For <code>pmf</code> or <code>cdf</code> output types,
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 6</span></span></span>
 <span><span class="co">#&gt;    target_end_date target       location output_type output_type_id oracle_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         8                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         9                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         10                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      wk flu hosp… US       cdf         11                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      wk flu hosp… US       cdf         12                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      wk inc flu … US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      wk flu hosp… US       cdf         1                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      wk flu hosp… US       cdf         2                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      wk flu hosp… US       cdf         3                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      wk flu hosp… US       cdf         4                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      wk flu hosp… US       cdf         5                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      wk flu hosp… US       cdf         6                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      wk flu hosp… US       cdf         7                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      wk flu hosp… US       cdf         8                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      wk flu hosp… US       cdf         9                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      wk flu hosp… US       cdf         10                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      wk flu hosp… US       cdf         11                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      wk flu hosp… US       cdf         12                        1</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      wk flu hosp… US       pmf         low                       0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      wk flu hosp… US       pmf         moderate                  0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      wk flu hosp… US       pmf         high                      1</span></span>
@@ -447,16 +447,16 @@ outputs and collecting predictions:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 9</span></span></span>
 <span><span class="co">#&gt;    model_id   location reference_date horizon target_end_date target output_type</span></span>
 <span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;chr&gt;, value &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Next, collect the corresponding oracle-output target data:</p>
@@ -510,16 +510,16 @@ category or threshold being predicted.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 10</span></span></span>
 <span><span class="co">#&gt;    model_id   location reference_date horizon target_end_date target output_type</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-… US       2022-11-19           1 2022-11-26      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: output_type_id &lt;chr&gt;, value &lt;dbl&gt;, oracle_value &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Now we have successfully aligned predicted values
@@ -539,16 +539,16 @@ forecasts).</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id    location reference_date horizon target output_type output_type_id</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.025         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.1           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.2           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.3           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.4           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.5           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.6           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.7           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.8           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.9           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: value &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>When working with such hubs, you’ll need to calculate the
@@ -565,16 +565,16 @@ with target data:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 9</span></span></span>
 <span><span class="co">#&gt;    model_id    location reference_date horizon target output_type output_type_id</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.025         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.1           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.2           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.3           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.4           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.5           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.6           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.7           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.8           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.9           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: value &lt;dbl&gt;, target_end_date &lt;date&gt;</span></span></span></code></pre></div>
 <p>Now we can join with target data as before:</p>
@@ -591,16 +591,16 @@ with target data:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 132 × 10</span></span></span>
 <span><span class="co">#&gt;    model_id    location reference_date horizon target output_type output_type_id</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.025         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.1           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.2           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.3           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.4           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.5           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.6           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.7           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.8           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-11-19           1 wk in… quantile    0.9           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 122 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: value &lt;dbl&gt;, target_end_date &lt;date&gt;, oracle_value &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Note: The multiplier (7L) assumes weekly horizons. Adjust this based
