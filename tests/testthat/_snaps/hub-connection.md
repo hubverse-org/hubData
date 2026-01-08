@@ -1013,8 +1013,8 @@
 # connect_hub data extraction works on simple forecasting hub
 
     Code
-      hub_con %>% dplyr::filter(origin_date == "2022-10-08", horizon == 2,
-      output_type_id == 0.01) %>% dplyr::collect() %>% str()
+      str(dplyr::collect(dplyr::filter(hub_con, origin_date == "2022-10-08",
+      horizon == 2, output_type_id == 0.01)))
     Output
       tibble [3 x 9] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:3], format: "2022-10-08" "2022-10-08" ...
@@ -1030,8 +1030,7 @@
 ---
 
     Code
-      hub_con %>% dplyr::filter(horizon == 2, age_group == "65+") %>% dplyr::collect() %>%
-        str()
+      str(dplyr::collect(dplyr::filter(hub_con, horizon == 2, age_group == "65+")))
     Output
       tibble [69 x 9] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:69], format: "2022-10-15" "2022-10-15" ...
@@ -1047,8 +1046,8 @@
 ---
 
     Code
-      model_output_con %>% dplyr::filter(origin_date == "2022-10-08", horizon == 2,
-      output_type_id == 0.01) %>% dplyr::collect() %>% str()
+      str(dplyr::collect(dplyr::filter(model_output_con, origin_date == "2022-10-08",
+      horizon == 2, output_type_id == 0.01)))
     Output
       tibble [3 x 8] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:3], format: "2022-10-08" "2022-10-08" ...
@@ -1219,8 +1218,7 @@
 ---
 
     Code
-      hub_con %>% dplyr::filter(horizon == 2, age_group == "65+") %>% dplyr::collect() %>%
-        str()
+      str(dplyr::collect(dplyr::filter(hub_con, horizon == 2, age_group == "65+")))
     Output
       tibble [69 x 9] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:69], format: "2022-10-15" "2022-10-15" ...
@@ -1395,8 +1393,7 @@
 ---
 
     Code
-      hub_con %>% dplyr::filter(horizon == 2, age_group == "65+") %>% dplyr::collect() %>%
-        str()
+      str(dplyr::collect(dplyr::filter(hub_con, horizon == 2, age_group == "65+")))
     Output
       tibble [69 x 9] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:69], format: "2022-10-15" "2022-10-15" ...
@@ -1602,8 +1599,7 @@
 ---
 
     Code
-      hub_con %>% dplyr::filter(horizon == 2, age_group == "65+") %>% dplyr::collect() %>%
-        str()
+      str(dplyr::collect(dplyr::filter(hub_con, horizon == 2, age_group == "65+")))
     Output
       tibble [69 x 9] (S3: tbl_df/tbl/data.frame)
        $ origin_date   : Date[1:69], format: "2022-10-15" "2022-10-15" ...

@@ -104,7 +104,7 @@ create_hub_schema <- function(
       names(hub_datatypes)
     ),
     partitions
-  ) %>%
+  ) |>
     arrow::schema()
 }
 
@@ -133,11 +133,11 @@ get_task_id_values <- function(config_tasks, task_id_name, round = "all") {
     )
   }
 
-  model_tasks %>%
+  model_tasks |>
     purrr::map(
-      ~ .x %>%
+      ~ .x |>
         purrr::map(~ .x[["task_ids"]][[task_id_name]])
-    ) %>% # nolint: indentation_linter
+    ) |> # nolint: indentation_linter
     unlist(recursive = FALSE)
 }
 
@@ -146,7 +146,7 @@ get_task_id_type <- function(config_tasks, task_id_name, round = "all") {
     config_tasks,
     task_id_name,
     round
-  ) %>%
+  ) |>
     unlist()
 
   get_data_type(values)
@@ -166,24 +166,24 @@ get_output_type_id_type <- function(config_tasks) {
     function(x) {
       x[["model_tasks"]]
     }
-  ) %>%
-    unlist(recursive = FALSE) %>%
+  ) |>
+    unlist(recursive = FALSE) |>
     purrr::map(
       function(x) {
         x[["output_type"]]
       }
-    ) %>%
-    unlist(recursive = FALSE) %>%
+    ) |>
+    unlist(recursive = FALSE) |>
     purrr::map(
       function(x) {
-        purrr::pluck(x, config_tid) %>%
+        purrr::pluck(x, config_tid) |>
           # Currently, no output type id values are allowed to be Dates but a use
           # of ISO Date character codes in output type id values would return an erroneous
           # Date type. This is a safeguard against this. If Dates are introduced as
           # output type id values in the future, this will need to be revisited.
           purrr::modify_if(~ inherits(.x, "Date"), as.character)
       }
-    ) %>%
+    ) |>
     unlist()
 
   sample_values <- purrr::map(
@@ -191,24 +191,24 @@ get_output_type_id_type <- function(config_tasks) {
     function(x) {
       x[["model_tasks"]]
     }
-  ) %>%
-    unlist(recursive = FALSE) %>%
+  ) |>
+    unlist(recursive = FALSE) |>
     purrr::map(
       function(x) {
         x[["output_type"]][["sample"]]
       }
-    ) %>%
+    ) |>
     purrr::map(
       function(x) {
         purrr::pluck(x, "output_type_id_params", "type")
       }
-    ) %>%
-    unlist() %>%
+    ) |>
+    unlist() |>
     # Instead of using R data type coercion by combining vectors of output type
     # id values, create length 1 vectors of sample output type id types
     # using the function specified by output_type_id_params type.
     # Get the appropriate function using `get`.
-    purrr::map(~ get(.x)(length = 1L)) %>%
+    purrr::map(~ get(.x)(length = 1L)) |>
     unlist()
 
   # Currently, no output type id values are allowed to be Dates so no need to use
@@ -228,12 +228,12 @@ get_value_type <- function(config_tasks) {
   types <- purrr::map(
     config_tasks[["rounds"]],
     ~ .x[["model_tasks"]]
-  ) %>%
-    unlist(recursive = FALSE) %>%
-    purrr::map(~ .x[["output_type"]]) %>%
-    purrr::flatten() %>%
-    purrr::map(~ purrr::pluck(.x, "value", "type")) %>%
-    unlist() %>%
+  ) |>
+    unlist(recursive = FALSE) |>
+    purrr::map(~ .x[["output_type"]]) |>
+    purrr::flatten() |>
+    purrr::map(~ purrr::pluck(.x, "value", "type")) |>
+    unlist() |>
     unique()
 
   coerce_datatype(types)

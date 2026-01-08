@@ -44,7 +44,7 @@ load_model_metadata.default <- function(hub_path, model_ids = NULL) {
     glob = "*.y*ml"
   )
   if (!is.null(model_ids)) {
-    metadata_ids <- basename(metadata_paths) %>% fs::path_ext_remove()
+    metadata_ids <- basename(metadata_paths) |> fs::path_ext_remove()
     if (any(!model_ids %in% metadata_ids)) {
       cli::cli_abort(
         "{.var model_ids} value{?s} {.val {model_ids[!model_ids %in% metadata_ids]}}
@@ -59,7 +59,7 @@ load_model_metadata.default <- function(hub_path, model_ids = NULL) {
 
   meta_l <- purrr::map(
     metadata_paths,
-    ~ yaml::read_yaml(.x) %>%
+    ~ yaml::read_yaml(.x) |>
       # Here we add depth to list elements so when the top level is unlisted at
       # the `bind_rows` step below, they do not create a row per list element.
       # Instead the expected single row per model is created.
@@ -114,8 +114,8 @@ arrange_meta_tbl <- function(meta_tbl, hub_path) {
   schema_names <- hubUtils::read_config(
     hub_path,
     config = "model-metadata-schema"
-  ) %>%
-    purrr::pluck("properties") %>%
+  ) |>
+    purrr::pluck("properties") |>
     names()
 
   meta_names <- names(meta_tbl)

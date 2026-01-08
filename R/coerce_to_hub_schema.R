@@ -35,7 +35,7 @@ coerce_to_hub_schema <- function(
 
   # Coerce data types according to hub schema
   if (skip_date_coercion) {
-    tbl[,] <- purrr::map2(
+    tbl[] <- purrr::map2(
       .x = names(tbl_schema),
       .y = tbl_schema,
       ~ if (.y == "Date") {
@@ -45,7 +45,7 @@ coerce_to_hub_schema <- function(
       }
     )
   } else {
-    tbl[,] <- purrr::map2(
+    tbl[] <- purrr::map2(
       .x = names(tbl_schema),
       .y = tbl_schema,
       ~ if (.y == "Date") {
@@ -56,9 +56,9 @@ coerce_to_hub_schema <- function(
     )
   }
   if (as_arrow_table) {
-    return(arrow::arrow_table(tbl))
+    arrow::arrow_table(tbl)
   } else {
-    return(tibble::as_tibble(tbl))
+    tibble::as_tibble(tbl)
   }
 }
 
@@ -68,13 +68,13 @@ coerce_to_character <- function(tbl, as_arrow_table = FALSE) {
   chr_schema <- purrr::map(
     names(tbl),
     ~ arrow::field(.x, arrow::string())
-  ) %>%
+  ) |>
     arrow::schema()
 
   tbl <- arrow::arrow_table(tbl)$cast(chr_schema)
   if (as_arrow_table) {
-    return(tbl)
+    tbl
   } else {
-    return(tibble::as_tibble(tbl))
+    tibble::as_tibble(tbl)
   }
 }

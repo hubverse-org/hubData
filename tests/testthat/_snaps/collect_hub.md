@@ -22,7 +22,7 @@
 ---
 
     Code
-      dplyr::filter(hub_con, is.na(output_type_id)) %>% collect_hub()
+      collect_hub(dplyr::filter(hub_con, is.na(output_type_id)))
     Output
       # A tibble: 1 x 9
         model_id     origin_date target         horizon location age_group output_type
@@ -33,7 +33,7 @@
 ---
 
     Code
-      dplyr::filter(hub_con, is.na(output_type_id)) %>% collect_hub(remove_empty = TRUE)
+      collect_hub(dplyr::filter(hub_con, is.na(output_type_id)), remove_empty = TRUE)
     Output
       # A tibble: 1 x 8
         model_id  origin_date target horizon location output_type output_type_id value
@@ -43,8 +43,7 @@
 ---
 
     Code
-      dplyr::filter(hub_con, is.na(output_type_id)) %>% dplyr::select(target) %>%
-        collect_hub()
+      collect_hub(dplyr::select(dplyr::filter(hub_con, is.na(output_type_id)), target))
     Message
       ! `model_id` column missing. Attempting to create automatically.
       Cannot coerce to <model_out_tbl>
@@ -58,8 +57,8 @@
 ---
 
     Code
-      dplyr::filter(hub_con, is.na(output_type_id)) %>% dplyr::select(target) %>%
-        collect_hub(silent = TRUE)
+      collect_hub(dplyr::select(dplyr::filter(hub_con, is.na(output_type_id)), target),
+      silent = TRUE)
     Output
       # A tibble: 1 x 1
         target         
@@ -79,7 +78,7 @@
 # collect_hub works on model output directories
 
     Code
-      dplyr::filter(mod_out_con, is.na(output_type_id)) %>% collect_hub()
+      collect_hub(dplyr::filter(mod_out_con, is.na(output_type_id)))
     Output
       # A tibble: 1 x 8
         model_id  origin_date target horizon location output_type output_type_id value
@@ -89,8 +88,8 @@
 ---
 
     Code
-      dplyr::filter(mod_out_con, is.na(output_type_id)) %>% dplyr::select(target) %>%
-        collect_hub()
+      collect_hub(dplyr::select(dplyr::filter(mod_out_con, is.na(output_type_id)),
+      target))
     Message
       ! `model_id` column missing. Attempting to create automatically.
       Cannot coerce to <model_out_tbl>
@@ -104,8 +103,8 @@
 ---
 
     Code
-      dplyr::filter(mod_out_con, is.na(output_type_id)) %>% dplyr::select(target) %>%
-        collect_hub(silent = TRUE)
+      collect_hub(dplyr::select(dplyr::filter(mod_out_con, is.na(output_type_id)),
+      target), silent = TRUE)
     Output
       # A tibble: 1 x 1
         target         

@@ -77,17 +77,17 @@
 #' mod_out_con
 #' # Query hub_connection for data
 #' library(dplyr)
-#' hub_con %>%
+#' hub_con |>
 #'   filter(
 #'     origin_date == "2022-10-08",
 #'     horizon == 2
-#'   ) %>%
+#'   ) |>
 #'   collect_hub()
-#' mod_out_con %>%
+#' mod_out_con |>
 #'   filter(
 #'     origin_date == "2022-10-08",
 #'     horizon == 2
-#'   ) %>%
+#'   ) |>
 #'   collect_hub()
 #' # Ignore a file
 #' connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv"))
@@ -199,7 +199,7 @@ connect_hub.default <- function(
     file_system <- purrr::map_chr(
       dataset$children,
       ~ class(.x$filesystem)[1]
-    ) %>%
+    ) |>
       unique()
   } else {
     file_system <- class(dataset$filesystem)[1]
@@ -310,7 +310,7 @@ connect_hub.SubTreeFileSystem <- function(
     file_system <- purrr::map_chr(
       dataset$children,
       ~ class(.x$filesystem$base_fs)[1]
-    ) %>%
+    ) |>
       unique()
   } else {
     file_system <- class(dataset$filesystem$base_fs)[1]

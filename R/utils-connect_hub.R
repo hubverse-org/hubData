@@ -96,7 +96,7 @@ get_file_format <- function(
     )
   }
 
-  return(config_file_format)
+  config_file_format
 }
 
 #' Locate the model output directory within a hub
@@ -329,14 +329,14 @@ warn_unopened_files <- function(
     unopened_files <- purrr::map(
       purrr::set_names(names(x)[unopened_file_formats]),
       ~ subset_files_by_format(model_out_files, .x)
-    ) %>%
+    ) |>
       # check dir files against files opened in dataset
       purrr::imap(
         function(.x, .y) {
           .x[!normalizePath(.x) %in% normalizePath(dataset_files[[.y]])]
         }
-      ) %>%
-      purrr::list_simplify() %>%
+      ) |>
+      purrr::list_simplify() |>
       purrr::set_names("x")
 
     # Check whether missing files were explicitly ignored. If so, remove

@@ -149,17 +149,17 @@ mod_out_con <- connect_model_output(mod_out_path)
 mod_out_con
 # Query hub_connection for data
 library(dplyr)
-hub_con \%>\%
+hub_con |>
   filter(
     origin_date == "2022-10-08",
     horizon == 2
-  ) \%>\%
+  ) |>
   collect_hub()
-mod_out_con \%>\%
+mod_out_con |>
   filter(
     origin_date == "2022-10-08",
     horizon == 2
-  ) \%>\%
+  ) |>
   collect_hub()
 # Ignore a file
 connect_hub(hub_path, ignore_files = c("README", "2022-10-08-team1-goodmodel.csv"))
