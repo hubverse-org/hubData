@@ -97,31 +97,45 @@
 #' hub_con <- connect_hub(hub_path)
 #' hub_con
 #' }
-connect_hub <- function(hub_path,
-                        file_format = c("csv", "parquet", "arrow"),
-                        output_type_id_datatype = c(
-                          "from_config", "auto", "character",
-                          "double", "integer",
-                          "logical", "Date"
-                        ),
-                        partitions = list(model_id = arrow::utf8()),
-                        skip_checks = TRUE, na = c("NA", ""),
-                        ignore_files = NULL) {
+connect_hub <- function(
+  hub_path,
+  file_format = c("csv", "parquet", "arrow"),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  partitions = list(model_id = arrow::utf8()),
+  skip_checks = TRUE,
+  na = c("NA", ""),
+  ignore_files = NULL
+) {
   UseMethod("connect_hub")
 }
 
 
 #' @export
-connect_hub.default <- function(hub_path,
-                                file_format = c("csv", "parquet", "arrow"),
-                                output_type_id_datatype = c(
-                                  "from_config", "auto", "character",
-                                  "double", "integer",
-                                  "logical", "Date"
-                                ),
-                                partitions = list(model_id = arrow::utf8()),
-                                skip_checks = TRUE, na = c("NA", ""),
-                                ignore_files = NULL) {
+connect_hub.default <- function(
+  hub_path,
+  file_format = c("csv", "parquet", "arrow"),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  partitions = list(model_id = arrow::utf8()),
+  skip_checks = TRUE,
+  na = c("NA", ""),
+  ignore_files = NULL
+) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -135,7 +149,9 @@ connect_hub.default <- function(hub_path,
     cli::cli_abort(c("x" = "Directory {.path {hub_path}} does not exist."))
   }
   if (!dir.exists(fs::path(hub_path, "hub-config"))) {
-    cli::cli_abort(c("x" = "{.path hub-config} directory not found in root of Hub."))
+    cli::cli_abort(c(
+      "x" = "{.path hub-config} directory not found in root of Hub."
+    ))
   }
 
   config_admin <- hubUtils::read_config(hub_path, "admin")
@@ -194,7 +210,8 @@ connect_hub.default <- function(hub_path,
   # files in dataset
   warn_unopened_files(file_format, dataset, model_out_files, ignore_files)
 
-  structure(dataset,
+  structure(
+    dataset,
     class = c("hub_connection", class(dataset)),
     hub_name = hub_name,
     file_format = file_format,
@@ -208,20 +225,23 @@ connect_hub.default <- function(hub_path,
 }
 
 #' @export
-connect_hub.SubTreeFileSystem <- function(hub_path,
-                                          file_format = c("csv", "parquet", "arrow"),
-                                          output_type_id_datatype = c(
-                                            "from_config",
-                                            "auto",
-                                            "character",
-                                            "double",
-                                            "integer",
-                                            "logical",
-                                            "Date"
-                                          ),
-                                          partitions = list(model_id = arrow::utf8()),
-                                          skip_checks = TRUE, na = c("NA", ""),
-                                          ignore_files = NULL) {
+connect_hub.SubTreeFileSystem <- function(
+  hub_path,
+  file_format = c("csv", "parquet", "arrow"),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  partitions = list(model_id = arrow::utf8()),
+  skip_checks = TRUE,
+  na = c("NA", ""),
+  ignore_files = NULL
+) {
   rlang::check_required(hub_path)
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
 
@@ -234,8 +254,10 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   hub_files <- list_hub_files(hub_path)
 
   if (!"hub-config" %in% hub_files) {
-    cli::cli_abort("{.path hub-config} not a directory in bucket
-                       {.path {hub_path$base_path}}")
+    cli::cli_abort(
+      "{.path hub-config} not a directory in bucket
+                       {.path {hub_path$base_path}}"
+    )
   }
 
   config_admin <- hubUtils::read_config(hub_path, "admin")
@@ -253,7 +275,11 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
 
   # Only include files. Ignoring directories prevents unintentionally excluding
   # all files within them
-  model_out_files <- list_model_out_files(model_output_dir, hub_files,  type = "file")
+  model_out_files <- list_model_out_files(
+    model_output_dir,
+    hub_files,
+    type = "file"
+  )
   file_format <- check_file_format(model_out_files, file_format, skip_checks)
 
   # Based on skip_checks param, set a flag that determines whether or not to
@@ -295,7 +321,8 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   # files in dataset
   warn_unopened_files(file_format, dataset, model_out_files, ignore_files)
 
-  structure(dataset,
+  structure(
+    dataset,
     class = c("hub_connection", class(dataset)),
     hub_name = hub_name,
     file_format = file_format,
@@ -308,20 +335,28 @@ connect_hub.SubTreeFileSystem <- function(hub_path,
   )
 }
 
-open_hub_dataset <- function(model_output_dir, model_out_files,
-                             file_format = c("csv", "parquet", "arrow"),
-                             config_tasks,
-                             output_type_id_datatype = c(
-                               "from_config",
-                               "auto", "character",
-                               "double", "integer",
-                               "logical", "Date"
-                             ),
-                             partitions = list(model_id = arrow::utf8()),
-                             exclude_invalid_files, na = c("NA", ""),
-                             ignore_files = c("README", ".DS_Store")) {
+open_hub_dataset <- function(
+  model_output_dir,
+  model_out_files,
+  file_format = c("csv", "parquet", "arrow"),
+  config_tasks,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  partitions = list(model_id = arrow::utf8()),
+  exclude_invalid_files,
+  na = c("NA", ""),
+  ignore_files = c("README", ".DS_Store")
+) {
   file_format <- rlang::arg_match(file_format)
-  schema <- create_hub_schema(config_tasks,
+  schema <- create_hub_schema(
+    config_tasks,
     partitions = partitions,
     output_type_id_datatype = output_type_id_datatype
   )
@@ -331,11 +366,13 @@ open_hub_dataset <- function(model_output_dir, model_out_files,
   ignore_files <- c(
     ignore_files,
     list_invalid_format_files(
-      model_out_files, file_format
+      model_out_files,
+      file_format
     )
   )
 
-  switch(file_format,
+  switch(
+    file_format,
     csv = arrow::open_dataset(
       model_output_dir,
       format = "csv",
@@ -374,20 +411,26 @@ open_hub_dataset <- function(model_output_dir, model_out_files,
   )
 }
 
-open_hub_datasets <- function(model_output_dir, model_out_files,
-                              file_format = c("csv", "parquet", "arrow"),
-                              config_tasks,
-                              output_type_id_datatype = c(
-                                "from_config",
-                                "auto", "character",
-                                "double", "integer",
-                                "logical", "Date"
-                              ),
-                              partitions = list(model_id = arrow::utf8()),
-                              exclude_invalid_files,
-                              na = c("NA", ""),
-                              ignore_files = c("README", ".DS_Store"),
-                              call = rlang::caller_env()) {
+open_hub_datasets <- function(
+  model_output_dir,
+  model_out_files,
+  file_format = c("csv", "parquet", "arrow"),
+  config_tasks,
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  partitions = list(model_id = arrow::utf8()),
+  exclude_invalid_files,
+  na = c("NA", ""),
+  ignore_files = c("README", ".DS_Store"),
+  call = rlang::caller_env()
+) {
   if (length(file_format) == 1L) {
     open_hub_dataset(
       model_output_dir = model_output_dir,

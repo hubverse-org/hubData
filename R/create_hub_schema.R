@@ -34,13 +34,20 @@
 #' hub_path <- system.file("testhubs/simple", package = "hubUtils")
 #' config_tasks <- hubUtils::read_config(hub_path, "tasks")
 #' schema <- create_hub_schema(config_tasks)
-create_hub_schema <- function(config_tasks,
-                              partitions = list(model_id = arrow::utf8()),
-                              output_type_id_datatype = c(
-                                "from_config", "auto", "character",
-                                "double", "integer",
-                                "logical", "Date"
-                              ), r_schema = FALSE) {
+create_hub_schema <- function(
+  config_tasks,
+  partitions = list(model_id = arrow::utf8()),
+  output_type_id_datatype = c(
+    "from_config",
+    "auto",
+    "character",
+    "double",
+    "integer",
+    "logical",
+    "Date"
+  ),
+  r_schema = FALSE
+) {
   output_type_id_datatype <- rlang::arg_match(output_type_id_datatype)
   if (output_type_id_datatype == "from_config") {
     output_type_id_datatype <- config_tasks$output_type_id_datatype
@@ -75,7 +82,8 @@ create_hub_schema <- function(config_tasks,
     output_type_id_type <- output_type_id_datatype
   }
 
-  hub_datatypes <- c(task_id_types,
+  hub_datatypes <- c(
+    task_id_types,
     output_type = "character",
     output_type_id = output_type_id_type,
     value = get_value_type(config_tasks)
@@ -100,9 +108,7 @@ create_hub_schema <- function(config_tasks,
     arrow::schema()
 }
 
-get_task_id_values <- function(config_tasks,
-                               task_id_name,
-                               round = "all") {
+get_task_id_values <- function(config_tasks, task_id_name, round = "all") {
   if (round == "all") {
     model_tasks <- purrr::map(
       config_tasks[["rounds"]],
@@ -118,7 +124,8 @@ get_task_id_values <- function(config_tasks,
       purrr::map_chr(
         config_tasks[["rounds"]],
         ~ .x$round_id
-      ) == round
+      ) ==
+        round
     )
     model_tasks <- purrr::map(
       config_tasks[["rounds"]][round_idx],
@@ -127,14 +134,14 @@ get_task_id_values <- function(config_tasks,
   }
 
   model_tasks %>%
-    purrr::map(~ .x %>%
-      purrr::map(~ .x[["task_ids"]][[task_id_name]])) %>% # nolint: indentation_linter
+    purrr::map(
+      ~ .x %>%
+        purrr::map(~ .x[["task_ids"]][[task_id_name]])
+    ) %>% # nolint: indentation_linter
     unlist(recursive = FALSE)
 }
 
-get_task_id_type <- function(config_tasks,
-                             task_id_name,
-                             round = "all") {
+get_task_id_type <- function(config_tasks, task_id_name, round = "all") {
   values <- get_task_id_values(
     config_tasks,
     task_id_name,

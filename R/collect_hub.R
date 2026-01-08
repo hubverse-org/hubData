@@ -32,9 +32,7 @@ collect_hub <- function(x, silent = FALSE, ...) {
   tbl <- tryCatch(
     dplyr::collect(x),
     error = function(e) {
-      cli::cli_abort(e$message,
-        call = rlang::expr(dplyr::collect(x))
-      )
+      cli::cli_abort(e$message, call = rlang::expr(dplyr::collect(x)))
     }
   )
   tryCatch(

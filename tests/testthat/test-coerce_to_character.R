@@ -6,7 +6,8 @@ test_that("coerce_to_hub_schema works", {
       hub_path,
       "model-output/team1-goodmodel/2022-10-08-team1-goodmodel.csv"
     )
-  ) %>% coerce_to_character()
+  ) %>%
+    coerce_to_character()
 
   expect_snapshot(str(
     coerce_to_hub_schema(tbl, config_tasks)
@@ -15,7 +16,8 @@ test_that("coerce_to_hub_schema works", {
     coerce_to_hub_schema(tbl, config_tasks, as_arrow_table = TRUE)
   )
   expect_snapshot(
-    coerce_to_hub_schema(tbl,
+    coerce_to_hub_schema(
+      tbl,
       config_tasks,
       as_arrow_table = TRUE,
       skip_date_coercion = TRUE

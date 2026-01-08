@@ -4,7 +4,6 @@ test_that("collect_hub works on local simple forecasting hub", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
   hub_con <- connect_hub(hub_path)
 
-
   # Collect whole hub
   expect_snapshot(collect_hub(hub_con))
   expect_s3_class(
@@ -22,7 +21,6 @@ test_that("collect_hub works on local simple forecasting hub", {
       collect_hub(),
     c("model_out_tbl", "tbl_df", "tbl", "data.frame")
   )
-
 
   # Pass arguments to as_model_out_tbl
   expect_snapshot(
@@ -70,7 +68,8 @@ test_that("collect_hub returns NULL with warning when model output folder is emp
 
 
 test_that("collect_hub works on model output directories", {
-  mod_out_path <- system.file("testhubs/simple/model-output",
+  mod_out_path <- system.file(
+    "testhubs/simple/model-output",
     package = "hubUtils"
   )
   mod_out_con <- connect_model_output(mod_out_path)

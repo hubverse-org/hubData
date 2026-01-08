@@ -35,10 +35,16 @@
 #' specified in `round_id` property of `config_tasks`) is set to the value of the
 #' `round_id` argument in the returned output.
 #' @export
-create_model_out_submit_tmpl <- function(hub_con, config_tasks, round_id,
-                                         required_vals_only = FALSE,
-                                         complete_cases_only = TRUE) {
-  lifecycle::deprecate_stop(when = "1.0.0",
-                            what = "create_model_out_submit_tmpl()",
-                            with = "hubValidations::submission_tmpl()")
+create_model_out_submit_tmpl <- function(
+  hub_con,
+  config_tasks,
+  round_id,
+  required_vals_only = FALSE,
+  complete_cases_only = TRUE
+) {
+  lifecycle::deprecate_stop(
+    when = "1.0.0",
+    what = "create_model_out_submit_tmpl()",
+    with = "hubValidations::submission_tmpl()"
+  )
 }
