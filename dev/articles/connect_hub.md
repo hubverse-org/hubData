@@ -232,22 +232,22 @@ To perform the queries, you can use `dplyr`’s
 function:
 
 ``` r
-hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   dplyr::collect()
 #> # A tibble: 276 × 8
 #>    forecast_date horizon target        location output_type output_type_id value
 #>    <date>          <int> <chr>         <chr>    <chr>       <chr>          <dbl>
-#>  1 2023-04-24          1 wk ahead inc… US       quantile    0.01             232
-#>  2 2023-04-24          1 wk ahead inc… US       quantile    0.025            331
-#>  3 2023-04-24          1 wk ahead inc… US       quantile    0.05             423
-#>  4 2023-04-24          1 wk ahead inc… US       quantile    0.1              512
-#>  5 2023-04-24          1 wk ahead inc… US       quantile    0.15             610
-#>  6 2023-04-24          1 wk ahead inc… US       quantile    0.2              670
-#>  7 2023-04-24          1 wk ahead inc… US       quantile    0.25             724
-#>  8 2023-04-24          1 wk ahead inc… US       quantile    0.3              773
-#>  9 2023-04-24          1 wk ahead inc… US       quantile    0.35             812
-#> 10 2023-04-24          1 wk ahead inc… US       quantile    0.4              893
+#>  1 2023-05-01          1 wk ahead inc… US       quantile    0.01               0
+#>  2 2023-05-01          1 wk ahead inc… US       quantile    0.025              0
+#>  3 2023-05-01          1 wk ahead inc… US       quantile    0.05               0
+#>  4 2023-05-01          1 wk ahead inc… US       quantile    0.1              193
+#>  5 2023-05-01          1 wk ahead inc… US       quantile    0.15             495
+#>  6 2023-05-01          1 wk ahead inc… US       quantile    0.2              618
+#>  7 2023-05-01          1 wk ahead inc… US       quantile    0.25             717
+#>  8 2023-05-01          1 wk ahead inc… US       quantile    0.3              774
+#>  9 2023-05-01          1 wk ahead inc… US       quantile    0.35             822
+#> 10 2023-05-01          1 wk ahead inc… US       quantile    0.4              857
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: model_id <chr>
 ```
@@ -266,8 +266,8 @@ which converts the output of
 to a `model_out_tbl` class object where possible:
 
 ``` r
-tbl <- hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+tbl <- hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 
 tbl
@@ -296,22 +296,22 @@ class(tbl)
 Accessing data from hubs in the cloud is exactly the same:
 
 ``` r
-hub_con_cloud %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+hub_con_cloud |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 #> # A tibble: 230 × 9
-#>    model_id     origin_date target        horizon location age_group output_type
-#>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
-#>  1 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  2 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  3 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  4 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  5 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  6 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  7 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  8 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  9 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#> 10 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>    model_id        origin_date target     horizon location age_group output_type
+#>  * <chr>           <date>      <chr>        <int> <chr>    <chr>     <chr>      
+#>  1 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  2 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  3 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  4 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  5 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  6 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  7 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  8 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  9 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#> 10 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -326,12 +326,12 @@ For example, if you wanted to get all quantile predictions for the last
 forecast date in the hub, you might try:
 
 ``` r
-hub_con %>%
+hub_con |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
-  ) %>%
+  ) |>
   hubData::collect_hub()
 #> Error in `forecast_date == max(forecast_date, na.rm = TRUE)`:
 #> ! Expression not supported in filter() in Arrow
@@ -346,9 +346,9 @@ filtering level which does work for arrow and then finish the filtering
 on the in-memory data returned by collect.
 
 ``` r
-hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
-  hubData::collect_hub() %>%
+hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
+  hubData::collect_hub() |>
   dplyr::filter(forecast_date == max(forecast_date))
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
@@ -374,32 +374,32 @@ filter the data in two steps:
 2.  use the last forecast date in the filtering query.
 
 ``` r
-last_forecast <- hub_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
-  dplyr::pull(forecast_date, as_vector = TRUE) %>%
+last_forecast <- hub_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
+  dplyr::pull(forecast_date, as_vector = TRUE) |>
   max(na.rm = TRUE)
 
 
-hub_con %>%
+hub_con |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == last_forecast
-  ) %>%
+  ) |>
   hubData::collect_hub()
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -418,13 +418,13 @@ between Apache Arrow and
 DuckDB](https://duckdb.org/2021/12/03/duck-arrow.html).*
 
 ``` r
-hub_con %>%
-  arrow::to_duckdb() %>%
+hub_con |>
+  arrow::to_duckdb() |>
   dplyr::filter(
     output_type == "quantile",
     location == "US",
     forecast_date == max(forecast_date, na.rm = TRUE)
-  ) %>%
+  ) |>
   hubData::collect_hub()
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
@@ -493,22 +493,22 @@ Accessing data follows the same procedure described for fully configured
 hubs:
 
 ``` r
-mod_out_con %>%
-  dplyr::filter(output_type == "quantile", location == "US") %>%
+mod_out_con |>
+  dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 #> # A tibble: 138 × 8
 #>    model_id origin_date target horizon location output_type output_type_id value
 #>  * <chr>    <date>      <chr>    <int> <chr>    <chr>                <dbl> <int>
-#>  1 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135
-#>  2 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137
-#>  3 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139
-#>  4 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140
-#>  5 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141
-#>  6 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141
-#>  7 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142
-#>  8 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143
-#>  9 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144
-#> 10 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145
+#>  1 team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135
+#>  2 team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137
+#>  3 team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139
+#>  4 team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140
+#>  5 team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141
+#>  6 team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141
+#>  7 team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142
+#>  8 team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143
+#>  9 team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144
+#> 10 team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145
 #> # ℹ 128 more rows
 ```
 

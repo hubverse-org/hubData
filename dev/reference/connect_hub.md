@@ -259,11 +259,11 @@ library(dplyr)
 #> The following objects are masked from ‘package:base’:
 #> 
 #>     intersect, setdiff, setequal, union
-hub_con %>%
+hub_con |>
   filter(
     origin_date == "2022-10-08",
     horizon == 2
-  ) %>%
+  ) |>
   collect_hub()
 #> # A tibble: 69 × 9
 #>    model_id     origin_date target        horizon location age_group output_type
@@ -280,11 +280,11 @@ hub_con %>%
 #> 10 hub-baseline 2022-10-08  wk inc flu h…       2 US       NA        quantile   
 #> # ℹ 59 more rows
 #> # ℹ 2 more variables: output_type_id <chr>, value <int>
-mod_out_con %>%
+mod_out_con |>
   filter(
     origin_date == "2022-10-08",
     horizon == 2
-  ) %>%
+  ) |>
   collect_hub()
 #> # A tibble: 69 × 8
 #>    model_id origin_date target horizon location output_type output_type_id value

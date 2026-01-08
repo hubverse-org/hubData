@@ -297,22 +297,22 @@ construct querying pipelines.</p>
 <p>To perform the queries, you can use <code>dplyr</code>’s
 <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 276 × 8</span></span></span>
 <span><span class="co">#&gt;    forecast_date horizon target        location output_type output_type_id value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-04-24          1 wk ahead inc… US       quantile    0.01             232</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-04-24          1 wk ahead inc… US       quantile    0.025            331</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-04-24          1 wk ahead inc… US       quantile    0.05             423</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-04-24          1 wk ahead inc… US       quantile    0.1              512</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-04-24          1 wk ahead inc… US       quantile    0.15             610</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-04-24          1 wk ahead inc… US       quantile    0.2              670</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-04-24          1 wk ahead inc… US       quantile    0.25             724</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-04-24          1 wk ahead inc… US       quantile    0.3              773</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-04-24          1 wk ahead inc… US       quantile    0.35             812</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-04-24          1 wk ahead inc… US       quantile    0.4              893</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-05-01          1 wk ahead inc… US       quantile    0.01               0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-05-01          1 wk ahead inc… US       quantile    0.025              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-05-01          1 wk ahead inc… US       quantile    0.05               0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-05-01          1 wk ahead inc… US       quantile    0.1              193</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-05-01          1 wk ahead inc… US       quantile    0.15             495</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-05-01          1 wk ahead inc… US       quantile    0.2              618</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-05-01          1 wk ahead inc… US       quantile    0.25             717</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-05-01          1 wk ahead inc… US       quantile    0.3              774</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-05-01          1 wk ahead inc… US       quantile    0.35             822</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-05-01          1 wk ahead inc… US       quantile    0.4              857</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 266 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: model_id &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Note however that in the above example, while the output contains the
@@ -330,8 +330,8 @@ columns is not standardised.</p>
 <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">dplyr::collect()</a></code> to a <code>model_out_tbl</code> class
 object where possible:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span></span>
@@ -359,22 +359,22 @@ object where possible:</p>
 </h3>
 <p>Accessing data from hubs in the cloud is exactly the same:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hub_con_cloud</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">hub_con_cloud</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 230 × 9</span></span></span>
-<span><span class="co">#&gt;    model_id     origin_date target        horizon location age_group output_type</span></span>
-<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   </span></span>
+<span><span class="co">#&gt;    model_id        origin_date target     horizon location age_group output_type</span></span>
+<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> team1-goodmodel 2022-10-08  wk inc fl…       1 US       <span style="color: #BB0000;">NA</span>        quantile   </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 220 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: output_type_id &lt;dbl&gt;, value &lt;int&gt;</span></span></span></code></pre></div>
 </div>
@@ -388,12 +388,12 @@ datasets.</p>
 <p>For example, if you wanted to get all quantile predictions for the
 last forecast date in the hub, you might try:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>,</span>
 <span>    <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span>,</span>
 <span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">forecast_date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `forecast_date == max(forecast_date, na.rm = TRUE)`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Expression not supported in filter() in Arrow</span></span>
@@ -405,9 +405,9 @@ types.</p>
 filtering level which does work for arrow and then finish the filtering
 on the in-memory data returned by collect.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">forecast_date</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">forecast_date</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id     forecast_date horizon target location output_type output_type_id</span></span>
@@ -431,32 +431,32 @@ to filter the data in two steps:</p>
 <li>use the last forecast date in the filtering query.</li>
 </ol>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">last_forecast</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">forecast_date</span>, as_vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">last_forecast</span> <span class="op">&lt;-</span> <span class="va">hub_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">forecast_date</span>, as_vector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">hub_con</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>,</span>
 <span>    <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span>,</span>
 <span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="va">last_forecast</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id     forecast_date horizon target location output_type output_type_id</span></span>
 <span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 82 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: value &lt;dbl&gt;</span></span></span></code></pre></div>
 <div class="section level4">
@@ -471,13 +471,13 @@ data before collecting.</p>
 Arrow: A zero-copy data integration between Apache Arrow and
 DuckDB</a>.</em></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/to_duckdb.html" class="external-link">to_duckdb</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">hub_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/to_duckdb.html" class="external-link">to_duckdb</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>,</span>
 <span>    <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span>,</span>
 <span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">forecast_date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id     forecast_date horizon target location output_type output_type_id</span></span>
@@ -541,22 +541,22 @@ correctly cannot be guaranteed across files.</p>
 <p>Accessing data follows the same procedure described for fully
 configured hubs:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod_out_con</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">mod_out_con</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">output_type</span> <span class="op">==</span> <span class="st">"quantile"</span>, <span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">hubData</span><span class="fu">::</span><span class="fu"><a href="../reference/collect_hub.html">collect_hub</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 138 × 8</span></span></span>
 <span><span class="co">#&gt;    model_id origin_date target horizon location output_type output_type_id value</span></span>
 <span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 128 more rows</span></span></span></code></pre></div>
 <p>And connecting to cloud model output data follows the same procedure
 described for fully configured cloud hubs:</p>
