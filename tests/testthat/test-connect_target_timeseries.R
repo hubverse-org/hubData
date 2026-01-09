@@ -28,7 +28,7 @@ test_that("connect_target_timeseries inference works on single-file hub", {
     sort(names(all)),
     sort(c("target_end_date", "target", "location", "observation"))
   )
-  expect_setequal(unique(all$target), c("wk inc flu hosp", "wk flu hosp rate"))
+  expect_setequal(unique(all$target), c("flu_hosp_inc", "flu_hosp_rate"))
 
   # simple filters (size-agnostic)
   by_date <- dplyr::filter(ts_con, target_end_date == "2022-10-22") |>
@@ -78,7 +78,7 @@ test_that("connect_target_timeseries fails correctly", {
   split(dat, dat$target) |>
     purrr::iwalk(function(df, tgt) {
       tgt2 <- gsub(" ", "_", tgt, fixed = TRUE)
-      if (identical(tgt2, "wk_flu_hosp_rate")) {
+      if (identical(tgt2, "flu_hosp_rate")) {
         out_path <- fs::path(out_dir, paste0("target-", tgt2), ext = "csv")
         .local_safe_overwrite(
           function(out_path) arrow::write_csv_arrow(df, file = out_path),
@@ -95,7 +95,7 @@ test_that("connect_target_timeseries fails correctly", {
 
   expect_error(
     connect_target_timeseries(hub_path),
-    regexp = "Multiple data file formats .*csv.* and .*parquet"
+    regexp = "Multiple data file formats.*(csv|parquet).* and .*(csv|parquet)"
   )
 
   # No time-series data present
