@@ -54,7 +54,7 @@ test_that("connect_target_oracle_output inference on single file works", {
   expect_setequal(unique(all$location), c("US", "01", "02"))
   expect_setequal(
     unique(all$target),
-    c("wk inc flu hosp", "wk flu hosp rate", "wk flu hosp rate category")
+    c("flu_hosp_inc", "flu_hosp_rate", "flu_hosp_rate_cat")
   )
 
   # simple filters (no magic counts)
@@ -65,7 +65,7 @@ test_that("connect_target_oracle_output inference on single file works", {
   expect_setequal(unique(filter_date$location), c("US", "01", "02"))
   expect_setequal(
     unique(filter_date$target),
-    c("wk inc flu hosp", "wk flu hosp rate", "wk flu hosp rate category")
+    c("flu_hosp_inc", "flu_hosp_rate", "flu_hosp_rate_cat")
   )
   expect_setequal(
     as.character(unique(filter_date$target_end_date)),
@@ -108,7 +108,7 @@ test_that("connect_target_oracle_output fails correctly", {
   split(dat, dat$target) |>
     purrr::iwalk(function(df, tgt) {
       tgt <- gsub(" ", "_", tgt, fixed = TRUE)
-      if (identical(tgt, "wk_flu_hosp_rate")) {
+      if (identical(tgt, "flu_hosp_rate")) {
         out_path <- fs::path(out_dir, paste0("target-", tgt), ext = "csv")
         .local_safe_overwrite(
           function(out_path) arrow::write_csv_arrow(df, file = out_path),
@@ -124,7 +124,7 @@ test_that("connect_target_oracle_output fails correctly", {
     })
   expect_error(
     connect_target_oracle_output(hub_path),
-    regexp = "Multiple data file formats .*csv.* and .*parquet"
+    regexp = "Multiple data file formats.*(csv|parquet).* and .*(csv|parquet)"
   )
 
   # No oracle-output data present
