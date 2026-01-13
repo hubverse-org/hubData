@@ -120,35 +120,35 @@ names(ts_con_csv)
 # Collect and filter as usual
 ts_con_csv |> dplyr::collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target          location observation
-#>    <date>          <chr>           <chr>          <dbl>
-#>  1 2022-10-22      wk inc flu hosp 02                 3
-#>  2 2022-10-22      wk inc flu hosp 01               141
-#>  3 2022-10-22      wk inc flu hosp US              2380
-#>  4 2022-10-29      wk inc flu hosp 02                14
-#>  5 2022-10-29      wk inc flu hosp 01               262
-#>  6 2022-10-29      wk inc flu hosp US              4353
-#>  7 2022-11-05      wk inc flu hosp 02                10
-#>  8 2022-11-05      wk inc flu hosp 01               360
-#>  9 2022-11-05      wk inc flu hosp US              6571
-#> 10 2022-11-12      wk inc flu hosp 02                20
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 02                 3
+#>  2 2022-10-22      flu_hosp_inc 01               141
+#>  3 2022-10-22      flu_hosp_inc US              2380
+#>  4 2022-10-29      flu_hosp_inc 02                14
+#>  5 2022-10-29      flu_hosp_inc 01               262
+#>  6 2022-10-29      flu_hosp_inc US              4353
+#>  7 2022-11-05      flu_hosp_inc 02                10
+#>  8 2022-11-05      flu_hosp_inc 01               360
+#>  9 2022-11-05      flu_hosp_inc US              6571
+#> 10 2022-11-12      flu_hosp_inc 02                20
 #> # ℹ 56 more rows
 ts_con_csv |>
   dplyr::filter(location == "US") |>
   dplyr::collect()
 #> # A tibble: 22 × 4
-#>    target_end_date target          location observation
-#>    <date>          <chr>           <chr>          <dbl>
-#>  1 2022-10-22      wk inc flu hosp US              2380
-#>  2 2022-10-29      wk inc flu hosp US              4353
-#>  3 2022-11-05      wk inc flu hosp US              6571
-#>  4 2022-11-12      wk inc flu hosp US              8848
-#>  5 2022-11-19      wk inc flu hosp US             11427
-#>  6 2022-11-26      wk inc flu hosp US             19846
-#>  7 2022-12-03      wk inc flu hosp US             26333
-#>  8 2022-12-10      wk inc flu hosp US             23851
-#>  9 2022-12-17      wk inc flu hosp US             21435
-#> 10 2022-12-24      wk inc flu hosp US             19286
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc US              2380
+#>  2 2022-10-29      flu_hosp_inc US              4353
+#>  3 2022-11-05      flu_hosp_inc US              6571
+#>  4 2022-11-12      flu_hosp_inc US              8848
+#>  5 2022-11-19      flu_hosp_inc US             11427
+#>  6 2022-11-26      flu_hosp_inc US             19846
+#>  7 2022-12-03      flu_hosp_inc US             26333
+#>  8 2022-12-10      flu_hosp_inc US             23851
+#>  9 2022-12-17      flu_hosp_inc US             21435
+#> 10 2022-12-24      flu_hosp_inc US             19286
 #> # ℹ 12 more rows
 
 # Example 2: Parquet format (directory) - reordered to hubverse convention
@@ -163,18 +163,18 @@ names(ts_con_parquet)
 # rather than position during collection
 ts_con_parquet |> dplyr::collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target           location observation
-#>    <date>          <chr>            <chr>          <dbl>
-#>  1 2022-10-22      wk flu hosp rate 02             0.422
-#>  2 2022-10-22      wk flu hosp rate 01             2.78 
-#>  3 2022-10-22      wk flu hosp rate US             0.716
-#>  4 2022-10-29      wk flu hosp rate 02             1.97 
-#>  5 2022-10-29      wk flu hosp rate 01             5.17 
-#>  6 2022-10-29      wk flu hosp rate US             1.31 
-#>  7 2022-11-05      wk flu hosp rate 02             1.41 
-#>  8 2022-11-05      wk flu hosp rate 01             7.11 
-#>  9 2022-11-05      wk flu hosp rate US             1.98 
-#> 10 2022-11-12      wk flu hosp rate 02             2.81 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 02                 3
+#>  2 2022-10-22      flu_hosp_inc 01               141
+#>  3 2022-10-22      flu_hosp_inc US              2380
+#>  4 2022-10-29      flu_hosp_inc 02                14
+#>  5 2022-10-29      flu_hosp_inc 01               262
+#>  6 2022-10-29      flu_hosp_inc US              4353
+#>  7 2022-11-05      flu_hosp_inc 02                10
+#>  8 2022-11-05      flu_hosp_inc 01               360
+#>  9 2022-11-05      flu_hosp_inc US              6571
+#> 10 2022-11-12      flu_hosp_inc 02                20
 #> # ℹ 56 more rows
 
 # Both formats support the same filtering operations
@@ -182,14 +182,14 @@ ts_con_parquet |>
   dplyr::filter(target_end_date ==  "2022-12-31") |>
   dplyr::collect()
 #> # A tibble: 6 × 4
-#>   target_end_date target           location observation
-#>   <date>          <chr>            <chr>          <dbl>
-#> 1 2022-12-31      wk flu hosp rate 02              6.18
-#> 2 2022-12-31      wk flu hosp rate 01              2.76
-#> 3 2022-12-31      wk flu hosp rate US              5.83
-#> 4 2022-12-31      wk inc flu hosp  02             44   
-#> 5 2022-12-31      wk inc flu hosp  01            140   
-#> 6 2022-12-31      wk inc flu hosp  US          19369   
+#>   target_end_date target        location observation
+#>   <date>          <chr>         <chr>          <dbl>
+#> 1 2022-12-31      flu_hosp_inc  02             44   
+#> 2 2022-12-31      flu_hosp_inc  01            140   
+#> 3 2022-12-31      flu_hosp_inc  US          19369   
+#> 4 2022-12-31      flu_hosp_rate 02              6.18
+#> 5 2022-12-31      flu_hosp_rate 01              2.76
+#> 6 2022-12-31      flu_hosp_rate US              5.83
 
 if (FALSE) { # \dontrun{
 # Access Target time-series data from a cloud hub
