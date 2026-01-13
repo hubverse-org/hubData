@@ -346,11 +346,11 @@ oo_con |>
 #> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
 #> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
-#> 14 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#> 15 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#> 16 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#> 17 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#> 18 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 14 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 15 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 #> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
 ```
 

@@ -2,6 +2,8 @@
 
 ## hubData (development version)
 
+## hubData 2.1.0
+
 ### New features and improvements
 
 - Added `date_col` parameter to

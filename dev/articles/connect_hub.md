@@ -499,16 +499,16 @@ mod_out_con |>
 #> # A tibble: 138 × 8
 #>    model_id origin_date target horizon location output_type output_type_id value
 #>  * <chr>    <date>      <chr>    <int> <chr>    <chr>                <dbl> <int>
-#>  1 team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135
-#>  2 team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137
-#>  3 team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139
-#>  4 team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140
-#>  5 team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141
-#>  6 team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141
-#>  7 team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142
-#>  8 team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143
-#>  9 team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144
-#> 10 team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145
+#>  1 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135
+#>  2 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137
+#>  3 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139
+#>  4 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140
+#>  5 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141
+#>  6 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141
+#>  7 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142
+#>  8 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143
+#>  9 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144
+#> 10 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145
 #> # ℹ 128 more rows
 ```
 
