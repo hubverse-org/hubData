@@ -19,7 +19,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/hubverse-org/hubData/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/hubverse-org/hubData/blob/v2.1.0/DESCRIPTION)
 
 Krystalli A (2026). *hubData: Tools for accessing and working with
 hubverse data*. R package version 2.1.0,

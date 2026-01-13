@@ -63,7 +63,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Accessing Target Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubData/blob/main/vignettes/articles/connect_target_data.Rmd" class="external-link"><code>vignettes/articles/connect_target_data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubData/blob/v2.1.0/vignettes/articles/connect_target_data.Rmd" class="external-link"><code>vignettes/articles/connect_target_data.Rmd</code></a></small>
       <div class="d-none name"><code>connect_target_data.Rmd</code></div>
     </div>
 
@@ -253,18 +253,18 @@ data:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">location</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 4</span></span></span>
-<span><span class="co">#&gt;    target_end_date target        location observation</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_rate US             0.716</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-29      flu_hosp_rate US             1.31 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-11-05      flu_hosp_rate US             1.98 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-11-12      flu_hosp_rate US             2.66 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-11-19      flu_hosp_rate US             3.44 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-11-26      flu_hosp_rate US             5.97 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-03      flu_hosp_rate US             7.93 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-10      flu_hosp_rate US             7.18 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-17      flu_hosp_rate US             6.45 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-24      flu_hosp_rate US             5.81 </span></span>
+<span><span class="co">#&gt;    target_end_date target       location observation</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_inc US              <span style="text-decoration: underline;">2</span>380</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-29      flu_hosp_inc US              <span style="text-decoration: underline;">4</span>353</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-11-05      flu_hosp_inc US              <span style="text-decoration: underline;">6</span>571</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-11-12      flu_hosp_inc US              <span style="text-decoration: underline;">8</span>848</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-11-19      flu_hosp_inc US             <span style="text-decoration: underline;">11</span>427</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-11-26      flu_hosp_inc US             <span style="text-decoration: underline;">19</span>846</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-03      flu_hosp_inc US             <span style="text-decoration: underline;">26</span>333</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-10      flu_hosp_inc US             <span style="text-decoration: underline;">23</span>851</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-17      flu_hosp_inc US             <span style="text-decoration: underline;">21</span>435</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-24      flu_hosp_inc US             <span style="text-decoration: underline;">19</span>286</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 12 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Filter by date range</span></span>
@@ -401,23 +401,23 @@ For <code>pmf</code> or <code>cdf</code> output types,
 <span><span class="co">#&gt;    target_end_date target       location output_type output_type_id oracle_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      flu_hosp_inc US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      flu_hosp_inc US       quantile    <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      flu_hosp_ra… US       cdf         1                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      flu_hosp_ra… US       cdf         2                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      flu_hosp_ra… US       cdf         3                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      flu_hosp_ra… US       cdf         4                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      flu_hosp_ra… US       cdf         5                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      flu_hosp_ra… US       cdf         6                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      flu_hosp_ra… US       cdf         7                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      flu_hosp_ra… US       cdf         8                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      flu_hosp_ra… US       cdf         9                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      flu_hosp_ra… US       cdf         10                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      flu_hosp_ra… US       cdf         11                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      flu_hosp_ra… US       cdf         12                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      flu_hosp_ra… US       pmf         low                       0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      flu_hosp_ra… US       pmf         high                      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2022-12-31      flu_hosp_ra… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      flu_hosp_ra… US       cdf         1                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      flu_hosp_ra… US       cdf         2                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      flu_hosp_ra… US       cdf         3                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      flu_hosp_ra… US       cdf         4                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      flu_hosp_ra… US       cdf         5                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      flu_hosp_ra… US       cdf         6                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      flu_hosp_ra… US       cdf         7                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      flu_hosp_ra… US       cdf         8                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      flu_hosp_ra… US       cdf         9                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      flu_hosp_ra… US       cdf         10                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      flu_hosp_ra… US       cdf         11                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      flu_hosp_ra… US       cdf         12                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      flu_hosp_ra… US       pmf         low                       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      flu_hosp_ra… US       pmf         high                      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      flu_hosp_ra… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2022-12-31      flu_hosp_inc US       quantile    <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 2022-12-31      flu_hosp_inc US       sample      <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span></code></pre></div>
 </div>
 </div>
