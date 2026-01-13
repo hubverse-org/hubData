@@ -8,6 +8,7 @@ as an arrow dataset.
 ``` r
 connect_target_oracle_output(
   hub_path = ".",
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   output_type_id_datatype = c("from_config", "auto", "character", "double", "integer",
@@ -30,6 +31,14 @@ connect_target_oracle_output(
   GCS)](https://arrow.apache.org/docs/r/articles/fs.html) in the `arrow`
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
+
+- date_col:
+
+  Optional column name to be interpreted as date. Default is `NULL`.
+  Useful when the required date column is a partitioning column in the
+  target data and does not have the same name as a date typed task ID
+  variable in the config. **Note**: Ignored when `target-data.json`
+  exists (v6+); date column is read from config.
 
 - na:
 
@@ -135,16 +144,16 @@ oo_con_csv |> dplyr::collect()
 #> # A tibble: 627 × 6
 #>    location target_end_date target       output_type output_type_id oracle_value
 #>    <chr>    <date>          <chr>        <chr>       <chr>                 <dbl>
-#>  1 US       2022-10-22      wk flu hosp… cdf         1                         1
-#>  2 US       2022-10-22      wk flu hosp… cdf         2                         1
-#>  3 US       2022-10-22      wk flu hosp… cdf         3                         1
-#>  4 US       2022-10-22      wk flu hosp… cdf         4                         1
-#>  5 US       2022-10-22      wk flu hosp… cdf         5                         1
-#>  6 US       2022-10-22      wk flu hosp… cdf         6                         1
-#>  7 US       2022-10-22      wk flu hosp… cdf         7                         1
-#>  8 US       2022-10-22      wk flu hosp… cdf         8                         1
-#>  9 US       2022-10-22      wk flu hosp… cdf         9                         1
-#> 10 US       2022-10-22      wk flu hosp… cdf         10                        1
+#>  1 US       2022-10-22      flu_hosp_ra… cdf         1                         1
+#>  2 US       2022-10-22      flu_hosp_ra… cdf         2                         1
+#>  3 US       2022-10-22      flu_hosp_ra… cdf         3                         1
+#>  4 US       2022-10-22      flu_hosp_ra… cdf         4                         1
+#>  5 US       2022-10-22      flu_hosp_ra… cdf         5                         1
+#>  6 US       2022-10-22      flu_hosp_ra… cdf         6                         1
+#>  7 US       2022-10-22      flu_hosp_ra… cdf         7                         1
+#>  8 US       2022-10-22      flu_hosp_ra… cdf         8                         1
+#>  9 US       2022-10-22      flu_hosp_ra… cdf         9                         1
+#> 10 US       2022-10-22      flu_hosp_ra… cdf         10                        1
 #> # ℹ 617 more rows
 oo_con_csv |>
   dplyr::filter(location == "US") |>
@@ -152,16 +161,16 @@ oo_con_csv |>
 #> # A tibble: 209 × 6
 #>    location target_end_date target       output_type output_type_id oracle_value
 #>    <chr>    <date>          <chr>        <chr>       <chr>                 <dbl>
-#>  1 US       2022-10-22      wk flu hosp… cdf         1                         1
-#>  2 US       2022-10-22      wk flu hosp… cdf         2                         1
-#>  3 US       2022-10-22      wk flu hosp… cdf         3                         1
-#>  4 US       2022-10-22      wk flu hosp… cdf         4                         1
-#>  5 US       2022-10-22      wk flu hosp… cdf         5                         1
-#>  6 US       2022-10-22      wk flu hosp… cdf         6                         1
-#>  7 US       2022-10-22      wk flu hosp… cdf         7                         1
-#>  8 US       2022-10-22      wk flu hosp… cdf         8                         1
-#>  9 US       2022-10-22      wk flu hosp… cdf         9                         1
-#> 10 US       2022-10-22      wk flu hosp… cdf         10                        1
+#>  1 US       2022-10-22      flu_hosp_ra… cdf         1                         1
+#>  2 US       2022-10-22      flu_hosp_ra… cdf         2                         1
+#>  3 US       2022-10-22      flu_hosp_ra… cdf         3                         1
+#>  4 US       2022-10-22      flu_hosp_ra… cdf         4                         1
+#>  5 US       2022-10-22      flu_hosp_ra… cdf         5                         1
+#>  6 US       2022-10-22      flu_hosp_ra… cdf         6                         1
+#>  7 US       2022-10-22      flu_hosp_ra… cdf         7                         1
+#>  8 US       2022-10-22      flu_hosp_ra… cdf         8                         1
+#>  9 US       2022-10-22      flu_hosp_ra… cdf         9                         1
+#> 10 US       2022-10-22      flu_hosp_ra… cdf         10                        1
 #> # ℹ 199 more rows
 
 # Example 2: Parquet format (directory) - reordered to hubverse convention
@@ -179,16 +188,16 @@ oo_con_parquet |> dplyr::collect()
 #> # A tibble: 627 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-10-22      wk flu hosp… US       cdf         1                         1
-#>  2 2022-10-22      wk flu hosp… US       cdf         2                         1
-#>  3 2022-10-22      wk flu hosp… US       cdf         3                         1
-#>  4 2022-10-22      wk flu hosp… US       cdf         4                         1
-#>  5 2022-10-22      wk flu hosp… US       cdf         5                         1
-#>  6 2022-10-22      wk flu hosp… US       cdf         6                         1
-#>  7 2022-10-22      wk flu hosp… US       cdf         7                         1
-#>  8 2022-10-22      wk flu hosp… US       cdf         8                         1
-#>  9 2022-10-22      wk flu hosp… US       cdf         9                         1
-#> 10 2022-10-22      wk flu hosp… US       cdf         10                        1
+#>  1 2022-10-22      flu_hosp_ra… US       cdf         1                         1
+#>  2 2022-10-22      flu_hosp_ra… US       cdf         2                         1
+#>  3 2022-10-22      flu_hosp_ra… US       cdf         3                         1
+#>  4 2022-10-22      flu_hosp_ra… US       cdf         4                         1
+#>  5 2022-10-22      flu_hosp_ra… US       cdf         5                         1
+#>  6 2022-10-22      flu_hosp_ra… US       cdf         6                         1
+#>  7 2022-10-22      flu_hosp_ra… US       cdf         7                         1
+#>  8 2022-10-22      flu_hosp_ra… US       cdf         8                         1
+#>  9 2022-10-22      flu_hosp_ra… US       cdf         9                         1
+#> 10 2022-10-22      flu_hosp_ra… US       cdf         10                        1
 #> # ℹ 617 more rows
 
 # Both formats support the same filtering operations
@@ -198,16 +207,16 @@ oo_con_parquet |>
 #> # A tibble: 57 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-12-31      wk flu hosp… US       cdf         1                         0
-#>  2 2022-12-31      wk flu hosp… US       cdf         2                         0
-#>  3 2022-12-31      wk flu hosp… US       cdf         3                         0
-#>  4 2022-12-31      wk flu hosp… US       cdf         4                         0
-#>  5 2022-12-31      wk flu hosp… US       cdf         5                         0
-#>  6 2022-12-31      wk flu hosp… US       cdf         6                         1
-#>  7 2022-12-31      wk flu hosp… US       cdf         7                         1
-#>  8 2022-12-31      wk flu hosp… US       cdf         8                         1
-#>  9 2022-12-31      wk flu hosp… US       cdf         9                         1
-#> 10 2022-12-31      wk flu hosp… US       cdf         10                        1
+#>  1 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  2 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  3 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         7                         1
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         8                         1
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         9                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> # ℹ 47 more rows
 
 # Get distinct target_end_date values

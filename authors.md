@@ -19,16 +19,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/hubverse-org/hubData/blob/v2.0.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/hubverse-org/hubData/blob/main/DESCRIPTION)
 
-Krystalli A (2025). *hubData: Tools for accessing and working with
-hubverse data*. R package version 2.0.0,
+Krystalli A (2026). *hubData: Tools for accessing and working with
+hubverse data*. R package version 2.1.0,
 <https://hubverse-org.github.io/hubData>.
 
     @Manual{,
       title = {hubData: Tools for accessing and working with hubverse data},
       author = {Anna Krystalli},
-      year = {2025},
-      note = {R package version 2.0.0},
+      year = {2026},
+      note = {R package version 2.1.0},
       url = {https://hubverse-org.github.io/hubData},
     }

@@ -39,7 +39,7 @@ case a `tibble` is returned.
 hub_path <- system.file("testhubs/simple", package = "hubUtils")
 hub_con <- connect_hub(hub_path)
 # Collect all data in a hub
-hub_con %>% collect_hub()
+hub_con |> collect_hub()
 #> # A tibble: 599 × 9
 #>    model_id     origin_date target        horizon location age_group output_type
 #>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
@@ -56,8 +56,8 @@ hub_con %>% collect_hub()
 #> # ℹ 589 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 # Filter data before collecting
-hub_con %>%
-  dplyr::filter(is.na(output_type_id)) %>%
+hub_con |>
+  dplyr::filter(is.na(output_type_id)) |>
   collect_hub()
 #> # A tibble: 1 × 9
 #>   model_id     origin_date target         horizon location age_group output_type
@@ -65,7 +65,7 @@ hub_con %>%
 #> 1 hub-baseline 2022-10-01  wk inc flu ho…       1 US       NA        mean       
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 # Pass arguments to as_model_out_tbl()
-dplyr::filter(hub_con, is.na(output_type_id)) %>%
+dplyr::filter(hub_con, is.na(output_type_id)) |>
   collect_hub(remove_empty = TRUE)
 #> # A tibble: 1 × 8
 #>   model_id  origin_date target horizon location output_type output_type_id value

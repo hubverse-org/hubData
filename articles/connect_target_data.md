@@ -152,18 +152,18 @@ You can query and collect data from the connection using `dplyr` verbs:
 ts_con |>
   collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target           location observation
-#>    <date>          <chr>            <chr>          <dbl>
-#>  1 2022-10-22      wk flu hosp rate 02             0.422
-#>  2 2022-10-22      wk flu hosp rate 01             2.78 
-#>  3 2022-10-22      wk flu hosp rate US             0.716
-#>  4 2022-10-29      wk flu hosp rate 02             1.97 
-#>  5 2022-10-29      wk flu hosp rate 01             5.17 
-#>  6 2022-10-29      wk flu hosp rate US             1.31 
-#>  7 2022-11-05      wk flu hosp rate 02             1.41 
-#>  8 2022-11-05      wk flu hosp rate 01             7.11 
-#>  9 2022-11-05      wk flu hosp rate US             1.98 
-#> 10 2022-11-12      wk flu hosp rate 02             2.81 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 02                 3
+#>  2 2022-10-22      flu_hosp_inc 01               141
+#>  3 2022-10-22      flu_hosp_inc US              2380
+#>  4 2022-10-29      flu_hosp_inc 02                14
+#>  5 2022-10-29      flu_hosp_inc 01               262
+#>  6 2022-10-29      flu_hosp_inc US              4353
+#>  7 2022-11-05      flu_hosp_inc 02                10
+#>  8 2022-11-05      flu_hosp_inc 01               360
+#>  9 2022-11-05      flu_hosp_inc US              6571
+#> 10 2022-11-12      flu_hosp_inc 02                20
 #> # ℹ 56 more rows
 ```
 
@@ -177,18 +177,18 @@ ts_con |>
   filter(location == "US") |>
   collect()
 #> # A tibble: 22 × 4
-#>    target_end_date target           location observation
-#>    <date>          <chr>            <chr>          <dbl>
-#>  1 2022-10-22      wk flu hosp rate US             0.716
-#>  2 2022-10-29      wk flu hosp rate US             1.31 
-#>  3 2022-11-05      wk flu hosp rate US             1.98 
-#>  4 2022-11-12      wk flu hosp rate US             2.66 
-#>  5 2022-11-19      wk flu hosp rate US             3.44 
-#>  6 2022-11-26      wk flu hosp rate US             5.97 
-#>  7 2022-12-03      wk flu hosp rate US             7.93 
-#>  8 2022-12-10      wk flu hosp rate US             7.18 
-#>  9 2022-12-17      wk flu hosp rate US             6.45 
-#> 10 2022-12-24      wk flu hosp rate US             5.81 
+#>    target_end_date target        location observation
+#>    <date>          <chr>         <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_rate US             0.716
+#>  2 2022-10-29      flu_hosp_rate US             1.31 
+#>  3 2022-11-05      flu_hosp_rate US             1.98 
+#>  4 2022-11-12      flu_hosp_rate US             2.66 
+#>  5 2022-11-19      flu_hosp_rate US             3.44 
+#>  6 2022-11-26      flu_hosp_rate US             5.97 
+#>  7 2022-12-03      flu_hosp_rate US             7.93 
+#>  8 2022-12-10      flu_hosp_rate US             7.18 
+#>  9 2022-12-17      flu_hosp_rate US             6.45 
+#> 10 2022-12-24      flu_hosp_rate US             5.81 
 #> # ℹ 12 more rows
 
 # Filter by date range
@@ -196,18 +196,18 @@ ts_con |>
   filter(target_end_date >= "2022-10-01") |>
   collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target           location observation
-#>    <date>          <chr>            <chr>          <dbl>
-#>  1 2022-10-22      wk flu hosp rate 02             0.422
-#>  2 2022-10-22      wk flu hosp rate 01             2.78 
-#>  3 2022-10-22      wk flu hosp rate US             0.716
-#>  4 2022-10-29      wk flu hosp rate 02             1.97 
-#>  5 2022-10-29      wk flu hosp rate 01             5.17 
-#>  6 2022-10-29      wk flu hosp rate US             1.31 
-#>  7 2022-11-05      wk flu hosp rate 02             1.41 
-#>  8 2022-11-05      wk flu hosp rate 01             7.11 
-#>  9 2022-11-05      wk flu hosp rate US             1.98 
-#> 10 2022-11-12      wk flu hosp rate 02             2.81 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 02                 3
+#>  2 2022-10-22      flu_hosp_inc 01               141
+#>  3 2022-10-22      flu_hosp_inc US              2380
+#>  4 2022-10-29      flu_hosp_inc 02                14
+#>  5 2022-10-29      flu_hosp_inc 01               262
+#>  6 2022-10-29      flu_hosp_inc US              4353
+#>  7 2022-11-05      flu_hosp_inc 02                10
+#>  8 2022-11-05      flu_hosp_inc 01               360
+#>  9 2022-11-05      flu_hosp_inc US              6571
+#> 10 2022-11-12      flu_hosp_inc 02                20
 #> # ℹ 56 more rows
 
 # Combine multiple filters
@@ -218,18 +218,18 @@ ts_con |>
   ) |>
   collect()
 #> # A tibble: 44 × 4
-#>    target_end_date target           location observation
-#>    <date>          <chr>            <chr>          <dbl>
-#>  1 2022-10-22      wk flu hosp rate 01             2.78 
-#>  2 2022-10-22      wk flu hosp rate US             0.716
-#>  3 2022-10-29      wk flu hosp rate 01             5.17 
-#>  4 2022-10-29      wk flu hosp rate US             1.31 
-#>  5 2022-11-05      wk flu hosp rate 01             7.11 
-#>  6 2022-11-05      wk flu hosp rate US             1.98 
-#>  7 2022-11-12      wk flu hosp rate 01             5.98 
-#>  8 2022-11-12      wk flu hosp rate US             2.66 
-#>  9 2022-11-19      wk flu hosp rate 01             4.46 
-#> 10 2022-11-19      wk flu hosp rate US             3.44 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 01               141
+#>  2 2022-10-22      flu_hosp_inc US              2380
+#>  3 2022-10-29      flu_hosp_inc 01               262
+#>  4 2022-10-29      flu_hosp_inc US              4353
+#>  5 2022-11-05      flu_hosp_inc 01               360
+#>  6 2022-11-05      flu_hosp_inc US              6571
+#>  7 2022-11-12      flu_hosp_inc 01               303
+#>  8 2022-11-12      flu_hosp_inc US              8848
+#>  9 2022-11-19      flu_hosp_inc 01               226
+#> 10 2022-11-19      flu_hosp_inc US             11427
 #> # ℹ 34 more rows
 ```
 
@@ -266,16 +266,16 @@ oo_con |>
 #> # A tibble: 627 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-10-22      wk flu hosp… US       cdf         1                         1
-#>  2 2022-10-22      wk flu hosp… US       cdf         2                         1
-#>  3 2022-10-22      wk flu hosp… US       cdf         3                         1
-#>  4 2022-10-22      wk flu hosp… US       cdf         4                         1
-#>  5 2022-10-22      wk flu hosp… US       cdf         5                         1
-#>  6 2022-10-22      wk flu hosp… US       cdf         6                         1
-#>  7 2022-10-22      wk flu hosp… US       cdf         7                         1
-#>  8 2022-10-22      wk flu hosp… US       cdf         8                         1
-#>  9 2022-10-22      wk flu hosp… US       cdf         9                         1
-#> 10 2022-10-22      wk flu hosp… US       cdf         10                        1
+#>  1 2022-10-22      flu_hosp_ra… US       cdf         1                         1
+#>  2 2022-10-22      flu_hosp_ra… US       cdf         2                         1
+#>  3 2022-10-22      flu_hosp_ra… US       cdf         3                         1
+#>  4 2022-10-22      flu_hosp_ra… US       cdf         4                         1
+#>  5 2022-10-22      flu_hosp_ra… US       cdf         5                         1
+#>  6 2022-10-22      flu_hosp_ra… US       cdf         6                         1
+#>  7 2022-10-22      flu_hosp_ra… US       cdf         7                         1
+#>  8 2022-10-22      flu_hosp_ra… US       cdf         8                         1
+#>  9 2022-10-22      flu_hosp_ra… US       cdf         9                         1
+#> 10 2022-10-22      flu_hosp_ra… US       cdf         10                        1
 #> # ℹ 617 more rows
 ```
 
@@ -292,16 +292,16 @@ oo_con |>
 #> # A tibble: 33 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-10-22      wk inc flu … US       quantile    NA                     2380
-#>  2 2022-10-22      wk inc flu … 01       quantile    NA                      141
-#>  3 2022-10-22      wk inc flu … 02       quantile    NA                        3
-#>  4 2022-10-29      wk inc flu … US       quantile    NA                     4353
-#>  5 2022-10-29      wk inc flu … 01       quantile    NA                      262
-#>  6 2022-10-29      wk inc flu … 02       quantile    NA                       14
-#>  7 2022-11-05      wk inc flu … US       quantile    NA                     6571
-#>  8 2022-11-05      wk inc flu … 01       quantile    NA                      360
-#>  9 2022-11-05      wk inc flu … 02       quantile    NA                       10
-#> 10 2022-11-12      wk inc flu … US       quantile    NA                     8848
+#>  1 2022-10-22      flu_hosp_inc US       quantile    NA                     2380
+#>  2 2022-10-22      flu_hosp_inc 01       quantile    NA                      141
+#>  3 2022-10-22      flu_hosp_inc 02       quantile    NA                        3
+#>  4 2022-10-29      flu_hosp_inc US       quantile    NA                     4353
+#>  5 2022-10-29      flu_hosp_inc 01       quantile    NA                      262
+#>  6 2022-10-29      flu_hosp_inc 02       quantile    NA                       14
+#>  7 2022-11-05      flu_hosp_inc US       quantile    NA                     6571
+#>  8 2022-11-05      flu_hosp_inc 01       quantile    NA                      360
+#>  9 2022-11-05      flu_hosp_inc 02       quantile    NA                       10
+#> 10 2022-11-12      flu_hosp_inc US       quantile    NA                     8848
 #> # ℹ 23 more rows
 ```
 
@@ -333,25 +333,25 @@ oo_con |>
 #> # A tibble: 19 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-12-31      wk inc flu … US       mean        NA                    19369
-#>  2 2022-12-31      wk flu hosp… US       pmf         low                       0
-#>  3 2022-12-31      wk flu hosp… US       pmf         moderate                  0
-#>  4 2022-12-31      wk flu hosp… US       pmf         high                      1
-#>  5 2022-12-31      wk flu hosp… US       pmf         very high                 0
-#>  6 2022-12-31      wk flu hosp… US       cdf         1                         0
-#>  7 2022-12-31      wk flu hosp… US       cdf         2                         0
-#>  8 2022-12-31      wk flu hosp… US       cdf         3                         0
-#>  9 2022-12-31      wk flu hosp… US       cdf         4                         0
-#> 10 2022-12-31      wk flu hosp… US       cdf         5                         0
-#> 11 2022-12-31      wk flu hosp… US       cdf         6                         1
-#> 12 2022-12-31      wk flu hosp… US       cdf         7                         1
-#> 13 2022-12-31      wk flu hosp… US       cdf         8                         1
-#> 14 2022-12-31      wk flu hosp… US       cdf         9                         1
-#> 15 2022-12-31      wk flu hosp… US       cdf         10                        1
-#> 16 2022-12-31      wk flu hosp… US       cdf         11                        1
-#> 17 2022-12-31      wk flu hosp… US       cdf         12                        1
-#> 18 2022-12-31      wk inc flu … US       quantile    NA                    19369
-#> 19 2022-12-31      wk inc flu … US       sample      NA                    19369
+#>  1 2022-12-31      flu_hosp_inc US       mean        NA                    19369
+#>  2 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
+#>  3 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         7                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         8                         1
+#> 11 2022-12-31      flu_hosp_ra… US       cdf         9                         1
+#> 12 2022-12-31      flu_hosp_ra… US       cdf         10                        1
+#> 13 2022-12-31      flu_hosp_ra… US       cdf         11                        1
+#> 14 2022-12-31      flu_hosp_ra… US       cdf         12                        1
+#> 15 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 18 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
 ```
 
 ## Working with target data
@@ -378,16 +378,16 @@ model_data
 #> # A tibble: 132 × 9
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>  * <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
+#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: output_type_id <chr>, value <dbl>
 ```
@@ -407,17 +407,17 @@ target_data
 #> # A tibble: 11 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-10-22      wk inc flu … US       quantile    NA                     2380
-#>  2 2022-10-29      wk inc flu … US       quantile    NA                     4353
-#>  3 2022-11-05      wk inc flu … US       quantile    NA                     6571
-#>  4 2022-11-12      wk inc flu … US       quantile    NA                     8848
-#>  5 2022-11-19      wk inc flu … US       quantile    NA                    11427
-#>  6 2022-11-26      wk inc flu … US       quantile    NA                    19846
-#>  7 2022-12-03      wk inc flu … US       quantile    NA                    26333
-#>  8 2022-12-10      wk inc flu … US       quantile    NA                    23851
-#>  9 2022-12-17      wk inc flu … US       quantile    NA                    21435
-#> 10 2022-12-24      wk inc flu … US       quantile    NA                    19286
-#> 11 2022-12-31      wk inc flu … US       quantile    NA                    19369
+#>  1 2022-10-22      flu_hosp_inc US       quantile    NA                     2380
+#>  2 2022-10-29      flu_hosp_inc US       quantile    NA                     4353
+#>  3 2022-11-05      flu_hosp_inc US       quantile    NA                     6571
+#>  4 2022-11-12      flu_hosp_inc US       quantile    NA                     8848
+#>  5 2022-11-19      flu_hosp_inc US       quantile    NA                    11427
+#>  6 2022-11-26      flu_hosp_inc US       quantile    NA                    19846
+#>  7 2022-12-03      flu_hosp_inc US       quantile    NA                    26333
+#>  8 2022-12-10      flu_hosp_inc US       quantile    NA                    23851
+#>  9 2022-12-17      flu_hosp_inc US       quantile    NA                    21435
+#> 10 2022-12-24      flu_hosp_inc US       quantile    NA                    19286
+#> 11 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 ```
 
 Before joining, we need to remove the `output_type` and `output_type_id`
@@ -447,16 +447,16 @@ comparison
 #> # A tibble: 132 × 10
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>    <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      wk in… quantile   
+#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: output_type_id <chr>, value <dbl>, oracle_value <dbl>
 ```
@@ -477,16 +477,16 @@ model_data_horizon
 #> # A tibble: 132 × 8
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           
+#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -506,16 +506,16 @@ model_data_horizon
 #> # A tibble: 132 × 9
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           
+#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: value <dbl>, target_end_date <date>
 ```
@@ -535,16 +535,16 @@ comparison_horizon
 #> # A tibble: 132 × 10
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 wk in… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 wk in… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 wk in… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 wk in… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 wk in… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 wk in… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 wk in… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 wk in… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 wk in… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 wk in… quantile    0.9           
+#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: value <dbl>, target_end_date <date>, oracle_value <dbl>
 ```
@@ -570,11 +570,11 @@ comparison |>
     .groups = "drop"
   )
 #> # A tibble: 3 × 2
-#>   model_id          mean_abs_error
-#>   <chr>                      <dbl>
-#> 1 Flusight-baseline          9050.
-#> 2 MOBS-GLEAM_FLUH            5475.
-#> 3 PSI-DICE                   6526.
+#>   model_id        mean_abs_error
+#>   <chr>                    <dbl>
+#> 1 Flusight-base            9050.
+#> 2 MOBS-GLEAM_FLUH          5475.
+#> 3 PSI-DICE                 6526.
 ```
 
 This workflow of aligning predictions with target observations and

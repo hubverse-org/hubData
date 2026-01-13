@@ -7,6 +7,7 @@ Create oracle-output target data file schema
 ``` r
 create_oracle_output_schema(
   hub_path,
+  date_col = NULL,
   na = c("NA", ""),
   ignore_files = NULL,
   r_schema = FALSE,
@@ -30,6 +31,14 @@ create_oracle_output_schema(
   GCS)](https://arrow.apache.org/docs/r/articles/fs.html) in the `arrow`
   package. The hub must be fully configured with valid `admin.json` and
   `tasks.json` files within the `hub-config` directory.
+
+- date_col:
+
+  Optional column name to be interpreted as date. Default is `NULL`.
+  Useful when the required date column is a partitioning column in the
+  target data and does not have the same name as a date typed task ID
+  variable in the config. **Note**: Ignored when `target-data.json`
+  exists (v6+); date column is read from config.
 
 - na:
 
