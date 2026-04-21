@@ -57,9 +57,14 @@ load_model_metadata.default <- function(hub_path, model_ids = NULL) {
     cli::cli_abort(c("x" = "{.path model-metadata} directory is empty."))
   }
 
-  meta_l <- purrr::map(
-    metadata_paths,
-    ~ yaml::read_yaml(.x) |>
+  meta_l <- purrr::map(metadata_paths,
+    # Use a custom handler to ensure that length-1 arrays become lists rather
+    # than scalars, and can be row-bound to non-length 1 arrays if those exist
+    # in other model-metadata files. See
+    # https://github.com/r-lib/yaml/issues/69                   
+    ~ yaml::read_yaml(.x,
+                      handlers = list(seq = function(x) x),
+                      as.named.list=TRUE) |>
       # Here we add depth to list elements so when the top level is unlisted at
       # the `bind_rows` step below, they do not create a row per list element.
       # Instead the expected single row per model is created.

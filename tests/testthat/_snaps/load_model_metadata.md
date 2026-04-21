@@ -183,3 +183,90 @@
         .. ..$ data_inputs: chr "description of the data imputs"
        $ ensemble_of_hub_models: logi [1:2] FALSE FALSE
 
+# Top-level array fields yield list columns, even if they are absent or length-1
+
+    Code
+      str(model_metadata)
+    Output
+      tibble [4 x 24] (S3: tbl_df/tbl/data.frame)
+       $ model_id                       : chr [1:4] "multi-entry" "no-entry" "single-entry" "two-arrays"
+       $ team_abbr                      : chr [1:4] "multi" "no" "single" "two"
+       $ model_abbr                     : chr [1:4] "entry" "entry" "entry" "arrays"
+       $ team_name                      : chr [1:4] "Hub Coordination Team" "Hub Coordination Team" "Hub Coordination Team" "Hub Coordination Team"
+       $ model_name                     : chr [1:4] "Multi entry" "No entry" "single entry" "Two array fields of different lengths"
+       $ model_version                  : chr [1:4] "1.0" "1.0" "1.0" "1.0"
+       $ model_contributors             :List of 4
+        ..$ :List of 2
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "Joe Bloggs"
+        .. .. ..$ email: chr "j.bloggs@email.com"
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "J Smith"
+        .. .. ..$ email: chr "j.smith@email.com"
+        ..$ :List of 2
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "Joe Bloggs"
+        .. .. ..$ email: chr "j.bloggs@email.com"
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "J Smith"
+        .. .. ..$ email: chr "j.smith@email.com"
+        ..$ :List of 2
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "Joe Bloggs"
+        .. .. ..$ email: chr "j.bloggs@email.com"
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "J Smith"
+        .. .. ..$ email: chr "j.smith@email.com"
+        ..$ :List of 2
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "Joe Bloggs"
+        .. .. ..$ email: chr "j.bloggs@email.com"
+        .. ..$ :List of 2
+        .. .. ..$ name : chr "J Smith"
+        .. .. ..$ email: chr "j.smith@email.com"
+       $ website_url                    : chr [1:4] "https://team1goodmodel.website" "https://team1goodmodel.website" "https://team1goodmodel.website" "https://team1goodmodel.website"
+       $ repo_url                       : logi [1:4] NA NA NA NA
+       $ license                        : chr [1:4] "cc-by-4.0" "cc-by-4.0" "cc-by-4.0" "cc-by-4.0"
+       $ designated_model               : logi [1:4] NA NA NA NA
+       $ citation                       : logi [1:4] NA NA NA NA
+       $ team_funding                   : logi [1:4] NA NA NA NA
+       $ data_inputs                    : logi [1:4] NA NA NA NA
+       $ methods                        : logi [1:4] NA NA NA NA
+       $ methods_long                   : logi [1:4] NA NA NA NA
+       $ ensemble_of_models             : logi [1:4] NA NA NA NA
+       $ ensemble_of_hub_models         : logi [1:4] FALSE FALSE FALSE FALSE
+       $ mandatory_array_valued_metadata:List of 4
+        ..$ :List of 2
+        .. ..$ : chr "test"
+        .. ..$ : chr "test2"
+        ..$ : NULL
+        ..$ :List of 1
+        .. ..$ : chr "test"
+        ..$ :List of 2
+        .. ..$ : chr "test"
+        .. ..$ : chr "test2"
+       $ optional_array_valued_metadata :List of 4
+        ..$ : NULL
+        ..$ : NULL
+        ..$ : NULL
+        ..$ :List of 3
+        .. ..$ : chr "test3"
+        .. ..$ : chr "test4"
+        .. ..$ : chr "test5"
+       $ include_viz                    : logi [1:4] TRUE TRUE TRUE TRUE
+       $ include_ensemble               : logi [1:4] FALSE FALSE FALSE FALSE
+       $ include_eval                   : logi [1:4] TRUE TRUE TRUE TRUE
+       $ model_details                  :List of 4
+        ..$ :List of 2
+        .. ..$ methods    : chr "this the method description of the model."
+        .. ..$ data_inputs: chr "description of the data inputs"
+        ..$ :List of 2
+        .. ..$ methods    : chr "this the method description of the model."
+        .. ..$ data_inputs: chr "description of the data inputs"
+        ..$ :List of 2
+        .. ..$ methods    : chr "this the method description of the model."
+        .. ..$ data_inputs: chr "description of the data inputs"
+        ..$ :List of 2
+        .. ..$ methods    : chr "this the method description of the model."
+        .. ..$ data_inputs: chr "description of the data inputs"
+
