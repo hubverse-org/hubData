@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   articles/connect_hub: connect_hub.html
   articles/connect_target_data: connect_target_data.html
-last_built: 2026-01-13T14:48Z
+last_built: 2026-04-23T05:36Z
 urls:
   reference: https://hubverse-org.github.io/hubData/reference
   article: https://hubverse-org.github.io/hubData/articles

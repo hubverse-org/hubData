@@ -14,6 +14,9 @@
 
 - **Becky Sweger**. Contributor.
 
+- **Dylan H. dylan@dylanhmorris.com Morris**. Contributor.
+  [](https://orcid.org/0000-0002-3655-406X)
+
 - **Consortium of Infectious Disease Modeling Hubs**. Copyright holder.
 
 ## Citation
