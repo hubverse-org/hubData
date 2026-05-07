@@ -196,18 +196,18 @@ ts_con |>
   filter(target_end_date >= "2022-10-01") |>
   collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target       location observation
-#>    <date>          <chr>        <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_inc 02                 3
-#>  2 2022-10-22      flu_hosp_inc 01               141
-#>  3 2022-10-22      flu_hosp_inc US              2380
-#>  4 2022-10-29      flu_hosp_inc 02                14
-#>  5 2022-10-29      flu_hosp_inc 01               262
-#>  6 2022-10-29      flu_hosp_inc US              4353
-#>  7 2022-11-05      flu_hosp_inc 02                10
-#>  8 2022-11-05      flu_hosp_inc 01               360
-#>  9 2022-11-05      flu_hosp_inc US              6571
-#> 10 2022-11-12      flu_hosp_inc 02                20
+#>    target_end_date target        location observation
+#>    <date>          <chr>         <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_rate 02             0.422
+#>  2 2022-10-22      flu_hosp_rate 01             2.78 
+#>  3 2022-10-22      flu_hosp_rate US             0.716
+#>  4 2022-10-29      flu_hosp_rate 02             1.97 
+#>  5 2022-10-29      flu_hosp_rate 01             5.17 
+#>  6 2022-10-29      flu_hosp_rate US             1.31 
+#>  7 2022-11-05      flu_hosp_rate 02             1.41 
+#>  8 2022-11-05      flu_hosp_rate 01             7.11 
+#>  9 2022-11-05      flu_hosp_rate US             1.98 
+#> 10 2022-11-12      flu_hosp_rate 02             2.81 
 #> # ℹ 56 more rows
 
 # Combine multiple filters
@@ -218,18 +218,18 @@ ts_con |>
   ) |>
   collect()
 #> # A tibble: 44 × 4
-#>    target_end_date target       location observation
-#>    <date>          <chr>        <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_inc 01               141
-#>  2 2022-10-22      flu_hosp_inc US              2380
-#>  3 2022-10-29      flu_hosp_inc 01               262
-#>  4 2022-10-29      flu_hosp_inc US              4353
-#>  5 2022-11-05      flu_hosp_inc 01               360
-#>  6 2022-11-05      flu_hosp_inc US              6571
-#>  7 2022-11-12      flu_hosp_inc 01               303
-#>  8 2022-11-12      flu_hosp_inc US              8848
-#>  9 2022-11-19      flu_hosp_inc 01               226
-#> 10 2022-11-19      flu_hosp_inc US             11427
+#>    target_end_date target        location observation
+#>    <date>          <chr>         <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_rate 01             2.78 
+#>  2 2022-10-22      flu_hosp_rate US             0.716
+#>  3 2022-10-29      flu_hosp_rate 01             5.17 
+#>  4 2022-10-29      flu_hosp_rate US             1.31 
+#>  5 2022-11-05      flu_hosp_rate 01             7.11 
+#>  6 2022-11-05      flu_hosp_rate US             1.98 
+#>  7 2022-11-12      flu_hosp_rate 01             5.98 
+#>  8 2022-11-12      flu_hosp_rate US             2.66 
+#>  9 2022-11-19      flu_hosp_rate 01             4.46 
+#> 10 2022-11-19      flu_hosp_rate US             3.44 
 #> # ℹ 34 more rows
 ```
 
@@ -346,11 +346,11 @@ oo_con |>
 #> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
 #> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
-#> 14 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#> 15 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#> 16 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#> 17 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#> 18 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 14 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 15 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 #> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
 ```
 
