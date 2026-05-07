@@ -196,18 +196,18 @@ ts_con |>
   filter(target_end_date >= "2022-10-01") |>
   collect()
 #> # A tibble: 66 × 4
-#>    target_end_date target       location observation
-#>    <date>          <chr>        <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_inc 02                 3
-#>  2 2022-10-22      flu_hosp_inc 01               141
-#>  3 2022-10-22      flu_hosp_inc US              2380
-#>  4 2022-10-29      flu_hosp_inc 02                14
-#>  5 2022-10-29      flu_hosp_inc 01               262
-#>  6 2022-10-29      flu_hosp_inc US              4353
-#>  7 2022-11-05      flu_hosp_inc 02                10
-#>  8 2022-11-05      flu_hosp_inc 01               360
-#>  9 2022-11-05      flu_hosp_inc US              6571
-#> 10 2022-11-12      flu_hosp_inc 02                20
+#>    target_end_date target        location observation
+#>    <date>          <chr>         <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_rate 02             0.422
+#>  2 2022-10-22      flu_hosp_rate 01             2.78 
+#>  3 2022-10-22      flu_hosp_rate US             0.716
+#>  4 2022-10-29      flu_hosp_rate 02             1.97 
+#>  5 2022-10-29      flu_hosp_rate 01             5.17 
+#>  6 2022-10-29      flu_hosp_rate US             1.31 
+#>  7 2022-11-05      flu_hosp_rate 02             1.41 
+#>  8 2022-11-05      flu_hosp_rate 01             7.11 
+#>  9 2022-11-05      flu_hosp_rate US             1.98 
+#> 10 2022-11-12      flu_hosp_rate 02             2.81 
 #> # ℹ 56 more rows
 
 # Combine multiple filters
