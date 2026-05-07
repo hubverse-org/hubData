@@ -273,18 +273,18 @@ data:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2022-10-01"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 66 × 4</span></span></span>
-<span><span class="co">#&gt;    target_end_date target        location observation</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_rate 02             0.422</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      flu_hosp_rate 01             2.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      flu_hosp_rate US             0.716</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      flu_hosp_rate 02             1.97 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      flu_hosp_rate 01             5.17 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      flu_hosp_rate US             1.31 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      flu_hosp_rate 02             1.41 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      flu_hosp_rate 01             7.11 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      flu_hosp_rate US             1.98 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      flu_hosp_rate 02             2.81 </span></span>
+<span><span class="co">#&gt;    target_end_date target       location observation</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_inc 02                 3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      flu_hosp_inc 01               141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      flu_hosp_inc US              <span style="text-decoration: underline;">2</span>380</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      flu_hosp_inc 02                14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      flu_hosp_inc 01               262</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      flu_hosp_inc US              <span style="text-decoration: underline;">4</span>353</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      flu_hosp_inc 02                10</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      flu_hosp_inc 01               360</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      flu_hosp_inc US              <span style="text-decoration: underline;">6</span>571</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      flu_hosp_inc 02                20</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 56 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Combine multiple filters</span></span>
