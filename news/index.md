@@ -1,5 +1,20 @@
 # Changelog
 
+## hubData 2.2.0
+
+- Fixed bug in
+  [`load_model_metadata()`](https://hubverse-org.github.io/hubData/reference/load_model_metadata.md)
+  that caused array-valued top-level fields in model metadata YAML files
+  to parse incorrectly or fail to parse at all
+  ([\#137](https://github.com/hubverse-org/hubData/issues/137)).
+  Array-valued top-level fields are now translated into list columns,
+  per the function specification. **Note**: The bug also meant that
+  length-1 top-level arrays parsed equivalently to top-level scalars,
+  e.g. both `y: "x"` and `y: ["x"]` parsed as a character column `y`
+  with value `x`. With the fix, those entries parse differently:
+  `y: "x"` parses as a character column; `y: ["x"]` parses as a list
+  column. Thanks [@dylanhmorris](https://github.com/dylanhmorris).
+
 ## hubData 2.1.0
 
 ### New features and improvements
