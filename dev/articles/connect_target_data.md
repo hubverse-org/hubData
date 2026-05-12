@@ -112,6 +112,7 @@ to target data.
 First, load the required packages:
 
 ``` r
+
 library(hubData)
 library(dplyr)
 #> 
@@ -129,6 +130,7 @@ Use
 to open a connection to time-series target data:
 
 ``` r
+
 hub_path <- system.file("testhubs/v6/target_dir", package = "hubUtils")
 ts_con <- connect_target_timeseries(hub_path)
 ts_con
@@ -148,6 +150,7 @@ collect it.
 You can query and collect data from the connection using `dplyr` verbs:
 
 ``` r
+
 # Collect all time-series data
 ts_con |>
   collect()
@@ -172,6 +175,7 @@ ts_con |>
 You can filter before collecting to work with subsets of the data:
 
 ``` r
+
 # Filter by location
 ts_con |>
   filter(location == "US") |>
@@ -240,6 +244,7 @@ Use
 to open a connection to oracle-output target data:
 
 ``` r
+
 oo_con <- connect_target_oracle_output(hub_path)
 oo_con
 #> target_oracle_output with 5 Parquet files
@@ -260,6 +265,7 @@ Notice the presence of columns like `output_type`, `output_type_id`, and
 You can query and collect data from this connection:
 
 ``` r
+
 # Collect all oracle-output data
 oo_con |>
   collect()
@@ -285,6 +291,7 @@ Oracle-output data has the same structure as model output, making it
 easy to filter by output type:
 
 ``` r
+
 # Get quantile forecasts only
 oo_con |>
   filter(output_type == "quantile") |>
@@ -312,6 +319,7 @@ applies to all quantile levels. For `pmf` or `cdf` output types,
 `output_type_id` would specify the category or threshold.
 
 ``` r
+
 # Get specific pmf category
 oo_con |>
   filter(
@@ -346,11 +354,11 @@ oo_con |>
 #> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
 #> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
-#> 14 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#> 15 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#> 16 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#> 17 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
-#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
+#> 14 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
+#> 15 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 18 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
 #> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
 ```
 
@@ -363,6 +371,7 @@ predictions for evaluation. Let’s start by connecting to the model
 outputs and collecting predictions:
 
 ``` r
+
 # Connect to model outputs
 hub_con <- connect_hub(hub_path)
 
@@ -395,6 +404,7 @@ model_data
 Next, collect the corresponding oracle-output target data:
 
 ``` r
+
 # Collect corresponding oracle-output target data
 target_data <- oo_con |>
   filter(
@@ -430,6 +440,7 @@ cause merge conflicts.
 columns as they specify the category or threshold being predicted.
 
 ``` r
+
 # Remove unnecessary columns that would cause merge conflicts
 target_data <- target_data |>
   select(-c(output_type, output_type_id))
@@ -472,6 +483,7 @@ date. In these cases, the target end date is often calculated as
 `origin_date + (horizon * 7L)` (assuming weekly forecasts).
 
 ``` r
+
 # Model data without target_end_date
 model_data_horizon
 #> # A tibble: 132 × 8
@@ -496,6 +508,7 @@ When working with such hubs, you’ll need to calculate the
 data:
 
 ``` r
+
 # Calculate target_end_date from origin_date and horizon
 model_data_horizon <- model_data_horizon |>
   mutate(
@@ -523,6 +536,7 @@ model_data_horizon
 Now we can join with target data as before:
 
 ``` r
+
 join_cols <- c("location", "target_end_date", "target")
 
 comparison_horizon <- model_data_horizon |>
@@ -558,6 +572,7 @@ Once you have both model predictions and target data, you can compute
 evaluation metrics:
 
 ``` r
+
 # Calculate absolute error for median forecasts
 comparison |>
   filter(output_type_id == "0.5") |>
@@ -592,6 +607,7 @@ approach as with
 [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md):
 
 ``` r
+
 # Connect to a cloud hub
 s3_hub_path <- s3_bucket("example-complex-forecast-hub")
 
@@ -607,6 +623,7 @@ ts_cloud
 ```
 
 ``` r
+
 # Collect a sample of the data
 ts_cloud |>
   filter(location == "US") |>
@@ -628,6 +645,7 @@ ts_cloud |>
 ```
 
 ``` r
+
 # Access oracle-output target data from cloud
 oo_cloud <- connect_target_oracle_output(s3_hub_path)
 oo_cloud
@@ -642,6 +660,7 @@ oo_cloud
 ```
 
 ``` r
+
 # Collect a sample of oracle-output data
 oo_cloud |>
   filter(location == "US") |>
@@ -673,6 +692,7 @@ tips:
     minimize data transfer:
 
 ``` r
+
 # Good: filter first, then collect
 ts_cloud |>
   filter(location == "US") |>
@@ -689,6 +709,7 @@ ts_cloud |>
     before collecting:
 
 ``` r
+
 ts_cloud |>
   select(location, target_end_date, observation) |>
   filter(location == "US") |>
