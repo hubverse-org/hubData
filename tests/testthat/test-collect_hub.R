@@ -67,8 +67,11 @@ test_that("collect_hub() returns plain (non-ALTREP) R vectors", {
   # inspect output (the canonical verification noted in the issue): ALTREP
   # views are tagged with an "arrow::array_*" class identifier.
   is_arrow_altrep <- function(x) {
-    any(grepl("arrow::array_", utils::capture.output(.Internal(inspect(x))),
-              fixed = TRUE))
+    any(grepl(
+      "arrow::array_",
+      utils::capture.output(.Internal(inspect(x))),
+      fixed = TRUE
+    ))
   }
 
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
