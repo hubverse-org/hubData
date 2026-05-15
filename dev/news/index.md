@@ -2,6 +2,25 @@
 
 ## hubData (development version)
 
+- Fixed bug in
+  [`collect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/collect_hub.md)
+  that caused returned tibbles to contain arrow-ALTREP-backed columns
+  rather than plain materialised R vectors
+  ([\#141](https://github.com/hubverse-org/hubData/issues/141)). The
+  ALTREP views could not be safely
+  [`save()`](https://rdrr.io/r/base/save.html)d,
+  [`serialize()`](https://rdrr.io/r/base/serialize.html)d, or sent to
+  parallel workers in R sessions without `arrow` installed, silently
+  corrupting columns (most came back length-0).
+  [`collect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/collect_hub.md)
+  now sets `arrow.use_altrep = FALSE` for the duration of the call,
+  restoring the long-standing
+  [`dplyr::collect()`](https://dplyr.tidyverse.org/reference/compute.html)
+  contract of materialising into plain in-memory R vectors. Users who
+  want lazy / ALTREP-friendly access can continue to use
+  [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+  and work with the arrow dataset directly.
+
 ## hubData 2.2.0
 
 - Fixed bug in
