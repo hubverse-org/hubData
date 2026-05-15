@@ -29,6 +29,12 @@ collect_hub <- function(x, silent = FALSE, ...) {
     return(NULL)
   }
 
+  # Force arrow to materialise columns into plain R vectors rather than
+  # ALTREP views, so the result can be safely save()d / serialize()d through
+  # R sessions without arrow installed (see hubverse-org/hubData#141).
+  old_opts <- options(arrow.use_altrep = FALSE)
+  on.exit(options(old_opts), add = TRUE)
+
   tbl <- tryCatch(
     dplyr::collect(x),
     error = function(e) {
