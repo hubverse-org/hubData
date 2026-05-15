@@ -59,6 +59,39 @@ test_that("collect_hub works on local simple forecasting hub", {
 })
 
 
+test_that("collect_hub() returns plain (non-ALTREP) R vectors", {
+  # Guard against arrow returning ALTREP-backed columns from dplyr::collect(),
+  # which silently corrupt save() / serialize() in R sessions without arrow
+  # installed (hubverse-org/hubData#141). arrow's own is_arrow_altrep()
+  # detector is unexported in recent arrow versions, so we use the SEXP-level
+  # inspect output (the canonical verification noted in the issue): ALTREP
+  # views are tagged with an "arrow::array_*" class identifier.
+  is_arrow_altrep <- function(x) {
+    any(grepl("arrow::array_", utils::capture.output(.Internal(inspect(x))),
+              fixed = TRUE))
+  }
+
+  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_con <- connect_hub(hub_path)
+  out <- collect_hub(hub_con)
+
+  for (col in names(out)) {
+    expect_false(
+      is_arrow_altrep(out[[col]]),
+      info = sprintf("column %s is arrow-ALTREP", col)
+    )
+  }
+})
+
+test_that("collect_hub() does not leak arrow.use_altrep option", {
+  hub_path <- system.file("testhubs/simple", package = "hubUtils")
+  hub_con <- connect_hub(hub_path)
+
+  before <- getOption("arrow.use_altrep")
+  collect_hub(hub_con)
+  expect_identical(getOption("arrow.use_altrep"), before)
+})
+
 test_that("collect_hub returns NULL with warning when model output folder is empty", {
   hub_path <- system.file("testhubs/empty", package = "hubUtils")
   hub_con <- suppressWarnings(connect_hub(hub_path))
