@@ -387,16 +387,16 @@ model_data
 #> # A tibble: 132 × 9
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>  * <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  1 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  2 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  3 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  4 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  5 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  6 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  7 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  8 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  9 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#> 10 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: output_type_id <chr>, value <dbl>
 ```
@@ -458,16 +458,16 @@ comparison
 #> # A tibble: 132 × 10
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>    <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  1 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  2 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  3 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  4 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  5 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  6 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  7 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  8 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#>  9 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
+#> 10 Flusight-… US       2022-11-19           1 2022-11-26      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: output_type_id <chr>, value <dbl>, oracle_value <dbl>
 ```
@@ -489,16 +489,16 @@ model_data_horizon
 #> # A tibble: 132 × 8
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -519,16 +519,16 @@ model_data_horizon
 #> # A tibble: 132 × 9
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: value <dbl>, target_end_date <date>
 ```
@@ -549,16 +549,16 @@ comparison_horizon
 #> # A tibble: 132 × 10
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.025         
+#>  2 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.1           
+#>  3 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.2           
+#>  4 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.3           
+#>  5 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.4           
+#>  6 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.5           
+#>  7 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.6           
+#>  8 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.7           
+#>  9 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.8           
+#> 10 Flusight-b… US       2022-11-19           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: value <dbl>, target_end_date <date>, oracle_value <dbl>
 ```

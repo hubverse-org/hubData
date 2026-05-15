@@ -7,7 +7,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hubdata-development-version">hubData (development version)<a class="anchor" aria-label="anchor" href="#hubdata-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.2.1" id="hubdata-221">hubData 2.2.1<a class="anchor" aria-label="anchor" href="#hubdata-221"></a></h2>
 <ul><li>Fixed bug in <code><a href="../reference/collect_hub.html">collect_hub()</a></code> that caused returned tibbles to contain arrow-ALTREP-backed columns rather than plain materialised R vectors (<a href="https://github.com/hubverse-org/hubData/issues/141" class="external-link">#141</a>). The ALTREP views could not be safely <code><a href="https://rdrr.io/r/base/save.html" class="external-link">save()</a></code>d, <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize()</a></code>d, or sent to parallel workers in R sessions without <code>arrow</code> installed, silently corrupting columns (most came back length-0). <code><a href="../reference/collect_hub.html">collect_hub()</a></code> now sets <code>arrow.use_altrep = FALSE</code> for the duration of the call, restoring the long-standing <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">dplyr::collect()</a></code> contract of materialising into plain in-memory R vectors. Users who want lazy / ALTREP-friendly access can continue to use <code><a href="../reference/connect_hub.html">connect_hub()</a></code> and work with the arrow dataset directly.</li>
 </ul></div>
     <div class="section level2">

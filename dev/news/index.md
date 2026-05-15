@@ -2,6 +2,8 @@
 
 ## hubData (development version)
 
+## hubData 2.2.1
+
 - Fixed bug in
   [`collect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/collect_hub.md)
   that caused returned tibbles to contain arrow-ALTREP-backed columns
