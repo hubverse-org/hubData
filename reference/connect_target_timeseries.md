@@ -184,12 +184,12 @@ ts_con_parquet |>
 #> # A tibble: 6 × 4
 #>   target_end_date target        location observation
 #>   <date>          <chr>         <chr>          <dbl>
-#> 1 2022-12-31      flu_hosp_inc  02             44   
-#> 2 2022-12-31      flu_hosp_inc  01            140   
-#> 3 2022-12-31      flu_hosp_inc  US          19369   
-#> 4 2022-12-31      flu_hosp_rate 02              6.18
-#> 5 2022-12-31      flu_hosp_rate 01              2.76
-#> 6 2022-12-31      flu_hosp_rate US              5.83
+#> 1 2022-12-31      flu_hosp_rate 02              6.18
+#> 2 2022-12-31      flu_hosp_rate 01              2.76
+#> 3 2022-12-31      flu_hosp_rate US              5.83
+#> 4 2022-12-31      flu_hosp_inc  02             44   
+#> 5 2022-12-31      flu_hosp_inc  01            140   
+#> 6 2022-12-31      flu_hosp_inc  US          19369   
 
 if (FALSE) { # \dontrun{
 # Access Target time-series data from a cloud hub
