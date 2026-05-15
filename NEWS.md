@@ -1,3 +1,5 @@
+# hubData (development version)
+
 # hubData 2.2.1
 
 * Fixed bug in `collect_hub()` that caused returned tibbles to contain arrow-ALTREP-backed columns rather than plain materialised R vectors (#141). The ALTREP views could not be safely `save()`d, `serialize()`d, or sent to parallel workers in R sessions without `arrow` installed, silently corrupting columns (most came back length-0). `collect_hub()` now sets `arrow.use_altrep = FALSE` for the duration of the call, restoring the long-standing `dplyr::collect()` contract of materialising into plain in-memory R vectors. Users who want lazy / ALTREP-friendly access can continue to use `connect_hub()` and work with the arrow dataset directly.
