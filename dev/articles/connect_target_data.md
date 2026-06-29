@@ -222,18 +222,18 @@ ts_con |>
   ) |>
   collect()
 #> # A tibble: 44 × 4
-#>    target_end_date target        location observation
-#>    <date>          <chr>         <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_rate 01             2.78 
-#>  2 2022-10-22      flu_hosp_rate US             0.716
-#>  3 2022-10-29      flu_hosp_rate 01             5.17 
-#>  4 2022-10-29      flu_hosp_rate US             1.31 
-#>  5 2022-11-05      flu_hosp_rate 01             7.11 
-#>  6 2022-11-05      flu_hosp_rate US             1.98 
-#>  7 2022-11-12      flu_hosp_rate 01             5.98 
-#>  8 2022-11-12      flu_hosp_rate US             2.66 
-#>  9 2022-11-19      flu_hosp_rate 01             4.46 
-#> 10 2022-11-19      flu_hosp_rate US             3.44 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc 01               141
+#>  2 2022-10-22      flu_hosp_inc US              2380
+#>  3 2022-10-29      flu_hosp_inc 01               262
+#>  4 2022-10-29      flu_hosp_inc US              4353
+#>  5 2022-11-05      flu_hosp_inc 01               360
+#>  6 2022-11-05      flu_hosp_inc US              6571
+#>  7 2022-11-12      flu_hosp_inc 01               303
+#>  8 2022-11-12      flu_hosp_inc US              8848
+#>  9 2022-11-19      flu_hosp_inc 01               226
+#> 10 2022-11-19      flu_hosp_inc US             11427
 #> # ℹ 34 more rows
 ```
 
@@ -354,11 +354,11 @@ oo_con |>
 #> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
 #> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
-#> 14 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#> 15 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#> 16 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#> 17 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#> 18 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 14 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 15 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
+#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 #> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
 ```
 
@@ -387,16 +387,16 @@ model_data
 #> # A tibble: 132 × 9
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>  * <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  1 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  2 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  3 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  4 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  5 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  6 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  7 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  8 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  9 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#> 10 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: output_type_id <chr>, value <dbl>
 ```
@@ -458,16 +458,16 @@ comparison
 #> # A tibble: 132 × 10
 #>    model_id   location reference_date horizon target_end_date target output_type
 #>    <chr>      <chr>    <date>           <int> <date>          <chr>  <chr>      
-#>  1 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  2 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  3 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  4 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  5 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  6 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  7 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  8 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#>  9 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
-#> 10 Flusight-… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  1 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  2 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  3 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  4 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  5 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  6 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  7 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  8 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#>  9 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
+#> 10 MOBS-GLEA… US       2022-10-22           1 2022-10-29      flu_h… quantile   
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: output_type_id <chr>, value <dbl>, oracle_value <dbl>
 ```
@@ -489,16 +489,16 @@ model_data_horizon
 #> # A tibble: 132 × 8
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -519,16 +519,16 @@ model_data_horizon
 #> # A tibble: 132 × 9
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 2 more variables: value <dbl>, target_end_date <date>
 ```
@@ -549,16 +549,16 @@ comparison_horizon
 #> # A tibble: 132 × 10
 #>    model_id    location reference_date horizon target output_type output_type_id
 #>    <chr>       <chr>    <date>           <int> <chr>  <chr>       <chr>         
-#>  1 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.025         
-#>  2 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.1           
-#>  3 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.2           
-#>  4 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.3           
-#>  5 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.4           
-#>  6 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.5           
-#>  7 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.6           
-#>  8 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.7           
-#>  9 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.8           
-#> 10 Flusight-b… US       2022-10-22           1 flu_h… quantile    0.9           
+#>  1 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.025         
+#>  2 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.1           
+#>  3 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.2           
+#>  4 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.3           
+#>  5 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.4           
+#>  6 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.5           
+#>  7 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.6           
+#>  8 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.7           
+#>  9 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.8           
+#> 10 MOBS-GLEAM… US       2022-10-22           1 flu_h… quantile    0.9           
 #> # ℹ 122 more rows
 #> # ℹ 3 more variables: value <dbl>, target_end_date <date>, oracle_value <dbl>
 ```
