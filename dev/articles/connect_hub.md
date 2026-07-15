@@ -243,16 +243,16 @@ hub_con |>
 #> # A tibble: 276 × 8
 #>    forecast_date horizon target        location output_type output_type_id value
 #>    <date>          <int> <chr>         <chr>    <chr>       <chr>          <dbl>
-#>  1 2023-04-24          1 wk ahead inc… US       quantile    0.01               0
-#>  2 2023-04-24          1 wk ahead inc… US       quantile    0.025              0
-#>  3 2023-04-24          1 wk ahead inc… US       quantile    0.05               0
-#>  4 2023-04-24          1 wk ahead inc… US       quantile    0.1              281
-#>  5 2023-04-24          1 wk ahead inc… US       quantile    0.15             600
-#>  6 2023-04-24          1 wk ahead inc… US       quantile    0.2              717
-#>  7 2023-04-24          1 wk ahead inc… US       quantile    0.25             817
-#>  8 2023-04-24          1 wk ahead inc… US       quantile    0.3              877
-#>  9 2023-04-24          1 wk ahead inc… US       quantile    0.35             913
-#> 10 2023-04-24          1 wk ahead inc… US       quantile    0.4              965
+#>  1 2023-05-01          1 wk ahead inc… US       quantile    0.01               0
+#>  2 2023-05-01          1 wk ahead inc… US       quantile    0.025              0
+#>  3 2023-05-01          1 wk ahead inc… US       quantile    0.05               0
+#>  4 2023-05-01          1 wk ahead inc… US       quantile    0.1              193
+#>  5 2023-05-01          1 wk ahead inc… US       quantile    0.15             495
+#>  6 2023-05-01          1 wk ahead inc… US       quantile    0.2              618
+#>  7 2023-05-01          1 wk ahead inc… US       quantile    0.25             717
+#>  8 2023-05-01          1 wk ahead inc… US       quantile    0.3              774
+#>  9 2023-05-01          1 wk ahead inc… US       quantile    0.35             822
+#> 10 2023-05-01          1 wk ahead inc… US       quantile    0.4              857
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: model_id <chr>
 ```
@@ -280,16 +280,16 @@ tbl
 #> # A tibble: 276 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.4           
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: value <dbl>
 
@@ -309,16 +309,16 @@ hub_con_cloud |>
 #> # A tibble: 230 × 9
 #>    model_id     origin_date target        horizon location age_group output_type
 #>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
-#>  1 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  2 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  3 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  4 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  5 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  6 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  7 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  8 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  9 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#> 10 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  1 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  2 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  3 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  4 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  5 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  6 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  7 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  8 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  9 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#> 10 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -362,16 +362,16 @@ hub_con |>
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>    <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -437,6 +437,10 @@ hub_con |>
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) |>
   hubData::collect_hub()
+#> duckdb is keeping downloaded extensions in a temporary directory:
+#> ℹ /tmp/Rtmpc7Z5IE/duckdb/extensions
+#> This is removed when the R session ends, so extensions are re-downloaded each session.
+#> ℹ To keep them, point `options(duckdb.extension_directory =)` or the `DUCKDB_EXTENSION_DIRECTORY` environment variable at a permanent path.
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
