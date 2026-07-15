@@ -210,13 +210,13 @@ oo_con_parquet |>
 #>  1 2022-12-31      flu_hosp_inc US       mean        NA                    19369
 #>  2 2022-12-31      flu_hosp_inc 01       mean        NA                      140
 #>  3 2022-12-31      flu_hosp_inc 02       mean        NA                       44
-#>  4 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#>  5 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#>  6 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#>  7 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
-#>  8 2022-12-31      flu_hosp_ra… 01       pmf         low                       0
-#>  9 2022-12-31      flu_hosp_ra… 01       pmf         moderate                  1
-#> 10 2022-12-31      flu_hosp_ra… 01       pmf         high                      0
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         7                         1
 #> # ℹ 47 more rows
 
 # Get distinct target_end_date values

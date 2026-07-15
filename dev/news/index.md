@@ -2,6 +2,19 @@
 
 ## hubData (development version)
 
+- Fixed bug where
+  [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+  returned an empty connection (with only a “No files of file format
+  found” warning) for cloud (S3) hubs whose `admin.json` declares a
+  non-parquet submission format such as `csv`
+  ([\#148](https://github.com/hubverse-org/hubData/issues/148)). The
+  hubverse cloud sync always writes `model-output/` to parquet on S3,
+  regardless of the declared submission format, so
+  [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
+  now also accepts parquet on S3 when `file_format` is not supplied.
+  Local hubs are unaffected, and hubs that genuinely store the declared
+  format on S3 continue to read exactly as before.
+
 ## hubData 2.2.1
 
 - Fixed bug in
