@@ -2,6 +2,8 @@
 
 ## hubData (development version)
 
+## hubData 2.2.2
+
 - Fixed bug where
   [`connect_hub()`](https://hubverse-org.github.io/hubData/dev/reference/connect_hub.md)
   returned an empty connection (with only a “No files of file format
