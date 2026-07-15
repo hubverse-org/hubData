@@ -682,6 +682,38 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
   )
 })
 
+test_that("connect_hub reads parquet on cloud hub with non-parquet config format", {
+  # Regression test for #148: the hubverse cloud sync always writes
+  # model-output to parquet on S3, regardless of the submission format(s)
+  # declared in admin.json. `example-complex-forecast-hub` declares
+  # file_format = ["csv"] (cloud.enabled = TRUE) but stores parquet on S3. A
+  # default connect_hub() must still read the data, rather than returning an
+  # empty connection with a "No files of file format 'csv' found" warning.
+  hub_path <- s3_bucket("example-complex-forecast-hub")
+
+  expect_no_warning(hub_con <- connect_hub(hub_path))
+
+  # config-declared "csv" is dropped by check_file_format() (no csv on S3) and
+  # the appended "parquet" is what actually gets opened.
+  expect_equal(
+    dimnames(attr(hub_con, "file_format"))[[2]],
+    "parquet"
+  )
+  expect_equal(
+    attr(hub_con, "file_system"),
+    "S3FileSystem"
+  )
+
+  # data is actually readable, not an empty connection
+  expect_gt(
+    hub_con |>
+      head(5) |>
+      dplyr::collect() |>
+      nrow(),
+    0L
+  )
+})
+
 
 test_that("connect_hub & connect_model_output fail correctly", {
   expect_snapshot(connect_hub("random/hub/path"), error = TRUE)
