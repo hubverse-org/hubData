@@ -268,6 +268,10 @@ connect_hub.SubTreeFileSystem <- function(
   if (missing(file_format)) {
     file_format <- rlang::missing_arg()
     file_format <- get_file_format(config_admin, file_format)
+    # The hubverse cloud sync pipeline always writes `model-output/` to parquet
+    # on S3, regardless of the submission format(s) declared in admin.json, so
+    # accept parquet alongside the config value.
+    file_format <- union(file_format, "parquet")
   } else {
     file_format <- rlang::arg_match(file_format, multiple = TRUE)
   }
