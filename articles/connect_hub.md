@@ -280,16 +280,16 @@ tbl
 #> # A tibble: 276 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.4           
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: value <dbl>
 
@@ -307,18 +307,18 @@ hub_con_cloud |>
   dplyr::filter(output_type == "quantile", location == "US") |>
   hubData::collect_hub()
 #> # A tibble: 230 × 9
-#>    model_id     origin_date target        horizon location age_group output_type
-#>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
-#>  1 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  2 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  3 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  4 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  5 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  6 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  7 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  8 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#>  9 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
-#> 10 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>    model_id        origin_date target     horizon location age_group output_type
+#>  * <chr>           <date>      <chr>        <int> <chr>    <chr>     <chr>      
+#>  1 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  2 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  3 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  4 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  5 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  6 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  7 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  8 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#>  9 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
+#> 10 team1-goodmodel 2022-10-08  wk inc fl…       1 US       NA        quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -437,6 +437,10 @@ hub_con |>
     forecast_date == max(forecast_date, na.rm = TRUE)
   ) |>
   hubData::collect_hub()
+#> duckdb is keeping downloaded extensions in a temporary directory:
+#> ℹ /tmp/RtmpEc6Yeo/duckdb/extensions
+#> This is removed when the R session ends, so extensions are re-downloaded each session.
+#> ℹ To keep them, point `options(duckdb.extension_directory =)` or the `DUCKDB_EXTENSION_DIRECTORY` environment variable at a permanent path.
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
@@ -512,16 +516,16 @@ mod_out_con |>
 #> # A tibble: 138 × 8
 #>    model_id origin_date target horizon location output_type output_type_id value
 #>  * <chr>    <date>      <chr>    <int> <chr>    <chr>                <dbl> <int>
-#>  1 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.01    135
-#>  2 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.025   137
-#>  3 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.05    139
-#>  4 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.1     140
-#>  5 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.15    141
-#>  6 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.2     141
-#>  7 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.25    142
-#>  8 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.3     143
-#>  9 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.35    144
-#> 10 hub-bas… 2022-10-01  wk in…       1 US       quantile             0.4     145
+#>  1 team1-g… 2022-10-08  wk in…       1 US       quantile             0.01    135
+#>  2 team1-g… 2022-10-08  wk in…       1 US       quantile             0.025   137
+#>  3 team1-g… 2022-10-08  wk in…       1 US       quantile             0.05    139
+#>  4 team1-g… 2022-10-08  wk in…       1 US       quantile             0.1     140
+#>  5 team1-g… 2022-10-08  wk in…       1 US       quantile             0.15    141
+#>  6 team1-g… 2022-10-08  wk in…       1 US       quantile             0.2     141
+#>  7 team1-g… 2022-10-08  wk in…       1 US       quantile             0.25    142
+#>  8 team1-g… 2022-10-08  wk in…       1 US       quantile             0.3     143
+#>  9 team1-g… 2022-10-08  wk in…       1 US       quantile             0.35    144
+#> 10 team1-g… 2022-10-08  wk in…       1 US       quantile             0.4     145
 #> # ℹ 128 more rows
 ```
 

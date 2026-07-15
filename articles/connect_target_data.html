@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Accessing Target Data">
 </head>
@@ -25,7 +25,7 @@
     <a href="https://hubdocs.readthedocs.io/en/latest/" class="external-link"><img src="https://raw.githubusercontent.com/hubverse-org/hubStyle/main/inst/hubverse.png" id="logo" height="30" alt="hubverse"></a>
     <a class="navbar-brand me-2" href="../index.html">hubData</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Accessing Target Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubData/blob/v2.2.1/vignettes/articles/connect_target_data.Rmd" class="external-link"><code>vignettes/articles/connect_target_data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hubverse-org/hubData/blob/main/vignettes/articles/connect_target_data.Rmd" class="external-link"><code>vignettes/articles/connect_target_data.Rmd</code></a></small>
       <div class="d-none name"><code>connect_target_data.Rmd</code></div>
     </div>
 
@@ -272,18 +272,18 @@ data:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">target_end_date</span> <span class="op">&gt;=</span> <span class="st">"2022-10-01"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 66 × 4</span></span></span>
-<span><span class="co">#&gt;    target_end_date target        location observation</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_rate 02             0.422</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      flu_hosp_rate 01             2.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      flu_hosp_rate US             0.716</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      flu_hosp_rate 02             1.97 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      flu_hosp_rate 01             5.17 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      flu_hosp_rate US             1.31 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      flu_hosp_rate 02             1.41 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      flu_hosp_rate 01             7.11 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      flu_hosp_rate US             1.98 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      flu_hosp_rate 02             2.81 </span></span>
+<span><span class="co">#&gt;    target_end_date target       location observation</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-10-22      flu_hosp_inc 02                 3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-10-22      flu_hosp_inc 01               141</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-10-22      flu_hosp_inc US              <span style="text-decoration: underline;">2</span>380</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-10-29      flu_hosp_inc 02                14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-10-29      flu_hosp_inc 01               262</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-10-29      flu_hosp_inc US              <span style="text-decoration: underline;">4</span>353</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-11-05      flu_hosp_inc 02                10</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-11-05      flu_hosp_inc 01               360</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-11-05      flu_hosp_inc US              <span style="text-decoration: underline;">6</span>571</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-11-12      flu_hosp_inc 02                20</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 56 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Combine multiple filters</span></span>
@@ -401,22 +401,22 @@ For <code>pmf</code> or <code>cdf</code> output types,
 <span><span class="co">#&gt;    target_end_date target       location output_type output_type_id oracle_value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-12-31      flu_hosp_inc US       mean        <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      flu_hosp_ra… US       cdf         1                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      flu_hosp_ra… US       cdf         2                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      flu_hosp_ra… US       cdf         3                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      flu_hosp_ra… US       cdf         4                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      flu_hosp_ra… US       cdf         5                         0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      flu_hosp_ra… US       cdf         6                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      flu_hosp_ra… US       cdf         7                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      flu_hosp_ra… US       cdf         8                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      flu_hosp_ra… US       cdf         9                         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      flu_hosp_ra… US       cdf         10                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      flu_hosp_ra… US       cdf         11                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      flu_hosp_ra… US       cdf         12                        1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      flu_hosp_ra… US       pmf         low                       0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      flu_hosp_ra… US       pmf         high                      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      flu_hosp_ra… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-12-31      flu_hosp_ra… US       pmf         low                       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-12-31      flu_hosp_ra… US       pmf         high                      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-12-31      flu_hosp_ra… US       pmf         very high                 0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-12-31      flu_hosp_ra… US       cdf         1                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-12-31      flu_hosp_ra… US       cdf         2                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-12-31      flu_hosp_ra… US       cdf         3                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-12-31      flu_hosp_ra… US       cdf         4                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-12-31      flu_hosp_ra… US       cdf         5                         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2022-12-31      flu_hosp_ra… US       cdf         6                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2022-12-31      flu_hosp_ra… US       cdf         7                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2022-12-31      flu_hosp_ra… US       cdf         8                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2022-12-31      flu_hosp_ra… US       cdf         9                         1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2022-12-31      flu_hosp_ra… US       cdf         10                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2022-12-31      flu_hosp_ra… US       cdf         11                        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2022-12-31      flu_hosp_ra… US       cdf         12                        1</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2022-12-31      flu_hosp_inc US       quantile    <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 2022-12-31      flu_hosp_inc US       sample      <span style="color: #BB0000;">NA</span>                    <span style="text-decoration: underline;">19</span>369</span></span></code></pre></div>
 </div>
@@ -800,7 +800,7 @@ target data guide</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1. PR Previews built by <a href="https://www.netlify.com" class="external-link">Netlify</a>. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer>
