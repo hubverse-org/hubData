@@ -342,24 +342,24 @@ oo_con |>
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
 #>  1 2022-12-31      flu_hosp_inc US       mean        NA                    19369
-#>  2 2022-12-31      flu_hosp_ra… US       cdf         1                         0
-#>  3 2022-12-31      flu_hosp_ra… US       cdf         2                         0
-#>  4 2022-12-31      flu_hosp_ra… US       cdf         3                         0
-#>  5 2022-12-31      flu_hosp_ra… US       cdf         4                         0
-#>  6 2022-12-31      flu_hosp_ra… US       cdf         5                         0
-#>  7 2022-12-31      flu_hosp_ra… US       cdf         6                         1
-#>  8 2022-12-31      flu_hosp_ra… US       cdf         7                         1
-#>  9 2022-12-31      flu_hosp_ra… US       cdf         8                         1
-#> 10 2022-12-31      flu_hosp_ra… US       cdf         9                         1
-#> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
-#> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
-#> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
-#> 14 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#> 15 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#> 16 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#> 17 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
-#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
+#>  2 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
+#>  3 2022-12-31      flu_hosp_inc US       sample      NA                    19369
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         7                         1
+#> 11 2022-12-31      flu_hosp_ra… US       cdf         8                         1
+#> 12 2022-12-31      flu_hosp_ra… US       cdf         9                         1
+#> 13 2022-12-31      flu_hosp_ra… US       cdf         10                        1
+#> 14 2022-12-31      flu_hosp_ra… US       cdf         11                        1
+#> 15 2022-12-31      flu_hosp_ra… US       cdf         12                        1
+#> 16 2022-12-31      flu_hosp_ra… US       pmf         low                       0
+#> 17 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
+#> 18 2022-12-31      flu_hosp_ra… US       pmf         high                      1
+#> 19 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
 ```
 
 ## Working with target data
