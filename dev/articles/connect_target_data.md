@@ -222,18 +222,18 @@ ts_con |>
   ) |>
   collect()
 #> # A tibble: 44 × 4
-#>    target_end_date target       location observation
-#>    <date>          <chr>        <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_inc 01               141
-#>  2 2022-10-22      flu_hosp_inc US              2380
-#>  3 2022-10-29      flu_hosp_inc 01               262
-#>  4 2022-10-29      flu_hosp_inc US              4353
-#>  5 2022-11-05      flu_hosp_inc 01               360
-#>  6 2022-11-05      flu_hosp_inc US              6571
-#>  7 2022-11-12      flu_hosp_inc 01               303
-#>  8 2022-11-12      flu_hosp_inc US              8848
-#>  9 2022-11-19      flu_hosp_inc 01               226
-#> 10 2022-11-19      flu_hosp_inc US             11427
+#>    target_end_date target        location observation
+#>    <date>          <chr>         <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_rate 01             2.78 
+#>  2 2022-10-22      flu_hosp_rate US             0.716
+#>  3 2022-10-29      flu_hosp_rate 01             5.17 
+#>  4 2022-10-29      flu_hosp_rate US             1.31 
+#>  5 2022-11-05      flu_hosp_rate 01             7.11 
+#>  6 2022-11-05      flu_hosp_rate US             1.98 
+#>  7 2022-11-12      flu_hosp_rate 01             5.98 
+#>  8 2022-11-12      flu_hosp_rate US             2.66 
+#>  9 2022-11-19      flu_hosp_rate 01             4.46 
+#> 10 2022-11-19      flu_hosp_rate US             3.44 
 #> # ℹ 34 more rows
 ```
 
@@ -342,20 +342,20 @@ oo_con |>
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
 #>  1 2022-12-31      flu_hosp_inc US       mean        NA                    19369
-#>  2 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#>  3 2022-12-31      flu_hosp_inc US       sample      NA                    19369
-#>  4 2022-12-31      flu_hosp_ra… US       cdf         1                         0
-#>  5 2022-12-31      flu_hosp_ra… US       cdf         2                         0
-#>  6 2022-12-31      flu_hosp_ra… US       cdf         3                         0
-#>  7 2022-12-31      flu_hosp_ra… US       cdf         4                         0
-#>  8 2022-12-31      flu_hosp_ra… US       cdf         5                         0
-#>  9 2022-12-31      flu_hosp_ra… US       cdf         6                         1
-#> 10 2022-12-31      flu_hosp_ra… US       cdf         7                         1
-#> 11 2022-12-31      flu_hosp_ra… US       cdf         8                         1
-#> 12 2022-12-31      flu_hosp_ra… US       cdf         9                         1
-#> 13 2022-12-31      flu_hosp_ra… US       cdf         10                        1
-#> 14 2022-12-31      flu_hosp_ra… US       cdf         11                        1
-#> 15 2022-12-31      flu_hosp_ra… US       cdf         12                        1
+#>  2 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  3 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         7                         1
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         8                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         9                         1
+#> 11 2022-12-31      flu_hosp_ra… US       cdf         10                        1
+#> 12 2022-12-31      flu_hosp_ra… US       cdf         11                        1
+#> 13 2022-12-31      flu_hosp_ra… US       cdf         12                        1
+#> 14 2022-12-31      flu_hosp_inc US       sample      NA                    19369
+#> 15 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 #> 16 2022-12-31      flu_hosp_ra… US       pmf         low                       0
 #> 17 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
 #> 18 2022-12-31      flu_hosp_ra… US       pmf         high                      1
