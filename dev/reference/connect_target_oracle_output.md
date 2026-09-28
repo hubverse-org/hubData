@@ -207,16 +207,16 @@ oo_con_parquet |>
 #> # A tibble: 57 × 6
 #>    target_end_date target       location output_type output_type_id oracle_value
 #>    <date>          <chr>        <chr>    <chr>       <chr>                 <dbl>
-#>  1 2022-12-31      flu_hosp_ra… US       pmf         low                       0
-#>  2 2022-12-31      flu_hosp_ra… US       pmf         moderate                  0
-#>  3 2022-12-31      flu_hosp_ra… US       pmf         high                      1
-#>  4 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
-#>  5 2022-12-31      flu_hosp_ra… 01       pmf         low                       0
-#>  6 2022-12-31      flu_hosp_ra… 01       pmf         moderate                  1
-#>  7 2022-12-31      flu_hosp_ra… 01       pmf         high                      0
-#>  8 2022-12-31      flu_hosp_ra… 01       pmf         very high                 0
-#>  9 2022-12-31      flu_hosp_ra… 02       pmf         low                       0
-#> 10 2022-12-31      flu_hosp_ra… 02       pmf         moderate                  0
+#>  1 2022-12-31      flu_hosp_ra… US       cdf         1                         0
+#>  2 2022-12-31      flu_hosp_ra… US       cdf         2                         0
+#>  3 2022-12-31      flu_hosp_ra… US       cdf         3                         0
+#>  4 2022-12-31      flu_hosp_ra… US       cdf         4                         0
+#>  5 2022-12-31      flu_hosp_ra… US       cdf         5                         0
+#>  6 2022-12-31      flu_hosp_ra… US       cdf         6                         1
+#>  7 2022-12-31      flu_hosp_ra… US       cdf         7                         1
+#>  8 2022-12-31      flu_hosp_ra… US       cdf         8                         1
+#>  9 2022-12-31      flu_hosp_ra… US       cdf         9                         1
+#> 10 2022-12-31      flu_hosp_ra… US       cdf         10                        1
 #> # ℹ 47 more rows
 
 # Get distinct target_end_date values
