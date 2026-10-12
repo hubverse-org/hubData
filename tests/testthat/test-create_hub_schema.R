@@ -112,7 +112,7 @@ test_that("create_hub_schema works with sample output types", {
         simplifyDataFrame = FALSE
       )
     )$ToString(),
-    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\noutput_type: string\noutput_type_id: int32\nvalue: double\nmodel_id: string"
+    "forecast_date: date32[day]\ntarget: string\nhorizon: int32\nlocation: string\nage_group: string\noutput_type: string\noutput_type_id: int32\nvalue: double\nmodel_id: string"
   )
 
   expect_equal(
