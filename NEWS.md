@@ -1,5 +1,7 @@
 # hubData (development version)
 
+* `create_hub_schema()` now includes task ID columns from every model task in a round, not only the first (#157). Requires hubUtils >= 1.3.0.
+
 # hubData 2.2.2
 
 * Fixed bug where `connect_hub()` returned an empty connection (with only a "No files of file format found" warning) for cloud (S3) hubs whose `admin.json` declares a non-parquet submission format such as `csv` (#148). The hubverse cloud sync always writes `model-output/` to parquet on S3, regardless of the declared submission format, so `connect_hub()` now also accepts parquet on S3 when `file_format` is not supplied. Local hubs are unaffected, and hubs that genuinely store the declared format on S3 continue to read exactly as before.
