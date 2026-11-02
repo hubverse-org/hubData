@@ -29,7 +29,7 @@ Imports:
     cli,
     dplyr (>= 1.1.0),
     fs,
-    hubUtils (>= 1.2.0),
+    hubUtils (>= 1.3.0),
     lifecycle,
     magrittr,
     purrr,
