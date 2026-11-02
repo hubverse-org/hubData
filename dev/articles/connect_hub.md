@@ -280,16 +280,16 @@ tbl
 #> # A tibble: 276 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>  * <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.01          
-#>  2 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.025         
-#>  3 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.05          
-#>  4 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.1           
-#>  5 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.15          
-#>  6 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.2           
-#>  7 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.25          
-#>  8 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.3           
-#>  9 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.35          
-#> 10 hub-baseline 2023-05-01          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-04-24          1 wk ah… US       quantile    0.4           
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: value <dbl>
 
@@ -309,16 +309,16 @@ hub_con_cloud |>
 #> # A tibble: 230 × 9
 #>    model_id     origin_date target        horizon location age_group output_type
 #>  * <chr>        <date>      <chr>           <int> <chr>    <chr>     <chr>      
-#>  1 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  2 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  3 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  4 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  5 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  6 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  7 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  8 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#>  9 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
-#> 10 hub-baseline 2022-10-01  wk inc flu h…       1 US       NA        quantile   
+#>  1 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  2 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  3 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  4 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  5 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  6 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  7 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  8 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#>  9 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
+#> 10 hub-baseline 2022-10-15  wk inc flu h…       1 US       65+       quantile   
 #> # ℹ 220 more rows
 #> # ℹ 2 more variables: output_type_id <dbl>, value <int>
 ```
@@ -438,7 +438,7 @@ hub_con |>
   ) |>
   hubData::collect_hub()
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpJ57L6h/duckdb
+#> ℹ /tmp/Rtmpcj4xDO/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
