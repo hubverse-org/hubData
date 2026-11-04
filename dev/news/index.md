@@ -2,6 +2,8 @@
 
 ## hubData (development version)
 
+## hubData 2.2.3
+
 - [`create_hub_schema()`](https://hubverse-org.github.io/hubData/dev/reference/create_hub_schema.md)
   now includes task ID columns from every model task in a round, not
   only the first

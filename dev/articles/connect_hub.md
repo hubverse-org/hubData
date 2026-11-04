@@ -243,16 +243,16 @@ hub_con |>
 #> # A tibble: 276 × 8
 #>    forecast_date horizon target        location output_type output_type_id value
 #>    <date>          <int> <chr>         <chr>    <chr>       <chr>          <dbl>
-#>  1 2023-05-01          1 wk ahead inc… US       quantile    0.01               0
-#>  2 2023-05-01          1 wk ahead inc… US       quantile    0.025              0
-#>  3 2023-05-01          1 wk ahead inc… US       quantile    0.05               0
-#>  4 2023-05-01          1 wk ahead inc… US       quantile    0.1              193
-#>  5 2023-05-01          1 wk ahead inc… US       quantile    0.15             495
-#>  6 2023-05-01          1 wk ahead inc… US       quantile    0.2              618
-#>  7 2023-05-01          1 wk ahead inc… US       quantile    0.25             717
-#>  8 2023-05-01          1 wk ahead inc… US       quantile    0.3              774
-#>  9 2023-05-01          1 wk ahead inc… US       quantile    0.35             822
-#> 10 2023-05-01          1 wk ahead inc… US       quantile    0.4              857
+#>  1 2023-04-24          1 wk ahead inc… US       quantile    0.01             232
+#>  2 2023-04-24          1 wk ahead inc… US       quantile    0.025            331
+#>  3 2023-04-24          1 wk ahead inc… US       quantile    0.05             423
+#>  4 2023-04-24          1 wk ahead inc… US       quantile    0.1              512
+#>  5 2023-04-24          1 wk ahead inc… US       quantile    0.15             610
+#>  6 2023-04-24          1 wk ahead inc… US       quantile    0.2              670
+#>  7 2023-04-24          1 wk ahead inc… US       quantile    0.25             724
+#>  8 2023-04-24          1 wk ahead inc… US       quantile    0.3              773
+#>  9 2023-04-24          1 wk ahead inc… US       quantile    0.35             812
+#> 10 2023-04-24          1 wk ahead inc… US       quantile    0.4              893
 #> # ℹ 266 more rows
 #> # ℹ 1 more variable: model_id <chr>
 ```
@@ -362,16 +362,16 @@ hub_con |>
 #> # A tibble: 92 × 8
 #>    model_id     forecast_date horizon target location output_type output_type_id
 #>    <chr>        <date>          <int> <chr>  <chr>    <chr>       <chr>         
-#>  1 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.01          
-#>  2 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.025         
-#>  3 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.05          
-#>  4 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.1           
-#>  5 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.15          
-#>  6 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.2           
-#>  7 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.25          
-#>  8 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.3           
-#>  9 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.35          
-#> 10 hub-ensemble 2023-05-08          1 wk ah… US       quantile    0.4           
+#>  1 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.01          
+#>  2 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.025         
+#>  3 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.05          
+#>  4 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.1           
+#>  5 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.15          
+#>  6 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.2           
+#>  7 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.25          
+#>  8 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.3           
+#>  9 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.35          
+#> 10 hub-baseline 2023-05-08          1 wk ah… US       quantile    0.4           
 #> # ℹ 82 more rows
 #> # ℹ 1 more variable: value <dbl>
 ```
@@ -438,7 +438,7 @@ hub_con |>
   ) |>
   hubData::collect_hub()
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpZtcDuk/duckdb
+#> ℹ /tmp/RtmpoM9SqM/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
