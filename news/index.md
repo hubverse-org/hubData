@@ -1,5 +1,13 @@
 # Changelog
 
+## hubData 2.2.3
+
+- [`create_hub_schema()`](https://hubverse-org.github.io/hubData/reference/create_hub_schema.md)
+  now includes task ID columns from every model task in a round, not
+  only the first
+  ([\#157](https://github.com/hubverse-org/hubData/issues/157)).
+  Requires hubUtils \>= 1.3.0.
+
 ## hubData 2.2.2
 
 - Fixed bug where
