@@ -22,24 +22,65 @@ test_that("load_model_metadata fails correctly", {
 
 test_that("load_model_metadata works correctly and retuns one row per model.", {
   hub_path <- system.file("testhubs/simple", package = "hubUtils")
-  expect_snapshot(str(load_model_metadata(hub_path)))
-  expect_snapshot(str(
-    load_model_metadata(hub_path, model_ids = c("hub-baseline"))
-  ))
-  hub_path <- test_path("testdata/error_hub")
-  expect_snapshot(str(
-    load_model_metadata(hub_path)
-  ))
-})
-
-# Contains all three of team_abbr, model_abbr, model_id
-test_that("resulting tibble has team_abbr, model_abbr, and model_id_columns", {
-  hub_path <- system.file("testhubs/simple", package = "hubUtils")
   model_metadata <- load_model_metadata(hub_path)
-  expect_snapshot(str(model_metadata))
-  expect_true(all(
-    c("team_abbr", "model_abbr", "model_id") %in% names(model_metadata)
-  ))
+  expect_named(
+    model_metadata,
+    c(
+      "model_id",
+      "team_abbr",
+      "model_abbr",
+      "team_name",
+      "model_name",
+      "model_version",
+      "model_contributors",
+      "website_url",
+      "repo_url",
+      "license",
+      "include_viz",
+      "include_ensemble",
+      "include_eval",
+      "model_details",
+      "ensemble_of_hub_models"
+    )
+  )
+  expect_equal(model_metadata$model_id, c("hub-baseline", "team1-goodmodel"))
+  expect_equal(model_metadata$team_abbr, c("hub", "team1"))
+  expect_equal(model_metadata$model_abbr, c("baseline", "goodmodel"))
+  expect_equal(model_metadata$include_ensemble, c(FALSE, TRUE))
+  expect_equal(model_metadata$repo_url, c(NA, NA))
+  expect_equal(
+    model_metadata$model_contributors[[1]],
+    list(
+      list(name = "Joe Bloggs", email = "j.bloggs@email.com"),
+      list(name = "J Smith", email = "j.smith@email.com")
+    )
+  )
+  expect_equal(
+    model_metadata$model_details[[2]],
+    list(
+      methods = "this the method description of the model.",
+      data_inputs = "description of the data imputs"
+    )
+  )
+
+  expect_equal(
+    load_model_metadata(hub_path, model_ids = c("hub-baseline")),
+    dplyr::filter(model_metadata, .data$model_id == "hub-baseline")
+  )
+
+  hub_path <- test_path("testdata/error_hub")
+  model_metadata <- load_model_metadata(hub_path)
+  expect_shape(model_metadata, dim = c(4L, 22L))
+  expect_equal(
+    model_metadata$model_id,
+    c(NA, NA, "hub-baseline-with-model_id", "wrong-model_id")
+  )
+  expect_equal(model_metadata$team_abbr, c("hub", "hub", NA, NA))
+  expect_equal(model_metadata$model_abbr, c("baseline", NA, NA, NA))
+  expect_equal(
+    model_metadata$model_name,
+    c(NA, "Baseline", "Baseline", "Baseline")
+  )
 })
 
 test_that("Top-level array fields yield list columns, even if they are absent or length-1", {
@@ -86,14 +127,20 @@ test_that("Top-level array fields yield list columns, even if they are absent or
 
   # model metadata files with different length top-level arrays for the same key should be row-bindable
   model_metadata <- load_model_metadata(hub_path)
-  expect_snapshot(str(model_metadata))
   # array columns should be lists, but others should be character, etc
-  expect_vector(model_metadata$mandatory_array_valued_metadata, ptype = list())
-  expect_vector(model_metadata$optional_array_valued_metadata, ptype = list())
   expect_vector(model_metadata$model_name, ptype = character())
-
-  # there should be no duplicate model ids
-  expect_equal(model_metadata$model_id, unique(model_metadata$model_id))
+  expect_equal(
+    model_metadata$model_id,
+    c("multi-entry", "no-entry", "single-entry", "two-arrays")
+  )
+  expect_equal(
+    model_metadata$mandatory_array_valued_metadata,
+    list(list("test", "test2"), NULL, list("test"), list("test", "test2"))
+  )
+  expect_equal(
+    model_metadata$optional_array_valued_metadata,
+    list(NULL, NULL, NULL, list("test3", "test4", "test5"))
+  )
 
   # row-binding the single-row tibbles that result from
   # loading models individually should yield the jointly-loaded metadata

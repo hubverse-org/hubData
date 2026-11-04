@@ -36,7 +36,6 @@ Imports:
     rlang,
     stringr,
     tibble,
-    yaml,
     zoltr (>= 1.0.1)
 Suggests:
     covr,
