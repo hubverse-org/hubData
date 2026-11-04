@@ -39,10 +39,7 @@ test_that("connect_hub works on local simple forecasting hub", {
     c(3L, 1L)
   )
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 })
 
 test_that("connect_hub works on a local simple forecasting hub with no csvs", {
@@ -77,10 +74,7 @@ test_that("connect_hub works on a local simple forecasting hub with no csvs", {
 
   expect_false(attr(hub_con, "checks"))
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 })
 
 test_that("connect_hub returns empty list when model output folder is empty", {
@@ -154,13 +148,7 @@ test_that("connect_hub connection & data extraction works on simple local hub", 
 
   expect_false(attr(hub_con, "checks"))
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- basename(attr(
-    hub_con,
-    "model_output_dir"
-  ))
-  attr(hub_con, "hub_path") <- basename(attr(hub_con, "hub_path"))
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 
   # Test that NAs are parsed correctly
   out_df <- hub_con |>
@@ -216,10 +204,7 @@ test_that("connect_hub works on local flusight forecasting hub", {
     c(5L, 2L, 1L)
   )
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 })
 
 
@@ -302,10 +287,13 @@ test_that("connect_model_output works on local model_output_dir", {
       "R6"
     )
   )
+  expect_setequal(
+    names(attributes(mod_out_con)),
+    c("class", "file_format", "checks", "file_system", "model_output_dir")
+  )
   # overwrite path attributes to make snapshot portable
   attr(mod_out_con, "model_output_dir") <- "test/model_output_dir"
   expect_snapshot(mod_out_con)
-  expect_snapshot(str(mod_out_con))
 
   expect_equal(length(mod_out_con$files), 3L)
 
@@ -434,7 +422,11 @@ test_that("hub_connection print method works", {
   attr(hub_con, "hub_path") <- "test/hub_path"
 
   expect_snapshot(hub_con)
-  expect_snapshot(print(hub_con, verbose = TRUE))
+  expect_output(
+    suppressMessages(print(hub_con, verbose = TRUE)),
+    'attr(*, "config_tasks")',
+    fixed = TRUE
+  )
 })
 
 test_that("mod_out_connection print method works", {
@@ -533,10 +525,7 @@ test_that("connect_hub works on S3 bucket simple forecasting hub on AWS", {
     )
   )
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 
   expect_snapshot(
     hub_con |>
@@ -591,10 +580,7 @@ test_that("connect_hub works on S3 bucket simple parquet forecasting hub on AWS"
     )
   )
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 
   expect_snapshot(
     hub_con |>
@@ -666,10 +652,7 @@ test_that("connect_hub works on parquet-only hub when skip_checks is TRUE", {
     )
   )
 
-  # overwrite path attributes to make snapshot portable
-  attr(hub_con, "model_output_dir") <- "test/model_output_dir"
-  attr(hub_con, "hub_path") <- "test/hub_path"
-  expect_snapshot(str(hub_con))
+  expect_hub_connection_attrs(hub_con, hub_path)
 
   expect_snapshot(
     hub_con |>
