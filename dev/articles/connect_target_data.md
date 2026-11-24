@@ -181,18 +181,18 @@ ts_con |>
   filter(location == "US") |>
   collect()
 #> # A tibble: 22 × 4
-#>    target_end_date target        location observation
-#>    <date>          <chr>         <chr>          <dbl>
-#>  1 2022-10-22      flu_hosp_rate US             0.716
-#>  2 2022-10-29      flu_hosp_rate US             1.31 
-#>  3 2022-11-05      flu_hosp_rate US             1.98 
-#>  4 2022-11-12      flu_hosp_rate US             2.66 
-#>  5 2022-11-19      flu_hosp_rate US             3.44 
-#>  6 2022-11-26      flu_hosp_rate US             5.97 
-#>  7 2022-12-03      flu_hosp_rate US             7.93 
-#>  8 2022-12-10      flu_hosp_rate US             7.18 
-#>  9 2022-12-17      flu_hosp_rate US             6.45 
-#> 10 2022-12-24      flu_hosp_rate US             5.81 
+#>    target_end_date target       location observation
+#>    <date>          <chr>        <chr>          <dbl>
+#>  1 2022-10-22      flu_hosp_inc US              2380
+#>  2 2022-10-29      flu_hosp_inc US              4353
+#>  3 2022-11-05      flu_hosp_inc US              6571
+#>  4 2022-11-12      flu_hosp_inc US              8848
+#>  5 2022-11-19      flu_hosp_inc US             11427
+#>  6 2022-11-26      flu_hosp_inc US             19846
+#>  7 2022-12-03      flu_hosp_inc US             26333
+#>  8 2022-12-10      flu_hosp_inc US             23851
+#>  9 2022-12-17      flu_hosp_inc US             21435
+#> 10 2022-12-24      flu_hosp_inc US             19286
 #> # ℹ 12 more rows
 
 # Filter by date range
@@ -358,8 +358,8 @@ oo_con |>
 #> 15 2022-12-31      flu_hosp_ra… US       pmf         high                      1
 #> 16 2022-12-31      flu_hosp_ra… US       pmf         very high                 0
 #> 17 2022-12-31      flu_hosp_inc US       mean        NA                    19369
-#> 18 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
-#> 19 2022-12-31      flu_hosp_inc US       sample      NA                    19369
+#> 18 2022-12-31      flu_hosp_inc US       sample      NA                    19369
+#> 19 2022-12-31      flu_hosp_inc US       quantile    NA                    19369
 ```
 
 ## Working with target data
